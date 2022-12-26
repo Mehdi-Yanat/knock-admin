@@ -1,0 +1,109 @@
+.contentContainer {
+	margin-top: 2rem;
+	margin-bottom: 2rem;
+	border-width: 0.125rem;
+	--tw-border-opacity: 1;
+	border-color: rgb(117 72 254 / var(--tw-border-opacity));
+	padding: 1.8rem;
+	border-radius: 1rem;
+	line-height: 2;
+	color: rgb(200, 200, 200);
+}
+@media (min-width: 640px) {
+	.contentContainer {
+		padding-left: 4rem /* 64px */;
+		padding-right: 4rem /* 64px */;
+		padding-top: 5rem /* 80px */;
+		padding-bottom: 5rem /* 80px */;
+	}
+}
+
+.contentContainerElements * {
+	max-width: 100%;
+}
+
+.contentContainerElements.contentContainerV2 {
+	font-size: 1.75rem;
+}
+.contentContainerElements.contentContainerV2 h2 {
+	font-size: 2rem;
+}
+
+.contentContainerElements h2,
+.contentContainerElements h3 {
+	color: white;
+	font-weight: 500;
+	text-transform: capitalize;
+	line-height: 1.2;
+	margin-bottom: 1rem;
+}
+.contentContainerElements h2 {
+	font-size: 1.6rem;
+	margin-top: 4rem;
+}
+.contentContainerElements h2:first-child {
+	margin-top: 0;
+}
+.contentContainerElements h3 {
+	font-size: 1.4rem;
+	margin-top: 2rem;
+}
+@media (max-width: 640px) {
+	.contentContainerElements h2 {
+		font-size: 1.8rem;
+		margin-top: 4rem;
+	}
+	.contentContainerElements h3 {
+		font-size: 1.6rem;
+		margin-top: 2rem;
+	}
+}
+
+.contentContainerElements a {
+	text-decoration: none;
+	color: #7548fe;
+	word-break: break-all;
+}
+
+.contentContainerElements ul li {
+	list-style: var(--ul-li-style, url(/svgs/purple-circle.svg));
+	list-style-position: inside;
+}
+
+.contentContainerElements table {
+	border-collapse: collapse;
+	margin-top: 2rem;
+	margin-bottom: 2rem;
+}
+
+.contentContainerElements td,
+.contentContainerElements th {
+	border: 0.0625rem solid #ddd;
+	padding: 0.5rem;
+}
+
+/* .contentContainerElements tr:nth-child(even) {
+}
+.contentContainerElements tr:hover {
+} */
+
+.contentContainerElements th {
+	padding-top: 0.75rem;
+	padding-bottom: 0.75rem;
+	text-align: left;
+	color: white;
+}
+
+:global([dir='rtl']) .contentContainerElements th {
+	text-align: right;
+}
+
+.contentContainerElements strong {
+	font-weight: bold;
+	color: white;
+}
+
+.contentContainerElements em {
+	color: white;
+	font-style: italic;
+}
