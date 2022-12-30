@@ -177,6 +177,11 @@ export interface ILoginSuccess {
 	user: IAccessToken;
 }
 
+export interface ISendVerificationCodeSuccess {
+	success: true;
+	message: string;
+}
+
 export interface IRegisterSuccess {
 	success: true;
 	message: string; // "Account created successfully!",
@@ -193,6 +198,7 @@ export interface IUser {
 	phone: null;
 	createdAt: string;
 	roles:[];
+	password:string;
 	defaultAddress: {
 		id: string;
 		address1: string;

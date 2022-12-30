@@ -18,22 +18,27 @@ const throwIfResponseError = async (response: Response) => {
 // 	} catch (error) {}
 // };
 
-const getApiUrl = () => {
-  if (process.env.NODE_ENV === "production") {
-    return `https://api.pluginsthatknock.com`;
-  } else {
-    return `http://127.0.0.1:4500`;
-  }
-};
+
 
 export const getBanner = async () => {
-  const response = await axios.get(`${getApiUrl()}/ui/get-banner`, {
+  const response = await axios.get(`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/get-banner`, {
     headers: {
       "Content-Type": "application/json",
     },
   });
 
   return response.data.banner;
+};
+
+
+export const getMainSection = async () => {
+  const response = await axios.get(`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/get-main-section`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  return response.data.main;
 };
 
 const getAppApiPath = () =>

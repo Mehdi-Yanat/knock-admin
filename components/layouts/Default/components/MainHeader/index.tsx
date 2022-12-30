@@ -29,7 +29,7 @@ import { commonClasses } from "../..";
 import UserAuthButton from "./components/UserAuthButton";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import EditBanner from "@components/shared/common/Dialog/editDialogFunctions";
+import {EditBanner} from "@components/shared/common/Dialog/editDialogFunctions";
 const linkClasses = ({
   isActive,
   keepCase,
@@ -61,7 +61,9 @@ const MainHeader = (props: any) => {
   const [onLiveBannerChange , setOnLiveBannerChange] = useState({
     text:   '',
 		textColor:  '',
-		background:''
+		background:'',
+    bannerUrl:'',
+    bannerUrlText:''
   })
 
 
@@ -180,7 +182,7 @@ const MainHeader = (props: any) => {
         >
           <div>
             <p style={{color:onLiveBannerChange.textColor}}>
-              {onLiveBannerChange.text}
+              {onLiveBannerChange.text} - <Link onClick={() => setBanner(false)} href={onLiveBannerChange.bannerUrl} className="text-bold border rounded-3xl	 px-5" >{onLiveBannerChange.bannerUrlText}</Link>
             </p>
           </div>
           <div className="absolute right-0 p-4">
@@ -189,7 +191,7 @@ const MainHeader = (props: any) => {
               style={{color:onLiveBannerChange.textColor}}
             />
           </div>
-          {banner.data ? (
+          {banner.data && user.data ? (
             <AiFillEdit
               onClick={() => setIsEditingBanner(true)}
               className="absolute left-5 font-semibold outline-none disabled:cursor-not-allowed left-5

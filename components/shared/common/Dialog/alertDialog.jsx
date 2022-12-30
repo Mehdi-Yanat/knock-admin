@@ -1,9 +1,9 @@
 import React from 'react';
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
 import classes from '../../../../styles/alertDialog.module.scss';
-import instance from 'lib/axios';
 import { toast } from 'react-toastify';
 import { getCookie } from '@utils/common/storage/cookie/document';
+import axios from 'axios';
 
 const AlertDialogComponent = (props) => {
 
@@ -12,7 +12,7 @@ const AlertDialogComponent = (props) => {
     try {
       let accessToken = getCookie('user-access-token')
       accessToken = JSON.parse(accessToken).accessToken
-      const response = await instance.delete(`/admin/${props.adminId}`, {
+      const response = await axios.delete(`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/admin/${props.adminId}`, {
         headers: {
           'Authorization': accessToken
         }

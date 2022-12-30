@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { ImageProps } from 'next/dist/client/image.d';
 import { useState } from 'react';
+import { websiteBasePath } from '@utils/core/next-seo.config';
 
 export interface ICustomNextImageProps extends Omit<ImageProps, 'alt'> {
 	className?: string;
@@ -46,7 +47,7 @@ const CustomNextImage = ({
 			src:
 				isWeservNlOptimized && typeof _src === 'string'
 					? `//images.weserv.nl/?url=${encodeURIComponent(
-							_src.startsWith('/') ? `${_src}` : _src
+							_src.startsWith('/') ? `${websiteBasePath}${_src}` : _src
 					  )}&w=${props.width}${props.height ? `&h=${props.height}` : ''}${
 							isAnimated ? '&n=-1' : ''
 					  }`

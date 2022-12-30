@@ -1,9 +1,9 @@
 import { cx } from 'class-variance-authority';
 
-const KnockTrademark = () => {
+const KnockTrademark = ({isMainSection , OnLiveMainSectionChange}:{isMainSection?:boolean , OnLiveMainSectionChange?:any}) => {
 	return (
 		<span className='flex w-fit relative'>
-			KNOCK
+			{isMainSection ? OnLiveMainSectionChange.h2  : 'KNOCK'}
 			<sup
 				className={cx(
 					'right-0 ml-[-0.25ch] translate-x-1/4',

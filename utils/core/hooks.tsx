@@ -17,7 +17,6 @@ import type {
 } from "./API";
 import { getUserCheckoutIdAndKeyFromCookie } from "./cookie";
 import { convertProductToCartItem } from "./products";
-import { getApiUrl } from "lib/getApiUrl";
 
 
 export const useGetUserDataFromStore = () => {
@@ -44,7 +43,7 @@ export const useGetUserData = ({
 
       if (!accessToken) throw new Error("Access token is required");
 
-      return fetch(`${getApiUrl()}/auth/check-token`, {
+      return fetch(`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/auth/check-token`, {
         headers: {
           "Content-type": "application/json",
           'Authorization': accessToken,
@@ -101,7 +100,7 @@ export const useLogoutUser = ({
       if (!accessToken) throw new Error("Access token is required");
 
       return fetch(
-        `${getApiUrl()}/auth/logout`,
+        `${process.env.NEXT_PUBLIC_KNOCK_URL_API}/auth/logout`,
         {
           headers: {
             "Content-type": "application/json",

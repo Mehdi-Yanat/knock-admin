@@ -15,7 +15,6 @@ import Table from "../../shared/core/table/table";
 import Dialog from "@components/shared/common/Dialog";
 import FormField from "@components/shared/core/FieldForm";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { getApiUrl } from "lib/getApiUrl";
 
 const TitleValue = ({
   title,
@@ -58,6 +57,7 @@ const UpdateUserBasicDetails = ({
     email: user.data ? user.data.email : "",
     firstName: user.data ? user.data.firstName : "",
     lastName: user.data ? user.data.lastName : "",
+    password:''
   });
 
   const [formValues, setFormValues] = useState(initFromValues());
@@ -68,7 +68,8 @@ const UpdateUserBasicDetails = ({
       (user.data &&
         user.data.email.trim() === formValues.email?.trim() &&
         user.data.firstName === formValues?.firstName &&
-        user.data.lastName === formValues?.lastName)
+        user.data.lastName === formValues?.lastName&&
+        user.data.password === formValues.password)
     )
       return false;
 
@@ -83,7 +84,7 @@ const UpdateUserBasicDetails = ({
       if (!isChanged) throw new Error("No changes detected");
       if (!user.data) throw new Error("No user data available");
 
-      return fetch(`${getApiUrl()}/admin/${user.data.id}`, {
+      return fetch(`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/admin`, {
         method: "PUT",
         headers: {
           "Content-type": "application/json",
@@ -102,6 +103,7 @@ const UpdateUserBasicDetails = ({
             user.data?.lastName !== formValues.lastName
               ? formValues.lastName
               : user.data.lastName,
+          password:formValues.password
         }),
       })
         .then((response) => response.json())
@@ -122,6 +124,7 @@ const UpdateUserBasicDetails = ({
         };
       });
       setIsOpen(false);
+      window.location.reload()
     },
   });
 
@@ -162,6 +165,15 @@ const UpdateUserBasicDetails = ({
             type="email"
             placeholder="*email"
             autoComplete="email"
+            minLength={3}
+          />
+          <FormField
+            values={formValues}
+            setValues={setFormValues}
+            name="password"
+            type="password"
+            placeholder="*password"
+            autoComplete="password"
             minLength={3}
           />
           <div className="flex justify-end">
@@ -208,7 +220,7 @@ const AddAdminMutiation = ({
     mutationFn: (event) => {
       event.preventDefault();
 
-      return fetch(`${getApiUrl()}/admin`, {
+      return fetch(`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/admin`, {
         method: "POST",
         headers: {
           "Content-type": "application/json",

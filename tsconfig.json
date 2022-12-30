@@ -37,6 +37,6 @@
 		"**/*.tsx",
 		".next/types/**/*.ts",
 		"pages/account/activate/[...slug].jsx"
-, "lib/getApiUrl.js", "components/screens/CustomerProfile/index.tsx", "components/shared/common/Dialog/alertDialog.jsx", "components/shared/common/Dialog/editDialogFunctions.jsx"	],
+, "lib/getApiUrl.js", "components/screens/CustomerProfile/index.tsx", "components/shared/common/Dialog/alertDialog.jsx", "components/shared/common/Dialog/editDialogFunctions.jsx", "components/screens/Home/sections/Hero/index.tsx"	],
 	"exclude": ["node_modules"]
 }

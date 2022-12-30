@@ -23,7 +23,7 @@ const ArtistsSection = ({ reviews }: Parameters<typeof Reviews>['0']) => {
 					<header className='text-center flex items-center justify-center'>
 						<h2 className='text-h4 font-semibold capitalize flex flex-wrap justify-center'>
 							SOME ARTISTS WHO HAVE USED DRUMS THAT&nbsp;
-							<KnockTrademark />
+							<KnockTrademark  />
 						</h2>
 					</header>
 					<div className='w-[1200px] max-w-full mx-auto'>

@@ -22,9 +22,9 @@ const SEODefaults: DefaultSeoProps = {
 		title: defaultTitle,
 		images: [
 			{
-				url: `${websiteBasePath}/favicon.ico`,
-				width: 250,
-				height: 250,
+				url: `${websiteBasePath}/images/_.jpeg`,
+				width: 700,
+				height: 470,
 				alt: 'PLUGINS THAT KNOCK Logo'
 			}
 		]

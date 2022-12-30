@@ -2,12 +2,12 @@ import { getCookie } from '@utils/common/storage/cookie/document';
 import moment from 'moment';
 import React, { useEffect, useMemo, useState } from 'react'
 import { useTable, Column, useGlobalFilter, useSortBy, usePagination } from 'react-table';
-import instance from '../../../../lib/axios'
 import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
 import AlertDialogComponent from '@components/shared/common/Dialog/alertDialog';
 import Button from '../Button';
 import classes from '../../../../styles/table.module.scss'
 import { useGetUserDataFromStore } from '@utils/core/hooks';
+import axios from 'axios';
 
 const Table = (props) => {
     const [windowSize, setWindowSize] = useState({
@@ -20,7 +20,7 @@ const Table = (props) => {
 
     useEffect(() => {
         const getAdminsList = async () => {
-            const response = await instance.get('/admin/get-users', {
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/admin/get-users`, {
                 headers: {
                     "Authorization": JSON.parse(getCookie('user-access-token')).accessToken
                 }
@@ -93,8 +93,10 @@ const Table = (props) => {
             {
                 Header: 'Controls',
                 accessor: (data) => {
+
+                    let adminEmail = ['support@pluginsthatknock.com' , 'mehdi.yanat3106@outlook.fr']
                     return <div className='flex justify-center gap-10' >
-                        {data.email === "knock@admin.com" || data.email === user.data.email  ? <p>No Actions</p> : <AlertDialogComponent setAdmins={props.setAdmins} adminId={data.id} >
+                        {adminEmail.includes(data.email)  || data.email === user.data.email  ? <p>No Actions</p> : <AlertDialogComponent setAdmins={props.setAdmins} adminId={data.id} >
                             <AiFillDelete size={20} className='cursor-pointer text-[red]' />
                         </AlertDialogComponent>}
                     </div>

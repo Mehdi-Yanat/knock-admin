@@ -9,7 +9,6 @@ import type { IGenericErrorResponse } from 'types';
 import { toast } from 'react-toastify';
 import { CountryDropdown } from 'react-country-region-selector';
 import { defaultSiteName3, websiteBasePath } from '@utils/core/next-seo.config';
-import CustomNextSeo from '@components/shared/common/CustomNextSeo';
 
 const ContactUsPage: NextPage = () => {
 	const [formValues, setFormValues] = useState({
@@ -66,7 +65,6 @@ const ContactUsPage: NextPage = () => {
 
 	return (
 		<>
-			<CustomNextSeo pageTitle={pageTitle} pageDescription={pageDescription} />
 			<section className='bg-primary-1 section-p-v1'>
 				<div className='max-w-[800px] mx-auto'>
 					<header className='flex flex-col gap-4 text-text-primary-1'>

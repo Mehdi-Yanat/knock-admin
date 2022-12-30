@@ -2,6 +2,7 @@ import AddItemOnHeroSectionButton from '@components/shared/core/AddItemOnHeroSec
 import KnockSection from '@components/shared/core/KnockSection';
 import KnockTrademark from '@components/shared/core/KnockTrademark';
 import { IKnockPluginPageProps } from '@pages/knock';
+import { useState } from 'react';
 
 const HeroSection = ({
 	knockPlugin
@@ -19,9 +20,10 @@ const HeroSection = ({
 			title={
 				<>
 					MAKE YOUR DRUMS&nbsp;
-					<KnockTrademark />
+					<KnockTrademark isMainSection={false} OnLiveMainSectionChange={{}} />
 				</>
 			}
+			setIsOpen={() => null}
 			description='Make your drums KNOCK and punch through the mix.'
 			pTheme={{ width: 'small' }}
 		/>
