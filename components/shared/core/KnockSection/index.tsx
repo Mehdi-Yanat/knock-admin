@@ -143,7 +143,7 @@ const KnockSection = ({
   OnLiveMainSectionChange?: any;
   isOpen?: boolean;
   mainSection?: any;
-  setPreviewImage: any;
+  setPreviewImage?: any;
 }) => {
   const { user } = useGetUserDataFromStore();
   const router = useRouter();
