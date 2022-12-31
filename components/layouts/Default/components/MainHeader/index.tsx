@@ -178,14 +178,14 @@ const MainHeader = (props: any) => {
       {openBanner && onLiveBannerChange && onLiveBannerChange.background ? (
         <div
           style={{ background: onLiveBannerChange.background }}
-          className={`${commonClasses} z-10 fixed h-14 right-0 left-0 w-full flex items-center justify-center`}
+          className={`${commonClasses} z-10 fixed ${openBanner ? 'h-14' : 'h-0'} right-0 left-0 w-full flex items-center justify-center`}
         >
           <div>
-            <p style={{color:onLiveBannerChange.textColor}}>
-              {onLiveBannerChange.text} - <Link onClick={() => setBanner(false)} href={onLiveBannerChange.bannerUrl} className="text-bold border rounded-3xl	 px-5" >{onLiveBannerChange.bannerUrlText}</Link>
-            </p>
+            <div className="flex flex-col  md:flex-row items-center gap-0 md:gap-3" style={{color:onLiveBannerChange.textColor}}>
+              <h4>{onLiveBannerChange.text}</h4> <div className=""><Link onClick={() => setBanner(false)} href={onLiveBannerChange.bannerUrl} className="text-bold border rounded-3xl	 px-5" >{onLiveBannerChange.bannerUrlText}</Link></div>
+            </div>
           </div>
-          <div className="absolute right-0 p-4">
+          <div className="hidden absolute sm:block  right-0 p-4">
             <AiFillCloseCircle
               onClick={() => setBanner(false)}
               style={{color:onLiveBannerChange.textColor}}
@@ -203,15 +203,15 @@ const MainHeader = (props: any) => {
             ""
           )}
         </div>
-      ) : (
-        <SkeletonTheme baseColor="#000" highlightColor="#7d7b78">
-          <Skeleton
-            count={1}
-            height={60}
-            className={`${commonClasses}  z-10 fixed h-14 right-0 left-0 w-full flex items-center justify-center`}
-          />
-        </SkeletonTheme>
-      )}
+      ) :   <SkeletonTheme baseColor="#000" highlightColor="#7d7b78">
+      <Skeleton
+        count={1}
+        height={60}
+        className={`${commonClasses}  z-10 fixed h-14 right-0 left-0 w-full flex items-center justify-center`}
+      />
+    </SkeletonTheme> 
+        
+      }
       <header
         id="main-header"
         className={`${commonClasses} bg-primary-1 z-10 fixed ${

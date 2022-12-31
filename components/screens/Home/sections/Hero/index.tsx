@@ -36,19 +36,19 @@ const HeroSection = () => {
         />
       }
       pTheme={{ width: "small" }}
-      mainImgOrVideoLink="/knock"
+      mainImgOrVideoLink={OnLiveMainSectionChange.buttonUrl}
       imageSrc={
         previewImage
           ? previewImage
           : OnLiveMainSectionChange.mainImageUrl
-          ? "https://api.pluginsthatknock.com" +
+          ? process.env.NEXT_PUBLIC_KNOCK_URL_API +
             OnLiveMainSectionChange.mainImageUrl
           : ""
       }
       mainImgOrVideoProps={{ isAnimated: true }}
       buttonProps={{
         className: "capitalize",
-        href: "/knock",
+        href: OnLiveMainSectionChange.buttonUrl,
         children: OnLiveMainSectionChange.buttonText,
       }}
       setOnLiveMainSectionChange={setOnLiveMainSectionChange}

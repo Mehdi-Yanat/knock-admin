@@ -1,11 +1,5 @@
 import { cx, VariantProps } from "class-variance-authority";
-import {
-  CSSProperties,
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  useState,
-} from "react";
+import { CSSProperties, Dispatch, ReactNode, SetStateAction } from "react";
 
 import Button from "@components/shared/core/Button";
 
@@ -20,6 +14,7 @@ import {
 } from "@utils/core/hooks";
 import { EditMainSection } from "@components/shared/common/Dialog/editDialogFunctions";
 import Image from "next/image";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
 export const pClasses = cva("text-primary-2 mt-2 mb-5 leading-6", {
   variants: {
@@ -218,22 +213,18 @@ const KnockSection = ({
               {...mainImgOrVideoProps}
             />
           ) : (
-            <video
-              src={videoSrc}
-              autoPlay
-              muted
-              width={700}
-              height={700}
-              title="knock plugin"
-              loop
-              controls={false}
-              poster="/images/knock poster.png"
-              {...mainImgOrVideoProps}
-            />
+            <SkeletonTheme baseColor="#000" highlightColor="#7d7b78">
+              <Skeleton
+                width={550}
+                count={1}
+                height={300}
+                className={"rounded-3xl mt-2"}
+              />
+            </SkeletonTheme>
           )}
         </div>
         <div className={textContainerClasses(textContainerTheme)}>
-          {
+          {props.mainSection ? (
             <h2
               style={{
                 color: props.isHome
@@ -249,23 +240,64 @@ const KnockSection = ({
                 </>
               )}
             </h2>
-          }
-          <p
-            style={{
-              color: props.isHome ? props.OnLiveMainSectionChange.pColor : null,
-            }}
-            className={pClasses(pTheme)}
-          >
-            {description}
-          </p>
-          {buttonElem || <Button className="capitalize" {...buttonProps} />}
+          ) : (
+            <SkeletonTheme baseColor="#000" highlightColor="#7d7b78">
+              <Skeleton
+                width={400}
+                count={1}
+                height={20}
+                className={"rounded-3xl mt-2"}
+              />
+            </SkeletonTheme>
+          )}
+          {props.mainSection ? (
+            <p
+              style={{
+                color: props.isHome
+                  ? props.OnLiveMainSectionChange.pColor
+                  : null,
+              }}
+              className={pClasses(pTheme)}
+            >
+              {description}
+            </p>
+          ) : (
+            <SkeletonTheme baseColor="#000" highlightColor="#7d7b78">
+              <Skeleton
+                width={300}
+                count={1}
+                height={20}
+                className={"rounded-3xl mt-2"}
+              />
+            </SkeletonTheme>
+          )}
+          {buttonElem || props.mainSection ? (
+            <Button className="capitalize" {...buttonProps} />
+          ) : (
+            <SkeletonTheme baseColor="#000" highlightColor="#7d7b78">
+              <Skeleton
+                width={200}
+                count={1}
+                height={20}
+                className={"rounded-3xl mt-2"}
+              />
+            </SkeletonTheme>
+          )}
           {!props.isHome || !user.data ? (
             ""
-          ) : (
+          ) : props.mainSection ? (
             <Button onClick={() => props.setIsOpen(true)} className="mt-5">
-              {" "}
-              <AiFillEdit />{" "}
+              <AiFillEdit />
             </Button>
+          ) : (
+            <SkeletonTheme  baseColor="#000" highlightColor="#7d7b78">
+              <Skeleton
+                width={100}
+                count={1}
+                height={20}
+                className={"rounded-3xl mt-2 mt-2"}
+              />
+            </SkeletonTheme>
           )}
         </div>
       </div>

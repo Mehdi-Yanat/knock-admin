@@ -30,6 +30,16 @@ export const getBanner = async () => {
   return response.data.banner;
 };
 
+export const getPopup = async () => {
+  const response = await axios.get(`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/get-popup`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  return response.data.popup;
+};
+
 
 export const getMainSection = async () => {
   const response = await axios.get(`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/get-main-section`, {
