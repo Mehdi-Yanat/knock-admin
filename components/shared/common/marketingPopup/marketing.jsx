@@ -119,7 +119,7 @@ const MarketingPopUp = (props) => {
       <div className='m-4  flex flex-col items-center gap-5' >
         <h2 style={{ color: formValues.h2Color }} >{formValues.h2}</h2>
         <p style={{ color: formValues.pColor }} >{formValues.p}</p>
-        <Button style={{ backgroundColor: formValues.buttonColor }} href={formValues.buttonLink} > {formValues.buttonText} </Button>
+        <Button onClick={() => props.onOpenChange(false)} style={{ backgroundColor: formValues.buttonColor }} href={formValues.buttonLink} > {formValues.buttonText} </Button>
         {
           openEditMode ? <div className='flex flex-col gap-5' >
             <FormField
