@@ -224,7 +224,7 @@ const KnockSection = ({
           )}
         </div>
         <div className={textContainerClasses(textContainerTheme)}>
-          {props.mainSection ? (
+          {props.mainSection || title ? (
             <h2
               style={{
                 color: props.isHome
@@ -250,7 +250,7 @@ const KnockSection = ({
               />
             </SkeletonTheme>
           )}
-          {props.mainSection ? (
+          {props.mainSection || description ? (
             <p
               style={{
                 color: props.isHome
@@ -271,7 +271,7 @@ const KnockSection = ({
               />
             </SkeletonTheme>
           )}
-          {buttonElem || props.mainSection ? (
+          {buttonElem ? buttonElem  : props.mainSection ? (
             <Button className="capitalize" {...buttonProps} />
           ) : (
             <SkeletonTheme baseColor="#000" highlightColor="#7d7b78">
