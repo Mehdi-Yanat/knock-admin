@@ -191,7 +191,6 @@ const MainHeader = (props: any) => {
                   <h4>{onLiveBannerChange.text}</h4>
                   <div className="">
                     <Link
-                      onClick={() => setBanner(false)}
                       href={onLiveBannerChange.bannerUrl}
                       className="text-bold border rounded-3xl	 px-5"
                     >
