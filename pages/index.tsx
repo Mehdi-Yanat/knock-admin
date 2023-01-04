@@ -6,6 +6,7 @@ import type { IProduct } from 'types';
 
 export interface IHomePageProps {
 	products: IProduct[]; // ShopifyBuy.Product[];
+	openPopUp:boolean
 }
 
 const HomePage: NextPage<IHomePageProps> = (props) => {

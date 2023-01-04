@@ -26,7 +26,8 @@ const MarketingPopUp = (props) => {
     buttonText: props.popup ? props.popup.buttonText : '',
     buttonColor: props.popup ? props.popup.buttonColor : '',
     buttonLink: props.popup ? props.popup.buttonLink : '',
-    mainImageUrl: props.popup ? props.popup.mainImageUrl : ''
+    mainImageUrl: props.popup ? props.popup.mainImageUrl : '',
+    disable:props.popup ? props.popup.disable : false
   })
 
   let formData = new FormData()
@@ -158,6 +159,15 @@ const MarketingPopUp = (props) => {
               autoComplete="button link"
               minLength={3}
             />
+            <div>
+						<input checked={formValues.disable} type="checkbox" id="diable" name="disable" onChange={(e) => setFormValues(value => {
+							return {
+								...value,
+								disable:e.target.checked
+							}
+						})} value={formValues.disable} />
+						<label for="diable"> Disable popup</label>
+					</div>
             <div className="flex flex-col" >
               <label >Button background color</label>
               <SketchPicker disableAlpha={true} color={formValues.buttonColor} onChangeComplete={(color) => {

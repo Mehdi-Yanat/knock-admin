@@ -6,10 +6,10 @@ import {
 	LatestSamplesSection
 } from './sections';
 
-const HomeScreen = ({ products }: IHomePageProps) => {
+const HomeScreen = ({ products , openPopUp}: IHomePageProps) => {
 	return (
 		<>
-			<HeroSection />
+			<HeroSection openPopUp={openPopUp} />
 			<OneProductShowCaseSection />
 			<AboutSection />
 			<LatestSamplesSection products={products} />

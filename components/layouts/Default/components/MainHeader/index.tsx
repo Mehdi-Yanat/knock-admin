@@ -64,6 +64,7 @@ const MainHeader = (props: any) => {
     background: "",
     bannerUrl: "",
     bannerUrlText: "",
+    disable: "",
   });
 
   const [isRegisterDialogOpen, setIsRegisterDialogOpen] = useState(false);
@@ -174,57 +175,58 @@ const MainHeader = (props: any) => {
 
   return (
     <>
-      {openBanner && onLiveBannerChange && onLiveBannerChange.background ? (
-        <div
-          style={{ background: onLiveBannerChange.background }}
-          className={`${commonClasses} z-10 fixed ${
-            openBanner ? "h-14" : "h-0"
-          }  right-0 left-0 w-full flex items-center justify-center`}
-        >
-          <div>
+
+          {openBanner && onLiveBannerChange && onLiveBannerChange.background ? (
             <div
-              className="flex flex-col  md:flex-row items-center gap-0 md:gap-3"
-              style={{ color: onLiveBannerChange.textColor }}
+              style={{ background: onLiveBannerChange.background }}
+              className={`${commonClasses} z-10 fixed ${
+                openBanner ? "h-14" : "h-0"
+              }  right-0 left-0 w-full flex items-center justify-center`}
             >
-              <h4>{onLiveBannerChange.text}</h4>
-              <div className="">
-                <Link
-                  onClick={() => setBanner(false)}
-                  href={onLiveBannerChange.bannerUrl}
-                  className="text-bold border rounded-3xl	 px-5"
+              <div>
+                <div
+                  className="flex flex-col  md:flex-row items-center gap-0 md:gap-3"
+                  style={{ color: onLiveBannerChange.textColor }}
                 >
-                  {onLiveBannerChange.bannerUrlText}
-                </Link>
+                  <h4>{onLiveBannerChange.text}</h4>
+                  <div className="">
+                    <Link
+                      onClick={() => setBanner(false)}
+                      href={onLiveBannerChange.bannerUrl}
+                      className="text-bold border rounded-3xl	 px-5"
+                    >
+                      {onLiveBannerChange.bannerUrlText}
+                    </Link>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div className="hidden absolute sm:block  right-0 p-4">
-            <AiFillCloseCircle
-              onClick={() => setBanner(false)}
-              style={{ color: onLiveBannerChange.textColor }}
-            />
-          </div>
-          {banner.data && user.data ? (
-            <AiFillEdit
-              onClick={() => setIsEditingBanner(true)}
-              className="absolute left-5 font-semibold outline-none disabled:cursor-not-allowed left-5
+              <div className="hidden absolute sm:block  right-0 p-4">
+                <AiFillCloseCircle
+                  onClick={() => setBanner(false)}
+                  style={{ color: onLiveBannerChange.textColor }}
+                />
+              </div>
+              {banner.data && user.data ? (
+                <AiFillEdit
+                  onClick={() => setIsEditingBanner(true)}
+                  className="absolute left-5 font-semibold outline-none disabled:cursor-not-allowed left-5
 	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
-              color="white"
-              size={35}
-            />
+                  color="white"
+                  size={35}
+                />
+              ) : (
+                ""
+              )}
+            </div>
           ) : (
-            ""
+            <SkeletonTheme baseColor="#000" highlightColor="#7d7b78">
+              <Skeleton
+                count={1}
+                height={60}
+                className={`${commonClasses}  z-10 fixed h-14 right-0 left-0 w-full flex items-center justify-center`}
+              />
+            </SkeletonTheme>
           )}
-        </div>
-      ) : (
-        <SkeletonTheme baseColor="#000" highlightColor="#7d7b78">
-          <Skeleton
-            count={1}
-            height={60}
-            className={`${commonClasses}  z-10 fixed h-14 right-0 left-0 w-full flex items-center justify-center`}
-          />
-        </SkeletonTheme>
-      )}
       <header
         id="main-header"
         className={`${commonClasses} bg-primary-1 z-10 fixed ${
@@ -282,7 +284,7 @@ const MainHeader = (props: any) => {
                 </button>
               </li>
               <li>
-                {banner.data ? (
+                {banner.data && !props.openPopUp ? (
                   <EditBanner
                     setOnLiveBannerChange={setOnLiveBannerChange}
                     banner={banner.data}

@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getMainSection } from "@utils/core/API";
 
-const HeroSection = () => {
+const HeroSection = ({openPopUp}:{openPopUp:boolean}) => {
   const [previewImage, setPreviewImage] = useState(null);
   const mainSection = useQuery(["main-section"], () => getMainSection(), {
     onSuccess(data) {
@@ -28,12 +28,13 @@ const HeroSection = () => {
 
   return (
     <KnockSection
+      openPopUp={openPopUp}
       description={OnLiveMainSectionChange.p}
       title={
-        <KnockTrademark
+        OnLiveMainSectionChange.h2 ? <KnockTrademark
           isMainSection={true}
           OnLiveMainSectionChange={OnLiveMainSectionChange}
-        />
+        /> : ''
       }
       pTheme={{ width: "small" }}
       mainImgOrVideoLink={OnLiveMainSectionChange.buttonUrl}

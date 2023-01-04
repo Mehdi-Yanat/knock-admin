@@ -24,6 +24,8 @@ import { useRouter } from "next/router";
 import SEODefaults from "@utils/core/next-seo.config";
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const [openPopUp, setOpenPop] = useState(false);
+
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -41,10 +43,10 @@ function MyApp({ Component, pageProps }: AppProps) {
     <QueryClientProvider client={queryClient}>
       <Hydrate state={pageProps.dehydratedState}>
         <SharedCustomerStateProvider>
-          <DefaultLayout>
+          <DefaultLayout openPopUp={openPopUp} setOpenPop={setOpenPop} >
             <DynamicTopProgressBar />
             <DefaultSeo {...SEODefaults} />
-            <Component {...pageProps} />
+            <Component openPopUp={openPopUp} {...pageProps} />
           </DefaultLayout>
         </SharedCustomerStateProvider>
       </Hydrate>

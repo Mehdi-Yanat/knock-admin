@@ -139,6 +139,7 @@ const KnockSection = ({
   isOpen?: boolean;
   mainSection?: any;
   setPreviewImage?: any;
+  openPopUp?:boolean
 }) => {
   const { user } = useGetUserDataFromStore();
   const router = useRouter();
@@ -168,7 +169,7 @@ const KnockSection = ({
         } as CSSProperties
       }
     >
-      {props.isHome && props.mainSection ? (
+      {props.isHome && props.mainSection && !props.openPopUp ? (
         <EditMainSection
           mainSection={props.mainSection}
           setIsOpen={props.setIsOpen}
@@ -215,10 +216,8 @@ const KnockSection = ({
           ) : (
             <SkeletonTheme baseColor="#000" highlightColor="#7d7b78">
               <Skeleton
-                width={550}
                 count={1}
-                height={300}
-                className={"rounded-3xl mt-2"}
+                className={"rounded-3xl mt-2 w-[250px] h-[150px]  sm:w-[550px] sm:h-[300px] "}
               />
             </SkeletonTheme>
           )}
@@ -243,7 +242,7 @@ const KnockSection = ({
           ) : (
             <SkeletonTheme baseColor="#000" highlightColor="#7d7b78">
               <Skeleton
-                width={400}
+                width={300}
                 count={1}
                 height={20}
                 className={"rounded-3xl mt-2"}
@@ -264,10 +263,10 @@ const KnockSection = ({
           ) : (
             <SkeletonTheme baseColor="#000" highlightColor="#7d7b78">
               <Skeleton
-                width={300}
+                width={250}
                 count={1}
                 height={20}
-                className={"rounded-3xl mt-2"}
+                className={"rounded-3xl mt-3"}
               />
             </SkeletonTheme>
           )}
@@ -276,10 +275,10 @@ const KnockSection = ({
           ) : (
             <SkeletonTheme baseColor="#000" highlightColor="#7d7b78">
               <Skeleton
-                width={200}
+                width={150}
                 count={1}
                 height={20}
-                className={"rounded-3xl mt-2"}
+                className={"rounded-3xl mt-3"}
               />
             </SkeletonTheme>
           )}

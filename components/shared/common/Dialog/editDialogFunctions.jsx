@@ -17,8 +17,9 @@ const EditBanner = ({ setOnLiveBannerChange, banner, isOpen, setIsOpen }) => {
 		textColor: banner ? banner.textColor : '',
 		background: banner ? banner.background : '',
 		bannerUrl: banner ? banner.bannerUrl : '',
-		bannerUrlText: banner ? banner.bannerUrlText : ''
-	});
+		bannerUrlText: banner ? banner.bannerUrlText : '',
+		disable: banner ? banner.disable : false
+	});	
 
 	useEffect(() => {
 		setOnLiveBannerChange(formValues)
@@ -98,10 +99,18 @@ const EditBanner = ({ setOnLiveBannerChange, banner, isOpen, setIsOpen }) => {
 						autoComplete='bannerUrlText'
 						minLength={3}
 					/>
-
+					<div>
+						<input checked={formValues.disable} type="checkbox" id="diable" name="disable" onChange={(e) => setFormValues(value => {
+							return {
+								...value,
+								disable:e.target.checked
+							}
+						})} value={formValues.disable} />
+						<label for="diable"> Disable banner</label>
+					</div>
 					<div className="flex flex-col" >
 						<label >Change background</label>
-						<SketchPicker disableAlpha={true} color={formValues.background} onChangeComplete={(color) => {
+						<SketchPicker  disableAlpha={true} color={formValues.background} onChangeComplete={(color) => {
 							setFormValues(prev => {
 								return {
 									...prev,
