@@ -5,7 +5,7 @@ const ShippingPolicyScreen = () => {
 	return (
 		<Wrapper
 			head={{
-				title:"hamid"
+				title:""
 			}}
 			header={{
 				h1Children:''

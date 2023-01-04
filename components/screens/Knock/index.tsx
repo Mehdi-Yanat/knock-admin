@@ -149,7 +149,6 @@ const KnockScreen = ({ knockPlugin }: IKnockPluginPageProps) => {
 			<EasyToUseSection knockPlugin={knockPlugin} />
 			<DrumsThatKnockSection knockPlugin={knockPlugin} />
 			<ReviewsSection reviews={reviews} />
-
 			<SystemRequirementsSection
 				items1={[
 					'9 OSX 10.12+ - AU, VST3, AAX (Fully compatible with both Mac OS Ventura and Apple M1 & M2.)',
