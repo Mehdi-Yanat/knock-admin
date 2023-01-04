@@ -54,7 +54,7 @@ const DefaultLayout = ({
       <main
         className={`${commonClasses} relative bg-primary-2 mt-main-nav-h w-full flex flex-col`}
       >
-        {user.data ? <div className="fixed flex items-center  w-[150px] h-[50px] bottom-2 left-10 ">
+        {user.data ? <div className="fixed flex items-center z-50  w-[150px] h-[50px] bottom-2 left-10 ">
           <Button onClick={() => setOpenPop(true)}> Edit popup </Button>
         </div> : ''}
         {children}
