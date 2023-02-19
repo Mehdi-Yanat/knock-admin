@@ -27,6 +27,9 @@ const AddItemOnHeroSectionButton = ({
 	};
 
 	const prices = useMemo(() => {
+		if (!product?.variants.length) {
+			return
+		}
 		const prices: { price: string; compareToPrice?: string } = {
 			price: priceCurrencyFormatter(
 				product?.variants[0].price.amount,
@@ -46,7 +49,7 @@ const AddItemOnHeroSectionButton = ({
 
 	return (
 		<div className='flex flex-col gap-[0.35rem] items-center justify-center relative'>
-			<div className='flex flex-wrap gap-[0.35rem] text-[95%]'>
+			{prices ? <div className='flex flex-wrap gap-[0.35rem] text-[95%]'>
 				{prices.compareToPrice && (
 					<del className='line-through font-normal'>
 						{prices.compareToPrice}
@@ -60,7 +63,7 @@ const AddItemOnHeroSectionButton = ({
 				>
 					{prices.price}
 				</span>
-			</div>
+			</div> : ''}
 			{!hideButton && <Button {...buttonProps} />}
 		</div>
 	);
