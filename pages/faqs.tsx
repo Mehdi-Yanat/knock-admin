@@ -12,65 +12,6 @@ import {
 } from "@components/shared/common/Dialog/editDialogFunctions";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
-const faqs: (
-  | {
-      question: string;
-      answer: string;
-      __answer_type?: undefined;
-    }
-  | {
-      question: string;
-      answer: {
-        opening: string;
-        list: {
-          title: string;
-          items: string[];
-        }[];
-      };
-      __answer_type: "opening_and_lists";
-    }
-)[] = [
-  {
-    question: "DOES KNOCK COME WITH PRESETS?",
-    answer: "Yes! KNOCK comes bundled with factory presets crafted by DECAP.",
-  },
-  {
-    question: "ARE YOUR PLUGINS COMPATIBLE WITH MY DAW?",
-    answer:
-      "Our plugins are compatible with every DAW that supports VST3, AU or AAX plugin formats. Please note that VST2 is not supported. This includes the latest versions of: Ableton Live, FL Studio, Pro Tools, Logic, Bitwig Studio, Reaper, Studio One, and others.",
-  },
-  {
-    question: "WHAT ARE THE SYSTEM REQUIREMENTS / COMPATIBILITY?",
-    answer: {
-      opening: "Supported by all major DAWs in 64-bit VST3, AU and AAX format.",
-      list: [
-        {
-          title: "OS/Processor:",
-          items: [
-            "Mac: Intel Core i5, i7, i9, Xeon, Apple M1 - OSX 10.12+ - AU, VST3, AAX",
-            "Windows: Intel Core i5, i7, i9, Xeon (all Gen 5 and above), AMD Quad Core - WIN 8.1, 10 - 64 bit  VST3, AAX",
-            "HDD Space requirements: Minimum of 500MB - 8GB RAM required, 16GB recommended",
-          ],
-        },
-      ],
-    },
-    __answer_type: "opening_and_lists",
-  },
-  {
-    question: "DO YOU OFFER A DEMO VERSION?",
-    answer: "At the moment, there are no demo versions.",
-  },
-  {
-    question: "DO YOU SUPPORT MAC OS VENTURA & APPLE SILICON M1 & M2?",
-    answer:
-      "Our plugins are fully compatible with both Mac OS Ventura and Apple M1 & M2 processors.",
-  },
-  {
-    question: "IS PRO TOOLS / AAX SUPPORTED?",
-    answer: "Yes! Our plugins are compatible with Pro Tools / AAX.",
-  },
-];
-
 const FAQSPages: NextPage = () => {
   const { data } = useQuery(["faq"], () => getFaqPageData(), {
     onSuccess(data) {
@@ -84,6 +25,20 @@ const FAQSPages: NextPage = () => {
   const [listId, setListId] = useState("");
 
   const [formValues, setFormValues] = useState({});
+
+  const [windowWidth, setWindowWidth] = useState(0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    setWindowWidth(window.innerWidth);
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     if (faqId) {
@@ -133,7 +88,7 @@ const FAQSPages: NextPage = () => {
         />
         <div className="max-w-full md:max-w-[800px] mx-auto text-primary-4">
           <header>
-            <h1 className="text-h2 capitalize font-semibold text-primary-1">
+            <h1 className="text-h2 mt-5 capitalize font-semibold text-primary-1">
               FAQs
             </h1>
           </header>
@@ -141,19 +96,39 @@ const FAQSPages: NextPage = () => {
             {!data ? (
               <>
                 <SkeletonTheme baseColor="#000" highlightColor="#7d7b78">
-                  <Skeleton count={1} width={500} height={50} />
+                  <Skeleton
+                    count={1}
+                    width={windowWidth < 600 ? 250 : 500}
+                    height={50}
+                  />
                 </SkeletonTheme>
                 <SkeletonTheme baseColor="#000" highlightColor="#7d7b78">
-                  <Skeleton count={1} width={500} height={50} />
+                  <Skeleton
+                    count={1}
+                    width={windowWidth < 600 ? "100%" : 500}
+                    height={50}
+                  />
                 </SkeletonTheme>
                 <SkeletonTheme baseColor="#000" highlightColor="#7d7b78">
-                  <Skeleton count={1} width={500} height={50} />
+                  <Skeleton
+                    count={1}
+                    width={windowWidth < 600 ? "100%" : 500}
+                    height={50}
+                  />
                 </SkeletonTheme>
                 <SkeletonTheme baseColor="#000" highlightColor="#7d7b78">
-                  <Skeleton count={1} width={500} height={50} />
+                  <Skeleton
+                    count={1}
+                    width={windowWidth < 600 ? "100%" : 500}
+                    height={50}
+                  />
                 </SkeletonTheme>
                 <SkeletonTheme baseColor="#000" highlightColor="#7d7b78">
-                  <Skeleton count={1} width={500} height={50} />
+                  <Skeleton
+                    count={1}
+                    width={windowWidth < 600 ? "100%" : 500}
+                    height={50}
+                  />
                 </SkeletonTheme>
               </>
             ) : (

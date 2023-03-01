@@ -2,6 +2,7 @@ import type { IKnockPluginPageProps } from "@pages/knock";
 import { useQuery } from "@tanstack/react-query";
 import { getKnockPageData } from "@utils/core/API";
 import { useGetUserDataFromStore } from "@utils/core/hooks";
+import { useEffect, useState } from "react";
 import { SystemRequirementsSection } from "../KnockClipper/sections";
 import {
   DescriptionSection,
@@ -24,9 +25,22 @@ const KnockScreen = ({ knockPlugin }: IKnockPluginPageProps) => {
     refetchInterval: 3000,
   });
 
+  const [windowWidth, setWindowWidth] = useState(0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    setWindowWidth(window.innerWidth);
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   return (
     <>
-      <HeroSection knockPlugin={knockPlugin} />
+      <HeroSection windowWidth={windowWidth} knockPlugin={knockPlugin} />
       <DescriptionSection data={data} />
       {data ? (
         <>

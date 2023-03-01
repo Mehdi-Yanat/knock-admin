@@ -164,55 +164,60 @@ const MainHeader = (props: any) => {
 
   return (
     <>
-
-          {props.openBanner && onLiveBannerChange && onLiveBannerChange.background ? (
+      {props.openBanner &&
+      onLiveBannerChange &&
+      onLiveBannerChange.background ? (
+        <div
+          style={{ background: onLiveBannerChange.background }}
+          className={`${commonClasses} z-10 fixed ${
+            props.openBanner ? "h-14" : "h-0"
+          }  right-0 left-0 w-full flex items-center justify-center`}
+        >
+          <div>
             <div
-              style={{ background: onLiveBannerChange.background }}
-              className={`${commonClasses} z-10 fixed ${
-                props.openBanner ? "h-14" : "h-0"
-              }  right-0 left-0 w-full flex items-center justify-center`}
+              className="flex flex-col  md:flex-row items-center gap-0 md:gap-3"
+              style={{ color: onLiveBannerChange.textColor }}
             >
-              <div>
-                <div
-                  className="flex flex-col  md:flex-row items-center gap-0 md:gap-3"
-                  style={{ color: onLiveBannerChange.textColor }}
-                >
-                  <h4>{onLiveBannerChange.text}</h4>
-                  <div className="">
-                    <Link
-                      href={onLiveBannerChange.bannerUrl}
-                      className="text-bold border rounded-3xl	 px-5"
-                    >
-                      {onLiveBannerChange.bannerUrlText}
-                    </Link>
-                  </div>
+              <h4>{onLiveBannerChange.text}</h4>
+              {onLiveBannerChange.bannerUrlText ? (
+                <div className="">
+                  <Link
+                    href={onLiveBannerChange.bannerUrl}
+                    className="text-bold border rounded-3xl	 px-5"
+                  >
+                    {onLiveBannerChange.bannerUrlText}
+                  </Link>
                 </div>
-              </div>
-              <div className="hidden absolute sm:block  right-0 p-4">
-                <AiFillCloseCircle
-                  onClick={() => props.setBanner(false)}
-                  style={{ color: onLiveBannerChange.textColor }}
-                />
-              </div>
-              {banner.data && user.data ? (
-                <AiFillEdit
-                  onClick={() => setIsEditingBanner(true)}
-                  className="absolute left-5 font-semibold outline-none disabled:cursor-not-allowed left-5
-	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
-                  color="white"
-                  size={35}
-                />
               ) : (
                 ""
               )}
             </div>
+          </div>
+          <div className="hidden absolute sm:block  right-0 p-4">
+            <AiFillCloseCircle
+              onClick={() => props.setBanner(false)}
+              style={{ color: onLiveBannerChange.textColor }}
+            />
+          </div>
+          {banner.data && user.data ? (
+            <AiFillEdit
+              onClick={() => setIsEditingBanner(true)}
+              className="absolute left-5 font-semibold outline-none disabled:cursor-not-allowed left-5
+	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+              color="white"
+              size={35}
+            />
           ) : (
-            ''
+            ""
           )}
+        </div>
+      ) : (
+        ""
+      )}
       <header
         id="main-header"
         className={`${commonClasses} bg-primary-1 z-10 fixed ${
-          !banner.data  ? 'top-0'  :  props.openBanner ? "top-14" : "top-0"
+          !banner.data ? "top-0" : props.openBanner ? "top-14" : "top-0"
         } right-0 left-0 w-full flex flex-col`}
       >
         <div className="relative w-full px-4 mx-auto sm:px-8">
