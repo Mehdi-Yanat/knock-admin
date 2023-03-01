@@ -331,7 +331,7 @@ const CustomerProfileScreen = () => {
 
     return (
       <>
-        <section className="bg-primary-1 section-p-v1 h-[75vh] max-h-[45rem] min-h-fit">
+        <section className="bg-primary-1 section-p-v1 h-[75vh] mt-10  max-h-[45rem] min-h-fit">
           <div className="max-w-screen-md mx-auto">
             <p>
               {!user.isSuccess
