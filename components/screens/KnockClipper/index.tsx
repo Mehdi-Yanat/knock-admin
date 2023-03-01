@@ -9,6 +9,8 @@ import {
   VideosSection,
 } from "./sections";
 
+import dynamic from "next/dynamic";
+
 const KnockScreen = ({ knockClipperPlugin }: IKnockClipperPageProps) => {
   const { data } = useQuery(
     ["knock-clipper-page"],
@@ -36,9 +38,15 @@ const KnockScreen = ({ knockClipperPlugin }: IKnockClipperPageProps) => {
       })
     : [];
 
+  const DynamicComponentWithNoSSR = dynamic(
+    () =>
+      import("./sections/Hero").then((mod) => mod.default),
+    { ssr: false }
+  );
+
   return (
     <>
-      <HeroSection knockClipperPlugin={knockClipperPlugin} />
+      <DynamicComponentWithNoSSR knockClipperPlugin={knockClipperPlugin} />
       <DescriptionSection data={data} />
 
       {data ? (
@@ -64,7 +72,7 @@ const KnockScreen = ({ knockClipperPlugin }: IKnockClipperPageProps) => {
           />
         </>
       ) : (
-        ''
+        ""
       )}
     </>
   );
