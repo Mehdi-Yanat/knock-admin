@@ -166,6 +166,7 @@ const MainHeader = (props: any) => {
     <>
       {props.openBanner &&
       onLiveBannerChange &&
+      user.data &&
       onLiveBannerChange.background ? (
         <div
           style={{ background: onLiveBannerChange.background }}
@@ -217,7 +218,7 @@ const MainHeader = (props: any) => {
       <header
         id="main-header"
         className={`${commonClasses} bg-primary-1 z-10 fixed ${
-          !banner.data ? "top-0" : props.openBanner ? "top-14" : "top-0"
+          !banner.data ? "top-0" : props.openBanner && user.data ? "top-14" : "top-0"
         } right-0 left-0 w-full flex flex-col`}
       >
         <div className="relative w-full px-4 mx-auto sm:px-8">
