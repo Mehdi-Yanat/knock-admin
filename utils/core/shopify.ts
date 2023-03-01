@@ -17,7 +17,7 @@ export const getShopifyClient = () => {
 
 	return Client.buildClient({
 		domain: DOMAINE,
-		storefrontAccessToken: SHOPIFY_STOREFRONT_API_TOKEN
+		storefrontAccessToken: SHOPIFY_STOREFRONT_API_TOKEN,
 	});
 };
 

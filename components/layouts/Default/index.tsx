@@ -6,7 +6,11 @@ import {
   useState,
 } from "react";
 import MainHeader from "./components/MainHeader";
-import { getGetAccessTokenFromCookie, useGetUserData, useGetUserDataFromStore } from "@utils/core/hooks";
+import {
+  getGetAccessTokenFromCookie,
+  useGetUserData,
+  useGetUserDataFromStore,
+} from "@utils/core/hooks";
 import MainFooter from "./components/MainFooter";
 import MarketingPopUp from "../../shared/common/marketingPopup/marketing";
 import { useQuery } from "@tanstack/react-query";
@@ -19,10 +23,14 @@ const DefaultLayout = ({
   children,
   setOpenPop,
   openPopUp,
+  openBanner,
+  setBanner,
 }: {
   children: ReactNode;
   setOpenPop: Dispatch<SetStateAction<boolean>>;
   openPopUp: boolean;
+  openBanner: boolean;
+  setBanner: Dispatch<SetStateAction<boolean>>;
 }) => {
   const { user } = useGetUserDataFromStore();
   const popup = useQuery(["get-popup"], () => getPopup(), {
@@ -41,7 +49,11 @@ const DefaultLayout = ({
 
   return (
     <>
-      <MainHeader openPopUp={openPopUp} />
+      <MainHeader
+        openBanner={openBanner}
+        setBanner={setBanner}
+        openPopUp={openPopUp}
+      />
       {popup.data ? (
         <MarketingPopUp
           popup={popup.data}
@@ -52,11 +64,17 @@ const DefaultLayout = ({
         ""
       )}
       <main
-        className={`${commonClasses} relative bg-primary-2 mt-main-nav-h w-full flex flex-col`}
+        className={`${commonClasses} relative bg-primary-2 ${
+          openBanner ? "mt-[70px]" : "mt-[30px]"
+        }  w-full flex flex-col`}
       >
-        {user.data ? <div className="fixed flex items-center z-50  w-[150px] h-[50px] bottom-2 left-10 ">
-          <Button onClick={() => setOpenPop(true)}> Edit popup </Button>
-        </div> : ''}
+        {user.data ? (
+          <div className="fixed flex items-center z-50  w-[150px] h-[50px] bottom-2 left-10 ">
+            <Button onClick={() => setOpenPop(true)}> Edit popup </Button>
+          </div>
+        ) : (
+          ""
+        )}
         {children}
       </main>
       <MainFooter />

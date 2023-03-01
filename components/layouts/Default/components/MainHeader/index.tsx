@@ -28,7 +28,6 @@ import { AiFillCloseCircle, AiFillEdit } from "react-icons/ai";
 import { commonClasses } from "../..";
 import UserAuthButton from "./components/UserAuthButton";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 import { EditBanner } from "@components/shared/common/Dialog/editDialogFunctions";
 const linkClasses = ({
   isActive,
@@ -71,7 +70,6 @@ const MainHeader = (props: any) => {
   const [setEditBanner, setIsEditingBanner] = useState(false);
   const [isSmallScreenNaveOpen, setIsSmallScreenNaveOpen] = useState(false);
   const [isCheckoutFound, setIsCheckoutFound] = useState(false);
-  const [openBanner, setBanner] = useState(true);
 
   const queryClient = useQueryClient();
 
@@ -127,15 +125,6 @@ const MainHeader = (props: any) => {
       enabled: !!userCheckoutIdAndKeyFromCookie && !isCheckoutFound,
       refetchInterval: 10 * 60 * 1000,
       onSuccess: ({ checkout }) => {
-        if (checkout.lineItems.length !== 0)
-          customerGlobalActions.cart.set(customerDispatch, {
-            cartObj: {
-              productsData: checkout.lineItems.map((item) =>
-                convertProductToCartItem({ product: item })
-              ),
-              updatedAt: new Date(),
-            },
-          });
         setIsCheckoutFound(true);
       },
     }
@@ -176,11 +165,11 @@ const MainHeader = (props: any) => {
   return (
     <>
 
-          {openBanner && onLiveBannerChange && onLiveBannerChange.background ? (
+          {props.openBanner && onLiveBannerChange && onLiveBannerChange.background ? (
             <div
               style={{ background: onLiveBannerChange.background }}
               className={`${commonClasses} z-10 fixed ${
-                openBanner ? "h-14" : "h-0"
+                props.openBanner ? "h-14" : "h-0"
               }  right-0 left-0 w-full flex items-center justify-center`}
             >
               <div>
@@ -201,7 +190,7 @@ const MainHeader = (props: any) => {
               </div>
               <div className="hidden absolute sm:block  right-0 p-4">
                 <AiFillCloseCircle
-                  onClick={() => setBanner(false)}
+                  onClick={() => props.setBanner(false)}
                   style={{ color: onLiveBannerChange.textColor }}
                 />
               </div>
@@ -218,18 +207,12 @@ const MainHeader = (props: any) => {
               )}
             </div>
           ) : (
-            <SkeletonTheme baseColor="#000" highlightColor="#7d7b78">
-              <Skeleton
-                count={1}
-                height={60}
-                className={`${commonClasses}  z-10 fixed h-14 right-0 left-0 w-full flex items-center justify-center`}
-              />
-            </SkeletonTheme>
+            ''
           )}
       <header
         id="main-header"
         className={`${commonClasses} bg-primary-1 z-10 fixed ${
-          openBanner ? "top-14" : "top-0"
+          !banner.data  ? 'top-0'  :  props.openBanner ? "top-14" : "top-0"
         } right-0 left-0 w-full flex flex-col`}
       >
         <div className="relative w-full px-4 mx-auto sm:px-8">
