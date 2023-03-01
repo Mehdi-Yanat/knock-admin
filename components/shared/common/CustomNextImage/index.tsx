@@ -10,6 +10,7 @@ export interface ICustomNextImageProps extends Omit<ImageProps, 'alt'> {
 	alt?: string;
 	weservNlOptimized?: boolean;
 	isAnimated?: boolean;
+	src:string;
 }
 
 const CustomNextImage = ({

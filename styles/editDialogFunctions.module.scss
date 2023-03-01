@@ -1,0 +1,33 @@
+.selectBox{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 3px solid #7548FE;
+    margin: 1em 0;
+    padding: .5em;
+    border-radius: 15px;
+
+    &>div:nth-child(1){
+        display: flex;
+        gap: .5em;
+        div{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        h2{
+            font-size: 1rem;
+        }
+        p{
+            font-size: .7rem;
+        }
+    }
+}
+
+@media (max-width:440px) {
+    .selectBox{
+        flex-direction: column;
+        padding: 1em;
+        gap: .5em;
+    }
+}

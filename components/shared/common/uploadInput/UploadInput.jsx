@@ -20,7 +20,8 @@ const UploadInput = (props) => {
                     props.setFormValues(prev => {
                         return {
                             ...prev,
-                            mainImageUrl: event.target.files[0]
+                            mainImageUrl: event.target.files[0],
+                            imageUrl:event.target.files[0]
                         }
                     })
                 }} />

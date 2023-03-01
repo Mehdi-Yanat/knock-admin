@@ -22,9 +22,12 @@ import { SharedCustomerStateProvider } from "context/Customer";
 import Script from "next/script";
 import { useRouter } from "next/router";
 import SEODefaults from "@utils/core/next-seo.config";
+import "react-loading-skeleton/dist/skeleton.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [openPopUp, setOpenPop] = useState(false);
+  const [openBanner, setBanner] = useState(true);
+
 
   const [queryClient] = useState(
     () =>
@@ -39,11 +42,12 @@ function MyApp({ Component, pageProps }: AppProps) {
       })
   );
 
+
   return (
     <QueryClientProvider client={queryClient}>
       <Hydrate state={pageProps.dehydratedState}>
         <SharedCustomerStateProvider>
-          <DefaultLayout openPopUp={openPopUp} setOpenPop={setOpenPop} >
+          <DefaultLayout setBanner={setBanner} openBanner={openBanner} openPopUp={openPopUp} setOpenPop={setOpenPop} >
             <DynamicTopProgressBar />
             <DefaultSeo {...SEODefaults} />
             <Component openPopUp={openPopUp} {...pageProps} />

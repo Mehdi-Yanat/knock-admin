@@ -115,6 +115,8 @@ const KnockSection = ({
   textContainerTheme,
   sectionInnerWrapperTheme,
   mainImgOrVideoLink,
+  mainSectionPageId,
+  windowWidth,
   // mainImgOrVideoProps = {}
   ...props
 }: {
@@ -139,7 +141,9 @@ const KnockSection = ({
   isOpen?: boolean;
   mainSection?: any;
   setPreviewImage?: any;
-  openPopUp?:boolean
+  openPopUp?: boolean;
+  mainSectionPageId: string;
+  windowWidth?: any;
 }) => {
   const { user } = useGetUserDataFromStore();
   const router = useRouter();
@@ -169,13 +173,15 @@ const KnockSection = ({
         } as CSSProperties
       }
     >
-      {props.isHome && props.mainSection && !props.openPopUp ? (
+      {props.mainSection && !props.openPopUp ? (
         <EditMainSection
           mainSection={props.mainSection}
           setIsOpen={props.setIsOpen}
           isOpen={props.isOpen}
           setOnLiveMainSectionChange={props.setOnLiveMainSectionChange}
           setPreviewImage={props.setPreviewImage}
+          mainSectionPageId={mainSectionPageId}
+          OnLiveMainSectionChange={props.OnLiveMainSectionChange}
         />
       ) : (
         ""
@@ -217,7 +223,9 @@ const KnockSection = ({
             <SkeletonTheme baseColor="#000" highlightColor="#7d7b78">
               <Skeleton
                 count={1}
-                className={"rounded-3xl mt-2 w-[250px] h-[150px]  sm:w-[550px] sm:h-[300px] "}
+                width={windowWidth < 500 ? 300 : 500}
+                height={windowWidth < 500 ? 200 : 300}
+                className="w-full"
               />
             </SkeletonTheme>
           )}
@@ -235,7 +243,7 @@ const KnockSection = ({
               {title || (
                 <>
                   DRUMS THAT&nbsp;
-                  <KnockTrademark isMainSection={false} />
+                  <KnockTrademark />
                 </>
               )}
             </h2>
@@ -270,7 +278,9 @@ const KnockSection = ({
               />
             </SkeletonTheme>
           )}
-          {buttonElem ? buttonElem  : props.mainSection ? (
+          {buttonElem ? (
+            buttonElem
+          ) : props.mainSection ? (
             <Button className="capitalize" {...buttonProps} />
           ) : (
             <SkeletonTheme baseColor="#000" highlightColor="#7d7b78">
@@ -282,14 +292,14 @@ const KnockSection = ({
               />
             </SkeletonTheme>
           )}
-          {!props.isHome || !user.data ? (
+          {!user.data ? (
             ""
           ) : props.mainSection ? (
             <Button onClick={() => props.setIsOpen(true)} className="mt-5">
               <AiFillEdit />
             </Button>
           ) : (
-            <SkeletonTheme  baseColor="#000" highlightColor="#7d7b78">
+            <SkeletonTheme baseColor="#000" highlightColor="#7d7b78">
               <Skeleton
                 width={100}
                 count={1}

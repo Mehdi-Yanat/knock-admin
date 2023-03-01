@@ -4,8 +4,15 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getMainSection } from "@utils/core/API";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
-const HeroSection = ({openPopUp}:{openPopUp:boolean}) => {
+const HeroSection = ({
+  openPopUp,
+  windowWidth,
+}: {
+  openPopUp: boolean;
+  windowWidth: number;
+}) => {
   const [previewImage, setPreviewImage] = useState(null);
   const mainSection = useQuery(["main-section"], () => getMainSection(), {
     onSuccess(data) {
@@ -23,18 +30,28 @@ const HeroSection = ({openPopUp}:{openPopUp:boolean}) => {
     pColor: "",
     mainImageUrl: "",
   });
-  
+
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <KnockSection
+      windowWidth={windowWidth}
       openPopUp={openPopUp}
       description={OnLiveMainSectionChange.p}
       title={
-        OnLiveMainSectionChange.h2 ? <KnockTrademark
-          isMainSection={true}
-          OnLiveMainSectionChange={OnLiveMainSectionChange}
-        /> : ''
+        OnLiveMainSectionChange.h2 ? (
+          <KnockTrademark
+            tradeMark={
+              OnLiveMainSectionChange.h2 || (
+                <SkeletonTheme baseColor="#000" highlightColor="#7d7b78">
+                  <Skeleton count={1} height={350} />
+                </SkeletonTheme>
+              )
+            }
+          />
+        ) : (
+          ""
+        )
       }
       pTheme={{ width: "small" }}
       mainImgOrVideoLink={OnLiveMainSectionChange.buttonUrl}
@@ -59,6 +76,7 @@ const HeroSection = ({openPopUp}:{openPopUp:boolean}) => {
       isHome={true}
       mainSection={mainSection.data}
       setPreviewImage={setPreviewImage}
+      mainSectionPageId={"home-page"}
     />
   );
 };
