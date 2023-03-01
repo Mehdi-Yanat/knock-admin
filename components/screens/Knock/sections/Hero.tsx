@@ -10,8 +10,10 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
 const HeroSection = ({
   knockPlugin,
+  windowWidth
 }: {
   knockPlugin: IKnockPluginPageProps["knockPlugin"];
+  windowWidth:number
 }) => {
   const [previewImage, setPreviewImage] = useState(null);
 
@@ -43,6 +45,7 @@ const HeroSection = ({
   return (
     <>
       <KnockSection
+        windowWidth={windowWidth}
         buttonElem={
           <AddItemOnHeroSectionButton
             product={knockPlugin}

@@ -3,7 +3,7 @@ import KnockTrademark from "@components/shared/core/KnockTrademark";
 import type { IKnockClipperPageProps } from "@pages/knock-clipper";
 import CustomNextImage from "@components/shared/common/CustomNextImage";
 import AddItemOnHeroSectionButton from "@components/shared/core/AddItemOnHeroSectionButton";
-import { useState, type CSSProperties } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { EditMainSection } from "@components/shared/common/Dialog/editDialogFunctions";
 import { useQuery } from "@tanstack/react-query";
 import { getKnockClipperMainSection } from "@utils/core/API";
@@ -44,6 +44,20 @@ const HeroSection = ({
   });
 
   const { user } = useGetUserDataFromStore();
+
+  const [windowWidth, setWindowWidth] = useState(0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    setWindowWidth(window.innerWidth);
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <section
@@ -105,7 +119,11 @@ const HeroSection = ({
             />
           ) : (
             <SkeletonTheme baseColor="#000" highlightColor="#7d7b78">
-              <Skeleton count={1} height={500} width={300} />
+              <Skeleton
+                count={1}
+                height={windowWidth < 500 ? 300  : 500}
+                width={300}
+              />
             </SkeletonTheme>
           )}
         </div>
@@ -123,10 +141,10 @@ const HeroSection = ({
         </h2>
         <p className="text-primary-2 mt-2 mb-5 leading-6 max-w-[350px] sm:text-[1.3rem]">
           {knockMainSectionData.p || (
-                <SkeletonTheme baseColor="#000" highlightColor="#7d7b78">
-                  <Skeleton count={1} width={200} height={25} />
-                </SkeletonTheme>
-              )}
+            <SkeletonTheme baseColor="#000" highlightColor="#7d7b78">
+              <Skeleton count={1} width={200} height={25} />
+            </SkeletonTheme>
+          )}
         </p>
         <AddItemOnHeroSectionButton
           product={knockClipperPlugin}
