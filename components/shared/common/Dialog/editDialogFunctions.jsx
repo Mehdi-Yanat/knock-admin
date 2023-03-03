@@ -345,6 +345,29 @@ const EditMainSection = ({ setOnLiveMainSectionChange, OnLiveMainSectionChange, 
 						autoComplete='button url'
 						minLength={3}
 					/> : ''}
+					<div className="flex flex-col" >
+						<label >Change h2 color</label>
+						<SketchPicker disableAlpha={true} color={formValues.h2Color} onChangeComplete={(color) => {
+							setFormValues(prev => {
+								return {
+									...prev,
+									h2Color: color.hex
+								}
+							})
+						}} />
+					</div>
+
+					<div className="flex flex-col" >
+						<label >Change p color</label>
+						<SketchPicker disableAlpha={true} color={formValues.pColor} onChangeComplete={(color) => {
+							setFormValues(prev => {
+								return {
+									...prev,
+									pColor: color.hex
+								}
+							})
+						}} />
+					</div>
 
 					<div>
 						<label >Upload new image</label>
