@@ -622,11 +622,11 @@ const HeroSection = ({ product }: { product: any }) => {
                     </>
                   ) : (
                     <>
-                      <iframe src={el.src + "?autoplay=1"} allow={"autoplay"} />
-                      <div className="flex flex-col items-center mt-4">
+                      <iframe src={el.src + "?autoplay=1"}  allow={"autoplay"} />
+                      <div className="flex flex-row justify-center gap-5 items-center mt-4 lg:flex  ">
                         {user.data ? (
                           <AiFillEdit
-                            className="cursor-pointer m-auto 	 font-semibold outline-none  
+                            className="cursor-pointer	 font-semibold outline-none  
 	duration-300 transition-all w-fit px-5 py-[0.20rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
                             color="white"
                             size={20}
@@ -648,7 +648,7 @@ const HeroSection = ({ product }: { product: any }) => {
                             api="youtube-video"
                           >
                             <AiFillDelete
-                              className=" cursor-pointer mt-2  font-semibold outline-none 
+                              className=" cursor-pointe font-semibold outline-none 
 	duration-300 transition-all w-fit px-5 py-[0.20rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
                               color="white"
                               size={20}
