@@ -362,7 +362,7 @@ const HeroSection = ({ product }: { product: any }) => {
                       {user.data ? (
                         <div className="flex justify-between">
                           <AiFillEdit
-                            className="  font-semibold outline-none disabled:cursor-not-allowed 
+                            className="font-semibold outline-none disabled:cursor-not-allowed 
                             duration-300 transition-all w-fit px-5 py-[0.30rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
                             color="white"
                             size={20}
@@ -623,39 +623,41 @@ const HeroSection = ({ product }: { product: any }) => {
                   ) : (
                     <>
                       <iframe src={el.src + "?autoplay=1"} allow={"autoplay"} />
-                      {user.data ? (
-                        <AiFillEdit
-                          className="cursor-pointer m-auto mt-5	 font-semibold outline-none  
-	duration-300 transition-all w-fit px-5 py-[0.20rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
-                          color="white"
-                          size={20}
-                          onClick={() => {
-                            setIsOpen(true);
-                            setFeatureId(null);
-                            setYoutubeId(el.id);
-                            setFilesIncludeId(null);
-                            setDescriptionId(null);
-                          }}
-                        />
-                      ) : (
-                        ""
-                      )}
-                      {user.data ? (
-                        <AlertDialogComponent
-                          handle={product.handle}
-                          id={el.id}
-                          api="youtube-video"
-                        >
-                          <AiFillDelete
-                            className=" cursor-pointer mt-5  font-semibold outline-none 
+                      <div className="flex flex-col items-center mt-4">
+                        {user.data ? (
+                          <AiFillEdit
+                            className="cursor-pointer m-auto 	 font-semibold outline-none  
 	duration-300 transition-all w-fit px-5 py-[0.20rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
                             color="white"
                             size={20}
+                            onClick={() => {
+                              setIsOpen(true);
+                              setFeatureId(null);
+                              setYoutubeId(el.id);
+                              setFilesIncludeId(null);
+                              setDescriptionId(null);
+                            }}
                           />
-                        </AlertDialogComponent>
-                      ) : (
-                        ""
-                      )}
+                        ) : (
+                          ""
+                        )}
+                        {user.data ? (
+                          <AlertDialogComponent
+                            handle={product.handle}
+                            id={el.id}
+                            api="youtube-video"
+                          >
+                            <AiFillDelete
+                              className=" cursor-pointer mt-2  font-semibold outline-none 
+	duration-300 transition-all w-fit px-5 py-[0.20rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                              color="white"
+                              size={20}
+                            />
+                          </AlertDialogComponent>
+                        ) : (
+                          ""
+                        )}
+                      </div>
                     </>
                   )}
                 </div>
