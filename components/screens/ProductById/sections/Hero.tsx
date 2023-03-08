@@ -1,218 +1,820 @@
-import type { IProductByIdPageProps } from '@pages/products/[productId]';
+import type { IProductByIdPageProps } from "@pages/products/[productId]";
 
-import Button from '@components/shared/core/Button';
+import Button from "@components/shared/core/Button";
 
-import CustomNextImage from '@components/shared/common/CustomNextImage';
+import CustomNextImage from "@components/shared/common/CustomNextImage";
 
-import classes from '@styles/productsPages.module.scss';
-import ProductDetails from '@components/screens/ProductById/sections/ProductDetails';
-import Link from 'next/link';
-import { FaPlay } from 'react-icons/fa';
-import { useState } from 'react';
+import classes from "@styles/productsPages.module.scss";
+import ProductDetails from "@components/screens/ProductById/sections/ProductDetails";
+import Link from "next/link";
+import { FaPlay } from "react-icons/fa";
+import { Fragment, useEffect, useState } from "react";
+import {
+  AddDTKfeatures,
+  EditDTKSection,
+} from "@components/shared/common/Dialog/editDialogFunctions";
+import { useGetUserDataFromStore } from "@utils/core/hooks";
+import { AiFillDelete, AiFillEdit, AiFillPlusCircle } from "react-icons/ai";
+import AlertDialogComponent from "@components/shared/common/Dialog/alertDialog";
 
-const HeroSection = ({ product }: IProductByIdPageProps) => {
-	const [isYoutubeVideo, setIsYoutubeVideo] = useState(10);
+const HeroSection = ({ product }: { product: any }) => {
+  const [isYoutubeVideo, setIsYoutubeVideo] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenAdd, setIsOpenAdd] = useState(false);
+  const [featureId, setFeatureId] = useState(null);
+  const [youtubeId, setYoutubeId] = useState(null);
+  const [filesIncludeId, setFilesIncludeId] = useState(null);
+  const [descriptionId, setDescriptionId] = useState(null);
 
-	const renderFeature = () => {
-		switch (product.handle) {
-			case 'decap-ableton-live-masterclass':
-			case 'complete-knock-bundle-v2-all-digital-products':
-				return (
-					<div>
-						<div className='px-8'>
-							{(product.description as unknown as any[]).map(
-								(el: any, index: any) => (
-									<p key={index}> {el} </p>
-								)
-							)}
-						</div>
-						<div className={classes.productPageFeaturesWithOneBox}>
-							<div className={classes.overLayFeatures}></div>
-							<div>
-								{product.filesIncluded.details.length ? (
-									<ul className={classes.productPageDetailsUl}>
-										{product.filesIncluded.details.map((el, index) => (
-											<li key={index}>{el}</li>
-										))}
-									</ul>
-								) : (
-									''
-								)}
-							</div>
-						</div>
-					</div>
-				);
+  const [typeAction, setTypeAction] = useState("");
 
-			case 'melodies-that-knock-vol-1':
-			case 'melodies-that-knock-vol-2-free-download':
-				return (
-					<div>
-						<div className={classes.productPageFeaturesWithOneBox}>
-							<div className={classes.overLayFeatures}></div>
-							<div>
-								{product.features.length ? (
-									<ul className={classes.productPageDetailsUl}>
-										{product.features.map((el, index) => (
-											<li key={index}>{el}</li>
-										))}
-									</ul>
-								) : (
-									''
-								)}
-							</div>
-						</div>
-					</div>
-				);
+  const { user } = useGetUserDataFromStore();
 
-			case 'drums-that-knock-vol-1':
-			case 'drums-that-knock-vol-2':
-			case 'drums-that-knock-vol-3':
-			case 'drums-that-knock-vol-4':
-				return (
-					<div className={classes.productPageFeaturesSmallBox}>
-						<div className={classes.overLayFeaturesSection}></div>
-						<div>
-							{product.features.length ? (
-								<ul className={classes.productPageFeaturesBox}>
-									{product.features.map((el: any, index: any) => (
-										<li key={index}>{el}</li>
-									))}
-								</ul>
-							) : (
-								''
-							)}
-							{product.filesIncluded.details.length ? (
-								<ul className={classes.productPageFeaturesBox}>
-									{product.filesIncluded.details.map((el, index) => (
-										<li key={index}>{el}</li>
-									))}
-								</ul>
-							) : (
-								''
-							)}
-						</div>
-					</div>
-				);
+  const [formValues, setFormValues] = useState({
+    li: "",
+    src: "https://www.youtube.com/embed/<insert-youtube-video-id-here>",
+    srcImage:
+      "https://img.youtube.com/vi/<insert-youtube-video-id-here>/maxresdefault.jpg",
+    title: "",
+    handle: product.handle,
+  });
 
-			case 'drums-that-knock-x':
-				return (
-					<div className={classes.productPageFeaturesBigBox}>
-						<div className={classes.overLayFeaturesSection}></div>
-						<div>
-							{product.features.length ? (
-								<ul className={classes.productPageFeaturesBox}>
-									{product.features.map((el: any, index: any) => (
-										<li key={index}>{el}</li>
-									))}
-								</ul>
-							) : (
-								''
-							)}
-							{product.filesIncluded.details.length ? (
-								<ul className={classes.productPageFeaturesBox}>
-									{product.filesIncluded.details.map((el, index) => (
-										<li key={index}>{el}</li>
-									))}
-								</ul>
-							) : (
-								''
-							)}
-						</div>
-					</div>
-				);
+  const renderFeature = () => {
+    switch (product.handle) {
+      case "decap-ableton-live-masterclass":
+      case "complete-knock-bundle-v2-all-digital-products":
+        return (
+          <div>
+            <div className="px-8">
+              {product.description.map((el: any, index: any) => (
+                <Fragment key={index}>
+                  <p> {el.h3} </p>
+                  {el.text.map((el: string, index: any) => (
+                    <p key={index}> {el} </p>
+                  ))}
+                  {user.data ? (
+                    <AiFillEdit
+                      className="left-5 cursor-pointer m-auto mt-5	 font-semibold outline-none  left-5
+	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                      color="white"
+                      size={25}
+                      onClick={() => {
+                        setIsOpen(true);
+                        setFeatureId(null);
+                        setYoutubeId(null);
+                        setFilesIncludeId(null);
+                        setDescriptionId(el.id);
+                      }}
+                    />
+                  ) : (
+                    ""
+                  )}
+                </Fragment>
+              ))}
+            </div>
+            <div className={classes.productPageFeaturesWithOneBox}>
+              <div className={classes.overLayFeatures}></div>
+              <div>
+                {product.filesIncluded.length ? (
+                  <ul className={classes.productPageDetailsUl}>
+                    {product.filesIncluded.map((el: any) => (
+                      <Fragment key={el.id}>
+                        <li key={el.id}>{el.li}</li>
+                        {user.data ? (
+                          <>
+                            <AiFillEdit
+                              className="left-5 cursor-pointer m-auto mt-5	 font-semibold outline-none  left-5
+	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                              color="white"
+                              size={25}
+                              onClick={() => {
+                                setIsOpen(true);
+                                setFeatureId(null);
+                                setYoutubeId(null);
+                                setFilesIncludeId(el.id);
+                                setDescriptionId(null);
+                              }}
+                            />
+                            {user.data ? (
+                              <AlertDialogComponent
+                                handle={product.handle}
+                                id={el.id}
+                                api="files-included"
+                              >
+                                <AiFillDelete
+                                  className=" left-5 cursor-pointer m-auto mt-2	 font-semibold outline-none  left-5
+                                  duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                                  color="white"
+                                  size={25}
+                                />
+                              </AlertDialogComponent>
+                            ) : (
+                              ""
+                            )}
+                          </>
+                        ) : (
+                          ""
+                        )}
+                      </Fragment>
+                    ))}
+                  </ul>
+                ) : (
+                  ""
+                )}
+                {product.filesIncluded.length && user.data ? (
+                  <div className="flex items-center justify-center">
+                    <AiFillPlusCircle
+                      className=" cursor-pointer mb-5  font-semibold outline-none 
+	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                      color="white"
+                      size={25}
+                      onClick={() => {
+                        setIsOpenAdd(true);
+                        setTypeAction("files Included");
+                      }}
+                    />
+                  </div>
+                ) : (
+                  ""
+                )}
+              </div>
+            </div>
+          </div>
+        );
 
-			default:
-				return (
-					<div className={classes.productPageFeatures}>
-						<div className={classes.overLayFeaturesSection}></div>
-						<div>
-							{product.features.length ? (
-								<ul>
-									{product.features.map((el: any, index: any) => (
-										<li key={index}>{el}</li>
-									))}
-								</ul>
-							) : (
-								''
-							)}
-							{product.filesIncluded.details.length ? (
-								<ul>
-									{product.filesIncluded.details.map((el, index) => (
-										<li key={index}>{el}</li>
-									))}
-								</ul>
-							) : (
-								''
-							)}
-						</div>
-					</div>
-				);
-		}
-	};
+      case "melodies-that-knock-vol-1":
+      case "melodies-that-knock-vol-2-free-download":
+        return (
+          <div>
+            <div className={classes.productPageFeaturesWithOneBox}>
+              <div className={classes.overLayFeatures}></div>
+              <div>
+                {product.features.length ? (
+                  <ul className={classes.productPageDetailsUl}>
+                    {product.features.map((el: any) => (
+                      <Fragment key={el.id}>
+                        <li>{el.li}</li>
+                        <>
+                          {user.data ? (
+                            <AiFillEdit
+                              className="left-5 cursor-pointer m-auto mt-5	 font-semibold outline-none  left-5
+	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                              color="white"
+                              size={25}
+                              onClick={() => {
+                                setIsOpen(true);
+                                setFeatureId(el.id);
+                                setYoutubeId(null);
+                                setFilesIncludeId(null);
+                              }}
+                            />
+                          ) : (
+                            ""
+                          )}
+                          {user.data ? (
+                            <AlertDialogComponent
+                              handle={product.handle}
+                              id={el.id}
+                              api="feature"
+                            >
+                              <AiFillDelete
+                                className=" left-5 cursor-pointer m-auto mt-2	 font-semibold outline-none  left-5
+                                  duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                                color="white"
+                                size={25}
+                              />
+                            </AlertDialogComponent>
+                          ) : (
+                            ""
+                          )}
+                        </>
+                      </Fragment>
+                    ))}
+                  </ul>
+                ) : (
+                  ""
+                )}
+                {product.features.length && user.data ? (
+                  <div className="flex items-center justify-center">
+                    <AiFillPlusCircle
+                      className=" cursor-pointer mb-5  font-semibold outline-none 
+	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                      color="white"
+                      size={25}
+                      onClick={() => {
+                        setIsOpenAdd(true);
+                        setTypeAction("features");
+                      }}
+                    />
+                  </div>
+                ) : (
+                  ""
+                )}
+              </div>
+            </div>
+          </div>
+        );
 
-	return (
-		<section className={classes.productPageSection}>
-			<div className={classes.productPageContainer}>
-				<ProductDetails product={product} />
+      case "drums-that-knock-vol-1":
+      case "drums-that-knock-vol-2":
+      case "drums-that-knock-vol-3":
+      case "drums-that-knock-vol-4":
+        return (
+          <div className={classes.productPageFeaturesSmallBox}>
+            <div className={classes.overLayFeaturesSection}></div>
+            <div>
+              {product.features.length ? (
+                <ul className={classes.productPageFeaturesBox}>
+                  {product.features.map((el: any) => (
+                    <div key={el.id} className="flex items-center w-full">
+                      <li>{el.li}</li>
+                      {user.data ? (
+                        <>
+                          <AiFillEdit
+                            className="cursor-pointer font-semibold outline-none	duration-300 transition-all w-fit px-3 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                            color="white"
+                            size={25}
+                            onClick={() => {
+                              setIsOpen(true);
+                              setFeatureId(el.id);
+                              setYoutubeId(null);
+                              setFilesIncludeId(null);
+                              setDescriptionId(null);
+                            }}
+                          />
+                          {user.data ? (
+                            <AlertDialogComponent
+                              handle={product.handle}
+                              id={el.id}
+                              api="feature"
+                            >
+                              <AiFillDelete
+                                className="cursor-pointer font-semibold outline-none	duration-300 transition-all w-fit px-3 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                                color="white"
+                                size={25}
+                              />
+                            </AlertDialogComponent>
+                          ) : (
+                            ""
+                          )}
+                        </>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  ))}
+                  {product.features.length && user.data ? (
+                    <div className="flex items-center justify-center">
+                      <AiFillPlusCircle
+                        className=" cursor-pointer m-auto  font-semibold outline-none 
+	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                        color="white"
+                        size={25}
+                        onClick={() => {
+                          setIsOpenAdd(true);
+                          setTypeAction("features");
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </ul>
+              ) : (
+                ""
+              )}
+              {product.filesIncluded.length ? (
+                <ul className={classes.productPageFeaturesBox}>
+                  {product.filesIncluded.map((el: any) => (
+                    <div key={el.id} className="flex items-center">
+                      <li>{el.li}</li>
+                      {user.data ? (
+                        <>
+                          <AiFillEdit
+                            className="cursor-pointer font-semibold outline-none
+	duration-300 transition-all w-fit px-3 py-[0.25rem]  rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                            color="white"
+                            size={25}
+                            onClick={() => {
+                              setIsOpen(true);
+                              setFeatureId(null);
+                              setYoutubeId(null);
+                              setFilesIncludeId(el.id);
+                              setDescriptionId(null);
+                            }}
+                          />
+                          {user.data ? (
+                            <AlertDialogComponent
+                              handle={product.handle}
+                              id={el.id}
+                              api="files-included"
+                            >
+                              <AiFillDelete
+                                className="cursor-pointer font-semibold outline-none	duration-300 transition-all w-fit px-3 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                                color="white"
+                                size={25}
+                              />
+                            </AlertDialogComponent>
+                          ) : (
+                            ""
+                          )}
+                        </>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  ))}
+                  {product.filesIncluded.length && user.data ? (
+                    <div className="flex items-center justify-center">
+                      <AiFillPlusCircle
+                        className=" cursor-pointer mb-5  font-semibold outline-none 
+	duration-300 transition-all w-fit px-8 py-[0.25rem]  m-auto rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                        color="white"
+                        size={25}
+                        onClick={() => {
+                          setIsOpenAdd(true);
+                          setTypeAction("files Included");
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </ul>
+              ) : (
+                ""
+              )}
+            </div>
+          </div>
+        );
 
-				{renderFeature()}
-				{product.video ? (
-					<div className={classes.productPageYoutubeSections}>
-						{product.video.title ? <h4>{product.video.title}</h4> : ''}
-						<div>
-							<div className={classes.overLayYoutubeSection}></div>
-							<div className={classes.youtubeVideo}>
-								{isYoutubeVideo !== 1 ? (
-									<div
-										onClick={() => setIsYoutubeVideo(1)}
-										style={{
-											backgroundImage: `url(${product.video.srcDoc1})`,
-											backgroundPosition: 'center',
-											backgroundSize: 'cover'
-										}}
-									>
-										<button>
-											<FaPlay />
-										</button>
-									</div>
-								) : (
-									<iframe src={product.video.src} allow={'autoplay'} />
-								)}
-							</div>
-							{product.video.srcTwo ? (
-								<div className={classes.youtubeVideo}>
-									{isYoutubeVideo !== 2 ? (
-										<div
-											onClick={() => setIsYoutubeVideo(2)}
-											style={{
-												backgroundImage: `url(${product.video.srcDoc2})`,
-												backgroundPosition: 'center',
-												backgroundSize: 'cover'
-											}}
-										>
-											<button>
-												<FaPlay />
-											</button>
-										</div>
-									) : (
-										<iframe src={product.video.srcTwo} allow={'autoplay'} />
-									)}
-								</div>
-							) : (
-								''
-							)}
-						</div>
-					</div>
-				) : (
-					''
-				)}
-				<Button className={classes.GoBackLink} href={'/drums-that-knock'}>
-					{' '}
-					GO BACK{' '}
-				</Button>
-			</div>
-		</section>
-	);
+      case "drums-that-knock-x":
+        return (
+          <div className={classes.productPageFeaturesBigBox}>
+            <div className={classes.overLayFeaturesSection}></div>
+            <div>
+              {product.features.length ? (
+                <ul className="flex flex-col justify-between">
+                  {product.features.map((el: any) => (
+                    <div className="flex items-center 	 ">
+                      <li key={el.id}>{el.li}</li>
+                      {user.data ? (
+                        <>
+                          <AiFillEdit
+                            className="cursor-pointer	 font-semibold outline-none  duration-300 transition-all w-fit px-2 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                            color="white"
+                            size={25}
+                            onClick={() => {
+                              setIsOpen(true);
+                              setFeatureId(el.id);
+                              setYoutubeId(null);
+                              setFilesIncludeId(null);
+                              setDescriptionId(null);
+                            }}
+                          />
+                          {user.data ? (
+                            <AlertDialogComponent
+                              handle={product.handle}
+                              id={el.id}
+                              api="feature"
+                            >
+                              <AiFillDelete
+                                className="cursor-pointer font-semibold outline-none	duration-300 transition-all w-fit px-3 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                                color="white"
+                                size={25}
+                              />
+                            </AlertDialogComponent>
+                          ) : (
+                            ""
+                          )}
+                        </>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  ))}
+                  {product.features.length && user.data ? (
+                    <div className="flex items-center justify-center">
+                      <AiFillPlusCircle
+                        className=" cursor-pointer   font-semibold outline-none 
+	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                        color="white"
+                        size={25}
+                        onClick={() => {
+                          setIsOpenAdd(true);
+                          setTypeAction("features");
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </ul>
+              ) : (
+                ""
+              )}
+              {product.filesIncluded.length ? (
+                <ul className={classes.productPageFeaturesBox}>
+                  {product.filesIncluded.map((el: any) => (
+                    <div className="flex items-center">
+                      <li key={el.id}>{el.li}</li>
+                      {user.data ? (
+                        <>
+                          <AiFillEdit
+                            className=" cursor-pointer   font-semibold outline-none  
+	duration-300 transition-all w-fit px-2 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                            color="white"
+                            size={25}
+                            onClick={() => {
+                              setIsOpen(true);
+                              setFeatureId(null);
+                              setYoutubeId(null);
+                              setFilesIncludeId(el.id);
+                              setDescriptionId(null);
+                            }}
+                          />
+                          {user.data ? (
+                            <AlertDialogComponent
+                              handle={product.handle}
+                              id={el.id}
+                              api="files-included"
+                            >
+                              <AiFillDelete
+                                className="cursor-pointer font-semibold outline-none	duration-300 transition-all w-fit px-3 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                                color="white"
+                                size={25}
+                              />
+                            </AlertDialogComponent>
+                          ) : (
+                            ""
+                          )}
+                        </>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  ))}
+                  {product.filesIncluded.length && user.data ? (
+                    <div className="flex items-center justify-center">
+                      <AiFillPlusCircle
+                        className=" cursor-pointer m-auto  font-semibold outline-none 
+	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                        color="white"
+                        size={25}
+                        onClick={() => {
+                          setIsOpenAdd(true);
+                          setTypeAction("files Included");
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </ul>
+              ) : (
+                ""
+              )}
+            </div>
+          </div>
+        );
+
+      default:
+        return (
+          <div className={classes.productPageFeatures}>
+            <div className={classes.overLayFeaturesSection}></div>
+            <div>
+              {product.features.length ? (
+                <ul>
+                  {product.features.map((el: any) => (
+                    <div key={el.id} className="flex items-center">
+                      <li>{el.li}</li>
+                      {user.data ? (
+                        <>
+                          <AiFillEdit
+                            className="cursor-pointer	 font-semibold outline-none  duration-300 transition-all w-fit px-2 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                            color="white"
+                            size={25}
+                            onClick={() => {
+                              setIsOpen(true);
+                              setFeatureId(el.id);
+                              setYoutubeId(null);
+                              setFilesIncludeId(null);
+                              setDescriptionId(null);
+                            }}
+                          />
+                          {user.data ? (
+                            <AlertDialogComponent
+                              handle={product.handle}
+                              id={el.id}
+                              api="feature"
+                            >
+                              <AiFillDelete
+                                className="cursor-pointer font-semibold outline-none	duration-300 transition-all w-fit px-3 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                                color="white"
+                                size={25}
+                              />
+                            </AlertDialogComponent>
+                          ) : (
+                            ""
+                          )}
+                        </>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  ))}
+                  {product.features.length && user.data ? (
+                    <div className="flex items-center justify-center">
+                      <AiFillPlusCircle
+                        className=" cursor-pointer   font-semibold outline-none 
+	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                        color="white"
+                        size={25}
+                        onClick={() => {
+                          setIsOpenAdd(true);
+                          setTypeAction("features");
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </ul>
+              ) : (
+                ""
+              )}
+              {product.filesIncluded.length ? (
+                <ul>
+                  {product.filesIncluded.map((el: any) => (
+                    <div key={el.id} className="flex items-center">
+                      <li>{el.li}</li>
+                      {user.data ? (
+                        <>
+                          <AiFillEdit
+                            className="cursor-pointer	 font-semibold  outline-none  duration-300 transition-all w-fit px-2 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                            color="white"
+                            size={25}
+                            onClick={() => {
+                              setIsOpen(true);
+                              setFeatureId(null);
+                              setYoutubeId(null);
+                              setFilesIncludeId(el.id);
+                              setDescriptionId(null);
+                            }}
+                          />
+                          {user.data ? (
+                            <AlertDialogComponent
+                              handle={product.handle}
+                              id={el.id}
+                              api="files-included"
+                            >
+                              <AiFillDelete
+                                className="cursor-pointer font-semibold outline-none	duration-300 transition-all w-fit px-3 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                                color="white"
+                                size={25}
+                              />
+                            </AlertDialogComponent>
+                          ) : (
+                            ""
+                          )}
+                        </>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  ))}
+                  {product.filesIncluded.length && user.data ? (
+                    <div className="flex items-center justify-center">
+                      <AiFillPlusCircle
+                        className=" cursor-pointer   font-semibold outline-none 
+	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                        color="white"
+                        size={25}
+                        onClick={() => {
+                          setIsOpenAdd(true);
+                          setTypeAction("files Included");
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </ul>
+              ) : (
+                ""
+              )}
+            </div>
+          </div>
+        );
+    }
+  };
+
+  useEffect(() => {
+    if (descriptionId) {
+      const description = product.description.filter(
+        (el: any) => el.id === descriptionId
+      );
+
+      setFormValues((value) => {
+        return {
+          ...description[0],
+          text1: description[0].text[0],
+          text2: description[0].text[1],
+          type: "description",
+        };
+      });
+    }
+    if (filesIncludeId) {
+      const filesInclude = product.filesIncluded.filter(
+        (el: any) => el.id === filesIncludeId
+      );
+
+      setFormValues((value) => {
+        return {
+          ...filesInclude[0],
+          type: "filesInclude",
+        };
+      });
+    }
+
+    if (youtubeId) {
+      const youtube = product.youtubeVideo.filter(
+        (el: any) => el.id === youtubeId
+      );
+
+      setFormValues((value) => {
+        return {
+          ...youtube[0],
+          type: "youtube",
+        };
+      });
+    }
+
+    if (featureId) {
+      const feature = product.features.filter((el: any) => el.id === featureId);
+
+      setFormValues((value) => {
+        return {
+          ...feature[0],
+          type: "feature",
+        };
+      });
+    }
+  }, [descriptionId, filesIncludeId, youtubeId, featureId]);
+
+  return (
+    <section className={classes.productPageSection}>
+      <AddDTKfeatures
+        formValues={formValues}
+        setFormValues={setFormValues}
+        setIsOpen={setIsOpenAdd}
+        isOpen={isOpenAdd}
+        type={typeAction}
+      />
+      <EditDTKSection
+        formValues={formValues}
+        setFormValues={setFormValues}
+        setIsOpen={setIsOpen}
+        isOpen={isOpen}
+        featureId={featureId}
+        youtubeId={youtubeId}
+        filesIncludeId={filesIncludeId}
+        descriptionId={descriptionId}
+      />
+      <div className={classes.productPageContainer}>
+        <ProductDetails product={product} />
+
+        {renderFeature()}
+        {product.youtubeVideo.length ? (
+          <div className={classes.productPageYoutubeSections}>
+            {product.youtubeVideo[0].title ? (
+              <h4>{product.youtubeVideo[0].title}</h4>
+            ) : (
+              ""
+            )}
+            <div>
+              <div className={classes.overLayYoutubeSection}></div>
+              {product.youtubeVideo.map((el: any) => (
+                <div key={el.id} className={classes.youtubeVideo}>
+                  {isYoutubeVideo !== el.id ? (
+                    <>
+                      <div
+                        className="flex flex-col"
+                        style={{
+                          backgroundImage: `url(${el.srcImage})`,
+                          backgroundPosition: "center",
+                          backgroundSize: "cover",
+                        }}
+                      >
+                        <button onClick={() => setIsYoutubeVideo(el.id)}>
+                          <FaPlay />
+                        </button>
+                        <div className="flex gap-5">
+                          {user.data ? (
+                            <AiFillEdit
+                              className=" cursor-pointer mt-5  font-semibold outline-none 
+	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                              color="white"
+                              size={25}
+                              onClick={() => {
+                                setIsOpen(true);
+                                setFeatureId(null);
+                                setYoutubeId(el.id);
+                                setFilesIncludeId(null);
+                                setDescriptionId(null);
+                              }}
+                            />
+                          ) : (
+                            ""
+                          )}
+                          {user.data ? (
+                            <AlertDialogComponent
+                              handle={product.handle}
+                              id={el.id}
+                              api="youtube-video"
+                            >
+                              <AiFillDelete
+                                className=" cursor-pointer mt-5  font-semibold outline-none 
+	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                                color="white"
+                                size={25}
+                              />
+                            </AlertDialogComponent>
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <iframe src={el.src + "?autoplay=1"} allow={"autoplay"} />
+                      {user.data ? (
+                        <AiFillEdit
+                          className="left-5 cursor-pointer m-auto mt-5	 font-semibold outline-none  left-5
+	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                          color="white"
+                          size={25}
+                          onClick={() => {
+                            setIsOpen(true);
+                            setFeatureId(null);
+                            setYoutubeId(el.id);
+                            setFilesIncludeId(null);
+                            setDescriptionId(null);
+                          }}
+                        />
+                      ) : (
+                        ""
+                      )}
+                      {user.data ? (
+                        <AlertDialogComponent
+                          handle={product.handle}
+                          id={el.id}
+                          api="youtube-video"
+                        >
+                          <AiFillDelete
+                            className=" cursor-pointer mt-5  font-semibold outline-none 
+	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                            color="white"
+                            size={25}
+                          />
+                        </AlertDialogComponent>
+                      ) : (
+                        ""
+                      )}
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          ""
+        )}
+
+        {user.data ? (
+          <>
+            <label>add youtube video</label>
+            <AiFillPlusCircle
+              className=" cursor-pointer mb-5  font-semibold outline-none 
+	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+              color="white"
+              size={25}
+              onClick={() => {
+                setIsOpenAdd(true);
+                setTypeAction("youtube");
+              }}
+            />
+          </>
+        ) : (
+          ""
+        )}
+        <Button className={classes.GoBackLink} href={"/drums-that-knock"}>
+          GO BACK
+        </Button>
+      </div>
+    </section>
+  );
 };
 
 export default HeroSection;

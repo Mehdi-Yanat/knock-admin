@@ -33,6 +33,7 @@ const DefaultLayout = ({
   setBanner: Dispatch<SetStateAction<boolean>>;
 }) => {
   const { user } = useGetUserDataFromStore();
+  
   const popup = useQuery(["get-popup"], () => getPopup(), {
     onSuccess(data) {
       return data;
@@ -65,7 +66,7 @@ const DefaultLayout = ({
       )}
       <main
         className={`${commonClasses} relative bg-primary-2 ${
-          openBanner ? "mt-[70px]" : "mt-[30px]"
+          openBanner ? "mt-[100px]" : "mt-[25px]"
         }  w-full flex flex-col`}
       >
         {user.data ? (

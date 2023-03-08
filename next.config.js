@@ -4,7 +4,7 @@ const nextConfig = (phase, { defaultConfig }) => {
 		reactStrictMode: true,
 		swcMinify: true,
 		images: {
-			domains: ['cdn.shopify.com' , '']
+			domains: ['cdn.shopify.com' , '*']
 		},
 		experimental: {
 			// appDir: true

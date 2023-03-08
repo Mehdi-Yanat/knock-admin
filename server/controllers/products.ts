@@ -17,11 +17,15 @@ export const getOneProductById = async (id: string) => {
     `gid://shopify/Product/${id}`
   );
 
-  const newFields = setFields(product.handle);
+  let response = await axios.get(`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/get-DTK-product?productHandle=${product.handle}`)
+  
+
+  let newFieldsApi = response.data.DTKproduct
+  delete newFieldsApi.id
 
   const newProductObject = {
     ...product,
-    ...newFields,
+    ...newFieldsApi
   };
 
   return newProductObject as unknown as IProduct;

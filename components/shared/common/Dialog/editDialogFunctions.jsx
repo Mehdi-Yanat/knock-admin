@@ -1728,7 +1728,7 @@ const EditKnockPageArtistSection = ({ formValues, setFormValues, artistId, setPr
 					/>
 
 					<div>
-						<label >Upload new image</label>
+						<label >Upload new image {'(100px width - 100px height)'}</label>
 						<UploadInput setPreviewImage={setPreviewImage} setFormValues={setFormValues} />
 					</div>
 
@@ -1870,5 +1870,529 @@ const EditFAQSection = ({ formValues, setFormValues, listId, isOpen, setIsOpen }
 	);
 };
 
+// DTK product 
 
-export { EditBanner, EditMainSection, EditHomePageSecondSection, EditHomePageThirdSection, EditHomePageForthSection, ChangeSamplesBox, EditKnockPageSecondSection, EditKnockPageThirdSection, EditKnockPageReviewsSection, EditRequirementSection, EditYoutubeSection, EditKnockPageArtistSection, EditFAQSection }
+const EditDTKSection = ({ formValues, setFormValues, featureId, youtubeId, filesIncludeId, descriptionId, isOpen, setIsOpen }) => {
+
+	const accessToken = getGetAccessTokenFromCookie();
+
+
+	const editSection = useMutation({
+		mutationFn: (event) => {
+			event.preventDefault();
+
+			return fetch(
+				`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/edit-DTK-product?featureId=${featureId}&youtubeId=${youtubeId}&filesIncludeId=${filesIncludeId}&descriptionId=${descriptionId}`,
+				{
+					method: 'PUT',
+					headers: {
+						'Content-type': 'application/json',
+						'Authorization': accessToken
+					},
+					body: JSON.stringify(formValues)
+				}
+			)
+				.then((response) => response.json())
+				.then((result) => {
+					if ('success' in result && !result.success)
+						throw new Error(result.message);
+
+					return result;
+				});
+		},
+		onSuccess: (result) =>
+			setTimeout(() => toast(result.message), 0),
+		onError: (result) =>
+			setTimeout(() => toast(result.message, { type: 'error' }), 0)
+	});
+
+	return (
+		<Dialog
+			isOpen={isOpen}
+			setIsOpen={setIsOpen}
+			header={{
+				title: 'Edit section'
+			}}
+		>
+			<form
+				className='mx-auto my-4 sm:w-11/12'
+				onSubmit={editSection.mutate}
+			>
+				<fieldset
+					className='mt-2 space-y-4'
+					disabled={editSection.isLoading}
+				>
+
+					{descriptionId ?
+						<>
+							<FormField
+								values={formValues}
+								setValues={setFormValues}
+								name='h3'
+								type='text'
+								placeholder='*text'
+								autoComplete='text'
+								minLength={3}
+							/>
+							<FormField
+								values={formValues}
+								setValues={setFormValues}
+								name='text1'
+								type='text'
+								placeholder='*text'
+								autoComplete='text'
+								minLength={3}
+							/>
+							<FormField
+								values={formValues}
+								setValues={setFormValues}
+								name='text2'
+								type='text'
+								placeholder='*text'
+								autoComplete='text'
+								minLength={3}
+							/>
+						</>
+						: ''
+					}
+					{filesIncludeId ? <FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='li'
+						type='text'
+						placeholder='*li'
+						autoComplete='li'
+						minLength={3}
+					/> : ''}
+
+					{youtubeId ? <>
+						<FormField
+							values={formValues}
+							setValues={setFormValues}
+							name='src'
+							type='text'
+							placeholder='*src'
+							autoComplete='src'
+							minLength={3}
+						/>
+						<FormField
+							values={formValues}
+							setValues={setFormValues}
+							name='srcImage'
+							type='text'
+							placeholder='*src image'
+							autoComplete='src image'
+							minLength={3}
+						/>
+						<FormField
+							values={formValues}
+							setValues={setFormValues}
+							name='title'
+							type='text'
+							placeholder='*title'
+							autoComplete='title'
+							minLength={3}
+						/>
+					</> : ""}
+					{
+						featureId ? <FormField
+							values={formValues}
+							setValues={setFormValues}
+							name='li'
+							type='text'
+							placeholder='*li'
+							autoComplete='li'
+							minLength={3}
+						/> : ''
+					}
+
+					<div className='flex justify-end mt-4'>
+						<Button
+							type='submit'
+							classesIntent={{ w: 'full' }}
+							className='mt-4'
+							disabled={editSection.isLoading}
+						>
+							Submit
+						</Button>
+					</div>
+				</fieldset>
+				{editSection.isError && (
+					<div className='text-bg-secondary-2'>
+						<p>{editSection.error.message}</p>
+					</div>
+				)}
+			</form>
+		</Dialog>
+	);
+};
+
+const AddDTKfeatures = ({ formValues, setFormValues, type, isOpen, setIsOpen }) => {
+
+	const [API_URL, setAPI_URL] = useState('')
+	const accessToken = getGetAccessTokenFromCookie();
+
+
+	useEffect(() => {
+		if (type) {
+			switch (type) {
+				case 'features':
+					setAPI_URL("feature")
+					break;
+				case 'files Included':
+					setAPI_URL("files-included")
+					break;
+				case 'youtube':
+					setAPI_URL("youtube-video")
+					break;
+				default:
+					break;
+			}
+		}
+	}, [type])
+
+
+
+
+	const editSection = useMutation({
+		mutationFn: (event) => {
+			event.preventDefault();
+
+			return fetch(
+				`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/add-DTK-product-${API_URL}`,
+				{
+					method: 'POST',
+					headers: {
+						'Content-type': 'application/json',
+						'Authorization': accessToken
+					},
+					body: JSON.stringify(formValues)
+				}
+			)
+				.then((response) => response.json())
+				.then((result) => {
+					if ('success' in result && !result.success)
+						throw new Error(result.message);
+
+					return result;
+				});
+		},
+		onSuccess: (result) =>
+			setTimeout(() => toast(result.message), 0),
+		onError: (result) =>
+			setTimeout(() => toast(result.message, { type: 'error' }), 0)
+	});
+
+	return (
+		<Dialog
+			isOpen={isOpen}
+			setIsOpen={setIsOpen}
+			header={{
+				title: 'Add ' + type
+			}}
+		>
+			<form
+				className='mx-auto my-4 sm:w-11/12'
+				onSubmit={editSection.mutate}
+			>
+				<fieldset
+					className='mt-2 space-y-4'
+					disabled={editSection.isLoading}
+				>
+
+					{type === 'features' ? <FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='li'
+						type='text'
+						placeholder='*li'
+						autoComplete='li'
+						minLength={3}
+					/> : ''}
+
+					{type === 'files Included' ? <FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='li'
+						type='text'
+						placeholder='*li'
+						autoComplete='li'
+						minLength={3}
+					/> : ''}
+
+					{type === 'youtube' ? <>
+						<FormField
+							values={formValues}
+							setValues={setFormValues}
+							name='src'
+							type='text'
+							placeholder='*src embed link'
+							autoComplete='src'
+							minLength={3}
+						/>
+						<FormField
+							values={formValues}
+							setValues={setFormValues}
+							name='srcImage'
+							type='text'
+							placeholder='*src background image'
+							autoComplete='srcImage'
+							minLength={3}
+						/>
+						<FormField
+							values={formValues}
+							setValues={setFormValues}
+							name='title'
+							type='text'
+							placeholder='*title'
+							autoComplete='title'
+							minLength={3}
+						/>
+					</> : ''}
+
+					<div className='flex justify-end mt-4'>
+						<Button
+							type='submit'
+							classesIntent={{ w: 'full' }}
+							className='mt-4'
+							disabled={editSection.isLoading}
+						>
+							Submit
+						</Button>
+					</div>
+				</fieldset>
+				{editSection.isError && (
+					<div className='text-bg-secondary-2'>
+						<p>{editSection.error.message}</p>
+					</div>
+				)}
+			</form>
+		</Dialog>
+	);
+};
+
+const Addreviews = ({ formValues, setFormValues, formData, setPreviewImage, isOpen, setIsOpen }) => {
+
+	const [API_URL, setAPI_URL] = useState('')
+	const accessToken = getGetAccessTokenFromCookie();
+
+
+	useEffect(() => {
+
+		if (formValues.sectionId) {
+			switch (formValues.sectionId) {
+				case 'sixSection-knock':
+					setAPI_URL('knockpage')
+					break;
+				case 'reviewSection-dtkpage':
+					setAPI_URL('DTK')
+					break;
+
+				default:
+					break;
+			}
+		}
+
+	}, [formValues.sectionId])
+
+	const addReview = useMutation({
+		mutationFn: (event) => {
+			event.preventDefault();
+			return fetch(
+				`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/add-review-${API_URL}`,
+				{
+					method: 'POST',
+					headers: {
+						'Accept': '*/*',
+						'Authorization': accessToken
+					},
+					body: formData
+				}
+			)
+				.then((response) => response.json())
+				.then((result) => {
+					if ('success' in result && !result.success)
+						throw new Error(result.message);
+
+					return result;
+				});
+		},
+		onSuccess: (result) =>
+			setTimeout(() => toast(result.message), 0),
+		onError: (result) =>
+			setTimeout(() => toast(result.message, { type: 'error' }), 0)
+	});
+
+	return (
+		<Dialog
+			isOpen={isOpen}
+			setIsOpen={setIsOpen}
+			header={{
+				title: 'add review'
+			}}
+		>
+			<form
+				className='mx-auto my-4 sm:w-11/12'
+				onSubmit={addReview.mutate}
+			>
+				<fieldset
+					className='mt-2 space-y-4'
+					disabled={addReview.isLoading}
+				>
+
+
+
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='review'
+						type='text'
+						placeholder='*review'
+						autoComplete='review'
+						minLength={3}
+					/>
+
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='reviewBy'
+						type='text'
+						placeholder='*review by'
+						autoComplete='review by'
+						minLength={3}
+					/>
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='alt'
+						type='text'
+						placeholder='*image alt'
+						autoComplete='image alt'
+						minLength={3}
+					/>
+
+					<div>
+						<label >Upload new image</label>
+						<UploadInput setPreviewImage={setPreviewImage} setFormValues={setFormValues} />
+					</div>
+
+					<div className='flex justify-end mt-4'>
+						<Button
+							type='submit'
+							classesIntent={{ w: 'full' }}
+							className='mt-4'
+							disabled={addReview.isLoading}
+						>
+							Submit
+						</Button>
+					</div>
+				</fieldset>
+				{addReview.isError && (
+					<div className='text-bg-secondary-2'>
+						<p>{addReview.error.message}</p>
+					</div>
+				)}
+			</form>
+		</Dialog>
+	);
+};
+
+const Addartist = ({ formValues, setFormValues, setPreviewImage, isOpen, setIsOpen }) => {
+
+	const accessToken = getGetAccessTokenFromCookie();
+
+	let formData = new FormData();
+	formData.append("imageUrl", formValues.imageUrl);
+	formData.append("sectionId", formValues.sectionId);
+	formData.append("name", formValues.name);
+
+	const addArtist = useMutation({
+		mutationFn: (event) => {
+			event.preventDefault();
+			return fetch(
+				`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/add-DTK-product-artist`,
+				{
+					method: 'POST',
+					headers: {
+						'Accept': '*/*',
+						'Authorization': accessToken
+					},
+					body: formData
+				}
+			)
+				.then((response) => response.json())
+				.then((result) => {
+					if ('success' in result && !result.success)
+						throw new Error(result.message);
+
+					return result;
+				});
+		},
+		onSuccess: (result) =>
+			setTimeout(() => toast(result.message), 0),
+		onError: (result) =>
+			setTimeout(() => toast(result.message, { type: 'error' }), 0)
+	});
+
+	return (
+		<Dialog
+			isOpen={isOpen}
+			setIsOpen={setIsOpen}
+			header={{
+				title: 'add artist'
+			}}
+		>
+			<form
+				className='mx-auto my-4 sm:w-11/12'
+				onSubmit={addArtist.mutate}
+			>
+				<fieldset
+					className='mt-2 space-y-4'
+					disabled={addArtist.isLoading}
+				>
+
+
+
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='name'
+						type='text'
+						placeholder='*name'
+						autoComplete='name'
+						minLength={3}
+					/>
+
+					<div>
+						<label >Upload new image {'(100px width - 100px height)'}</label>
+						<UploadInput setPreviewImage={setPreviewImage} setFormValues={setFormValues} />
+					</div>
+
+					<div className='flex justify-end mt-4'>
+						<Button
+							type='submit'
+							classesIntent={{ w: 'full' }}
+							className='mt-4'
+							disabled={addArtist.isLoading}
+						>
+							Submit
+						</Button>
+					</div>
+				</fieldset>
+				{addArtist.isError && (
+					<div className='text-bg-secondary-2'>
+						<p>{addArtist.error.message}</p>
+					</div>
+				)}
+			</form>
+		</Dialog>
+	);
+};
+
+export {
+	EditBanner, EditMainSection, EditHomePageSecondSection, EditHomePageThirdSection,
+	EditHomePageForthSection, ChangeSamplesBox, EditKnockPageSecondSection,
+	EditKnockPageThirdSection, EditKnockPageReviewsSection, EditRequirementSection,
+	EditYoutubeSection, EditKnockPageArtistSection, EditFAQSection, EditDTKSection,
+	AddDTKfeatures, Addreviews, Addartist
+}

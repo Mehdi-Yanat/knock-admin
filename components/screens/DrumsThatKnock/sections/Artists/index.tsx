@@ -16,15 +16,21 @@ import CustomNextImage from "@components/shared/common/CustomNextImage";
 import Reviews from "@components/shared/core/Reviews";
 import { useEffect, useState } from "react";
 import {
+  Addartist,
+  Addreviews,
   EditKnockPageArtistSection,
   EditKnockPageReviewsSection,
 } from "@components/shared/common/Dialog/editDialogFunctions";
-import { AiFillEdit } from "react-icons/ai";
+import { AiFillDelete, AiFillEdit, AiFillPlusCircle } from "react-icons/ai";
 import { useGetUserDataFromStore } from "@utils/core/hooks";
+import AlertDialogComponent from "@components/shared/common/Dialog/alertDialog";
 
 const ArtistsSection = ({ data }: { data: any }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenArtist, setIsOpenArtist] = useState(false);
+  const [isOpenAddArtist, setIsOpenAddArtist] = useState(false);
+  const [isOpenAddReview, setIsOpenAddReview] = useState(false);
+
   const [reviewId, setreviewId] = useState("");
   const [artistId, setArtistId] = useState("");
 
@@ -76,6 +82,13 @@ const ArtistsSection = ({ data }: { data: any }) => {
 
   const { user } = useGetUserDataFromStore();
 
+  let formData = new FormData();
+  formData.append("imageUrl", formValues.imageUrl);
+  formData.append("sectionId", formValues.sectionId);
+  formData.append("review", formValues.review);
+  formData.append("reviewBy", formValues.reviewBy);
+  formData.append("alt", formValues.alt);
+  
   return (
     <>
       <section className="bg-primary-2 section-p-v1 pb-0">
@@ -86,6 +99,13 @@ const ArtistsSection = ({ data }: { data: any }) => {
           formValues={formValuesArtist}
           setPreviewImage={setPreviewImage}
           artistId={artistId}
+        />
+        <Addartist
+          setFormValues={setFormValuesArtist}
+          formValues={formValuesArtist}
+          setIsOpen={setIsOpenAddArtist}
+          isOpen={isOpenAddArtist}
+          setPreviewImage={setPreviewImage}
         />
         <div className="flex flex-col gap-2 lg:px-8 sm:gap-4">
           <header className="text-center flex items-center justify-center">
@@ -125,7 +145,7 @@ const ArtistsSection = ({ data }: { data: any }) => {
                   <p className="select-auto">{item.name}</p>
                   {user.data ? (
                     <AiFillEdit
-                      className="left-5 cursor-pointer m-auto mt-5	 font-semibold outline-none  left-5
+                      className="left-5 cursor-pointer m-auto mt-1	 font-semibold outline-none  left-5
 	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
                       color="white"
                       size={25}
@@ -137,13 +157,50 @@ const ArtistsSection = ({ data }: { data: any }) => {
                   ) : (
                     ""
                   )}
+                  {user.data ? (
+                    <AlertDialogComponent
+                      id={item.id}
+                      page="dtk"
+                      action={"artist"}
+                    >
+                      <AiFillDelete
+                        className="left-5 cursor-pointer m-auto mt-1	 font-semibold outline-none  left-5
+duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                        color="white"
+                        size={25}
+                      />
+                    </AlertDialogComponent>
+                  ) : (
+                    ""
+                  )}
                 </SwiperSlide>
               ))}
             </Swiper>
+            {user.data ? (
+              <AiFillPlusCircle
+                className="left-5 cursor-pointer m-auto mb-5	 font-semibold outline-none  left-5
+	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                color="white"
+                size={25}
+                onClick={() => {
+                  setIsOpenAddArtist(true);
+                }}
+              />
+            ) : (
+              ""
+            )}
           </div>
         </div>
       </section>
       <section className="bg-primary-1 section-p-v1 pb-0">
+        <Addreviews
+          setFormValues={setFormValues}
+          formValues={formValues}
+          setIsOpen={setIsOpenAddReview}
+          formData={formData}
+          isOpen={isOpenAddReview}
+          setPreviewImage={setPreviewImage}
+        />
         <EditKnockPageReviewsSection
           setIsOpen={setIsOpen}
           isOpen={isOpen}
@@ -159,6 +216,8 @@ const ArtistsSection = ({ data }: { data: any }) => {
             containerVariants={{ "max-w": "screen-sm" }}
             setIsOpen={setIsOpen}
             setreviewId={setreviewId}
+            setIsOpenAddReview={setIsOpenAddReview}
+            page='dtk'
           />
         </div>
       </section>

@@ -11,8 +11,9 @@ import CustomNextImage, {
 } from "@components/shared/common/CustomNextImage";
 import { cva, cx } from "class-variance-authority";
 import { useGetUserDataFromStore } from "@utils/core/hooks";
-import { AiFillEdit } from "react-icons/ai";
+import { AiFillDelete, AiFillEdit, AiFillPlusCircle } from "react-icons/ai";
 import { Dispatch, SetStateAction } from "react";
+import AlertDialogComponent from "@components/shared/common/Dialog/alertDialog";
 
 const handleReviewCardVariants = cva(
   "relative rounded-2xl w-full px-6 py-12 flex",
@@ -55,12 +56,16 @@ const Reviews = ({
   containerVariants,
   setIsOpen,
   setreviewId,
+  setIsOpenAddReview,
+  page
 }: {
-  reviews:any;
+  reviews: any;
   reviewCardVariants?: VariantProps<typeof handleReviewCardVariants>;
   containerVariants?: VariantProps<typeof handleContainerVariants>;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   setreviewId: Dispatch<SetStateAction<string>>;
+  setIsOpenAddReview: Dispatch<SetStateAction<boolean>>;
+  page:string
 }) => {
   const { user } = useGetUserDataFromStore();
 
@@ -109,7 +114,10 @@ const Reviews = ({
                     <CustomNextImage
                       {...item.image}
                       src={
-                        process.env.NEXT_PUBLIC_KNOCK_URL_API + item.imageUrl
+                        item.imageUrl
+                          ? process.env.NEXT_PUBLIC_KNOCK_URL_API +
+                            item.imageUrl
+                          : "/images/icon1.png"
                       }
                       width={250}
                       height={250}
@@ -130,7 +138,7 @@ const Reviews = ({
                   </div>
                   {user.data ? (
                     <AiFillEdit
-                      className="left-5 cursor-pointer m-auto mt-5	 font-semibold outline-none  left-5
+                      className="cursor-pointer m-auto mt-5	 font-semibold outline-none  
 	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
                       color="white"
                       size={25}
@@ -145,6 +153,35 @@ const Reviews = ({
                 </div>
               </div>
             </div>
+            {user.data ? (
+              <AiFillPlusCircle
+                className="left-5 cursor-pointer m-auto mt-5	 font-semibold outline-none  left-5
+	duration-300 transition-all w-fit px-2 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                color="white"
+                size={25}
+                onClick={() => {
+                  setIsOpenAddReview(true);
+                }}
+              />
+            ) : (
+              ""
+            )}
+            {user.data ? (
+              <AlertDialogComponent
+                id={item.id}
+                page={page}
+                action={"review"}
+              >
+                <AiFillDelete
+                  className="left-5 cursor-pointer m-auto mt-5 ml-1	 font-semibold outline-none  left-5
+   duration-300 transition-all w-fit px-2 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                  color="white"
+                  size={25}
+                />
+              </AlertDialogComponent>
+            ) : (
+              ""
+            )}
           </SwiperSlide>
         ))}
       </Swiper>

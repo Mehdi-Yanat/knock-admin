@@ -31,6 +31,19 @@ export const getBanner = async () => {
   return response.data.banner;
 };
 
+export const getDTKproduct = async (data: string) => {
+  const response = await axios.get(
+    `${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/get-DTK-product?productHandle=${data}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  return response.data.banner;
+};
+
 export const getHomePageData = async () => {
   const response = await axios.get(
     `${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/get-homepage`,

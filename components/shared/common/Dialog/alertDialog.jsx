@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
 import classes from '../../../../styles/alertDialog.module.scss';
 import { toast } from 'react-toastify';
@@ -7,11 +7,54 @@ import axios from 'axios';
 
 const AlertDialogComponent = (props) => {
 
+  let accessToken = getCookie('user-access-token')
+  accessToken = JSON.parse(accessToken).accessToken
+  const deleteFunction = async () => {
 
-  const deleteAccount = async () => {
+    if (props.handle) {
+      try {
+        const response = await axios.delete(`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/remove-DTK-product-${props.api}?id=${props.id}&handle=${props.handle}`, {
+          headers: {
+            'Authorization': accessToken
+          }
+        })
+
+        if (response.data) {
+          return toast.success(response.data.message)
+        }
+      } catch (error) {
+        if (error.response) {
+          if (!error.response.data.success) {
+            return toast.warn(error.response.data.message)
+          }
+        }
+      }
+
+    }
+
+    if (props.action === 'review') {
+      try {
+        const response = await axios.delete(`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/remove-review?id=${props.id}&page=${props.page}`, {
+          headers: {
+            'Authorization': accessToken
+          }
+        })
+        if (response.data) {
+          return toast.success(response.data.message)
+        }
+      } catch (error) {
+        if (error.response) {
+          if (!error.response.data.success) {
+            return toast.warn(error.response.data.message)
+          }
+        }
+      }
+    }
+
+
+
+
     try {
-      let accessToken = getCookie('user-access-token')
-      accessToken = JSON.parse(accessToken).accessToken
       const response = await axios.delete(`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/admin/${props.adminId}`, {
         headers: {
           'Authorization': accessToken
@@ -48,7 +91,7 @@ const AlertDialogComponent = (props) => {
             <AlertDialog.Cancel asChild>
               <button className={classes.Button + ' ' + classes.mauve}>Cancel</button>
             </AlertDialog.Cancel>
-            <AlertDialog.Action onClick={deleteAccount} asChild>
+            <AlertDialog.Action onClick={deleteFunction} asChild>
               <button className={classes.Button + ' ' + classes.red}>Yes, delete account</button>
             </AlertDialog.Action>
           </div>
