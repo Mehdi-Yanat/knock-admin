@@ -1901,7 +1901,10 @@ const EditDTKSection = ({ formValues, setFormValues, featureId, youtubeId, files
 				});
 		},
 		onSuccess: (result) =>
-			setTimeout(() => toast(result.message), 0),
+			setTimeout(() => {
+				toast(result.message)
+				window.location.reload()
+			}, 0),
 		onError: (result) =>
 			setTimeout(() => toast(result.message, { type: 'error' }), 0)
 	});
@@ -2078,7 +2081,10 @@ const AddDTKfeatures = ({ formValues, setFormValues, type, isOpen, setIsOpen }) 
 				});
 		},
 		onSuccess: (result) =>
-			setTimeout(() => toast(result.message), 0),
+			setTimeout(() => {
+				toast(result.message)
+				window.location.reload()
+			}, 0),
 		onError: (result) =>
 			setTimeout(() => toast(result.message, { type: 'error' }), 0)
 	});
@@ -2218,7 +2224,10 @@ const Addreviews = ({ formValues, setFormValues, formData, setPreviewImage, isOp
 				});
 		},
 		onSuccess: (result) =>
-			setTimeout(() => toast(result.message), 0),
+			setTimeout(() => {
+				toast(result.message)
+				window.location.reload()
+			}, 0),
 		onError: (result) =>
 			setTimeout(() => toast(result.message, { type: 'error' }), 0)
 	});

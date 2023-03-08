@@ -45,7 +45,7 @@ const HeroSection = ({ product }: { product: any }) => {
       case "complete-knock-bundle-v2-all-digital-products":
         return (
           <div>
-            <div className="px-8">
+            <div className="px-5">
               {product.description.map((el: any, index: any) => (
                 <Fragment key={index}>
                   <p> {el.h3} </p>
@@ -54,10 +54,10 @@ const HeroSection = ({ product }: { product: any }) => {
                   ))}
                   {user.data ? (
                     <AiFillEdit
-                      className="left-5 cursor-pointer m-auto mt-5	 font-semibold outline-none  left-5
-	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                      className="cursor-pointer m-auto mt-5	 font-semibold outline-none  
+	duration-300 transition-all w-fit px-5 py-[0.20rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
                       color="white"
-                      size={25}
+                      size={20}
                       onClick={() => {
                         setIsOpen(true);
                         setFeatureId(null);
@@ -83,10 +83,10 @@ const HeroSection = ({ product }: { product: any }) => {
                         {user.data ? (
                           <>
                             <AiFillEdit
-                              className="left-5 cursor-pointer m-auto mt-5	 font-semibold outline-none  left-5
-	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                              className="cursor-pointer m-auto mt-5	 font-semibold outline-none  
+	duration-300 transition-all w-fit px-5 py-[0.20rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
                               color="white"
-                              size={25}
+                              size={20}
                               onClick={() => {
                                 setIsOpen(true);
                                 setFeatureId(null);
@@ -102,10 +102,10 @@ const HeroSection = ({ product }: { product: any }) => {
                                 api="files-included"
                               >
                                 <AiFillDelete
-                                  className=" left-5 cursor-pointer m-auto mt-2	 font-semibold outline-none  left-5
-                                  duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                                  className=" cursor-pointer m-auto mt-2	 font-semibold outline-none  
+                                  duration-300 transition-all w-fit px-5 py-[0.20rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
                                   color="white"
-                                  size={25}
+                                  size={20}
                                 />
                               </AlertDialogComponent>
                             ) : (
@@ -125,9 +125,9 @@ const HeroSection = ({ product }: { product: any }) => {
                   <div className="flex items-center justify-center">
                     <AiFillPlusCircle
                       className=" cursor-pointer mb-5  font-semibold outline-none 
-	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+	duration-300 transition-all w-fit px-5 py-[0.20rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
                       color="white"
-                      size={25}
+                      size={20}
                       onClick={() => {
                         setIsOpenAdd(true);
                         setTypeAction("files Included");
@@ -154,13 +154,13 @@ const HeroSection = ({ product }: { product: any }) => {
                     {product.features.map((el: any) => (
                       <Fragment key={el.id}>
                         <li>{el.li}</li>
-                        <>
+                        <div>
                           {user.data ? (
                             <AiFillEdit
-                              className="left-5 cursor-pointer m-auto mt-5	 font-semibold outline-none  left-5
-	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                              className="cursor-pointer m-auto mt-5	 font-semibold outline-none  
+	duration-300 transition-all w-fit px-5 py-[0.20rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
                               color="white"
-                              size={25}
+                              size={20}
                               onClick={() => {
                                 setIsOpen(true);
                                 setFeatureId(el.id);
@@ -178,16 +178,16 @@ const HeroSection = ({ product }: { product: any }) => {
                               api="feature"
                             >
                               <AiFillDelete
-                                className=" left-5 cursor-pointer m-auto mt-2	 font-semibold outline-none  left-5
-                                  duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                                className=" cursor-pointer m-auto mt-2	 font-semibold outline-none  
+                                  duration-300 transition-all w-fit px-5 py-[0.20rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
                                 color="white"
-                                size={25}
+                                size={20}
                               />
                             </AlertDialogComponent>
                           ) : (
                             ""
                           )}
-                        </>
+                        </div>
                       </Fragment>
                     ))}
                   </ul>
@@ -198,9 +198,9 @@ const HeroSection = ({ product }: { product: any }) => {
                   <div className="flex items-center justify-center">
                     <AiFillPlusCircle
                       className=" cursor-pointer mb-5  font-semibold outline-none 
-	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+	duration-300 transition-all w-fit px-5 py-[0.20rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
                       color="white"
-                      size={25}
+                      size={20}
                       onClick={() => {
                         setIsOpenAdd(true);
                         setTypeAction("features");
@@ -215,25 +215,25 @@ const HeroSection = ({ product }: { product: any }) => {
           </div>
         );
 
-      case "drums-that-knock-vol-1":
-      case "drums-that-knock-vol-2":
-      case "drums-that-knock-vol-3":
-      case "drums-that-knock-vol-4":
+      case "drums-that-knock-vol-8":
+      case "drums-that-knock-vol-9":
+      case "drums-that-knock-vol-7":
         return (
-          <div className={classes.productPageFeaturesSmallBox}>
+          <div className={classes.productPageFeatures}>
             <div className={classes.overLayFeaturesSection}></div>
             <div>
               {product.features.length ? (
-                <ul className={classes.productPageFeaturesBox}>
+                <ul>
                   {product.features.map((el: any) => (
-                    <div key={el.id} className="flex items-center w-full">
+                    <div key={el.id} className="flex flex-col">
                       <li>{el.li}</li>
                       {user.data ? (
-                        <>
+                        <div className="flex justify-between">
                           <AiFillEdit
-                            className="cursor-pointer font-semibold outline-none	duration-300 transition-all w-fit px-3 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                            className="  font-semibold outline-none disabled:cursor-not-allowed 
+                            duration-300 transition-all w-fit px-5 py-[0.30rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
                             color="white"
-                            size={25}
+                            size={20}
                             onClick={() => {
                               setIsOpen(true);
                               setFeatureId(el.id);
@@ -249,145 +249,16 @@ const HeroSection = ({ product }: { product: any }) => {
                               api="feature"
                             >
                               <AiFillDelete
-                                className="cursor-pointer font-semibold outline-none	duration-300 transition-all w-fit px-3 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                                className="  font-semibold outline-none disabled:cursor-not-allowed 
+                            duration-300 transition-all w-fit px-5 py-[0.30rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
                                 color="white"
-                                size={25}
+                                size={20}
                               />
                             </AlertDialogComponent>
                           ) : (
                             ""
                           )}
-                        </>
-                      ) : (
-                        ""
-                      )}
-                    </div>
-                  ))}
-                  {product.features.length && user.data ? (
-                    <div className="flex items-center justify-center">
-                      <AiFillPlusCircle
-                        className=" cursor-pointer m-auto  font-semibold outline-none 
-	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
-                        color="white"
-                        size={25}
-                        onClick={() => {
-                          setIsOpenAdd(true);
-                          setTypeAction("features");
-                        }}
-                      />
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                </ul>
-              ) : (
-                ""
-              )}
-              {product.filesIncluded.length ? (
-                <ul className={classes.productPageFeaturesBox}>
-                  {product.filesIncluded.map((el: any) => (
-                    <div key={el.id} className="flex items-center">
-                      <li>{el.li}</li>
-                      {user.data ? (
-                        <>
-                          <AiFillEdit
-                            className="cursor-pointer font-semibold outline-none
-	duration-300 transition-all w-fit px-3 py-[0.25rem]  rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
-                            color="white"
-                            size={25}
-                            onClick={() => {
-                              setIsOpen(true);
-                              setFeatureId(null);
-                              setYoutubeId(null);
-                              setFilesIncludeId(el.id);
-                              setDescriptionId(null);
-                            }}
-                          />
-                          {user.data ? (
-                            <AlertDialogComponent
-                              handle={product.handle}
-                              id={el.id}
-                              api="files-included"
-                            >
-                              <AiFillDelete
-                                className="cursor-pointer font-semibold outline-none	duration-300 transition-all w-fit px-3 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
-                                color="white"
-                                size={25}
-                              />
-                            </AlertDialogComponent>
-                          ) : (
-                            ""
-                          )}
-                        </>
-                      ) : (
-                        ""
-                      )}
-                    </div>
-                  ))}
-                  {product.filesIncluded.length && user.data ? (
-                    <div className="flex items-center justify-center">
-                      <AiFillPlusCircle
-                        className=" cursor-pointer mb-5  font-semibold outline-none 
-	duration-300 transition-all w-fit px-8 py-[0.25rem]  m-auto rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
-                        color="white"
-                        size={25}
-                        onClick={() => {
-                          setIsOpenAdd(true);
-                          setTypeAction("files Included");
-                        }}
-                      />
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                </ul>
-              ) : (
-                ""
-              )}
-            </div>
-          </div>
-        );
-
-      case "drums-that-knock-x":
-        return (
-          <div className={classes.productPageFeaturesBigBox}>
-            <div className={classes.overLayFeaturesSection}></div>
-            <div>
-              {product.features.length ? (
-                <ul className="flex flex-col justify-between">
-                  {product.features.map((el: any) => (
-                    <div className="flex items-center 	 ">
-                      <li key={el.id}>{el.li}</li>
-                      {user.data ? (
-                        <>
-                          <AiFillEdit
-                            className="cursor-pointer	 font-semibold outline-none  duration-300 transition-all w-fit px-2 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
-                            color="white"
-                            size={25}
-                            onClick={() => {
-                              setIsOpen(true);
-                              setFeatureId(el.id);
-                              setYoutubeId(null);
-                              setFilesIncludeId(null);
-                              setDescriptionId(null);
-                            }}
-                          />
-                          {user.data ? (
-                            <AlertDialogComponent
-                              handle={product.handle}
-                              id={el.id}
-                              api="feature"
-                            >
-                              <AiFillDelete
-                                className="cursor-pointer font-semibold outline-none	duration-300 transition-all w-fit px-3 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
-                                color="white"
-                                size={25}
-                              />
-                            </AlertDialogComponent>
-                          ) : (
-                            ""
-                          )}
-                        </>
+                        </div>
                       ) : (
                         ""
                       )}
@@ -397,9 +268,9 @@ const HeroSection = ({ product }: { product: any }) => {
                     <div className="flex items-center justify-center">
                       <AiFillPlusCircle
                         className=" cursor-pointer   font-semibold outline-none 
-	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+	duration-300 transition-all w-fit px-5 py-[0.20rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
                         color="white"
-                        size={25}
+                        size={20}
                         onClick={() => {
                           setIsOpenAdd(true);
                           setTypeAction("features");
@@ -414,17 +285,17 @@ const HeroSection = ({ product }: { product: any }) => {
                 ""
               )}
               {product.filesIncluded.length ? (
-                <ul className={classes.productPageFeaturesBox}>
+                <ul className={classes.ul}>
                   {product.filesIncluded.map((el: any) => (
-                    <div className="flex items-center">
-                      <li key={el.id}>{el.li}</li>
+                    <div key={el.id}>
+                      <li>{el.li}</li>
                       {user.data ? (
-                        <>
+                        <div className="flex justify-between">
                           <AiFillEdit
-                            className=" cursor-pointer   font-semibold outline-none  
-	duration-300 transition-all w-fit px-2 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                            className=" cursor-pointer   font-semibold outline-none 
+                        duration-300 transition-all w-fit px-5 py-[0.20rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
                             color="white"
-                            size={25}
+                            size={20}
                             onClick={() => {
                               setIsOpen(true);
                               setFeatureId(null);
@@ -440,15 +311,15 @@ const HeroSection = ({ product }: { product: any }) => {
                               api="files-included"
                             >
                               <AiFillDelete
-                                className="cursor-pointer font-semibold outline-none	duration-300 transition-all w-fit px-3 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                                className="cursor-pointer font-semibold outline-none	duration-300 transition-all w-fit px-3 py-[0.20rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
                                 color="white"
-                                size={25}
+                                size={20}
                               />
                             </AlertDialogComponent>
                           ) : (
                             ""
                           )}
-                        </>
+                        </div>
                       ) : (
                         ""
                       )}
@@ -457,10 +328,10 @@ const HeroSection = ({ product }: { product: any }) => {
                   {product.filesIncluded.length && user.data ? (
                     <div className="flex items-center justify-center">
                       <AiFillPlusCircle
-                        className=" cursor-pointer m-auto  font-semibold outline-none 
-	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                        className=" cursor-pointer   font-semibold outline-none 
+	duration-300 transition-all w-fit px-5 py-[0.20rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
                         color="white"
-                        size={25}
+                        size={20}
                         onClick={() => {
                           setIsOpenAdd(true);
                           setTypeAction("files Included");
@@ -486,14 +357,15 @@ const HeroSection = ({ product }: { product: any }) => {
               {product.features.length ? (
                 <ul>
                   {product.features.map((el: any) => (
-                    <div key={el.id} className="flex items-center">
+                    <div key={el.id} className="flex flex-col">
                       <li>{el.li}</li>
                       {user.data ? (
-                        <>
+                        <div className="flex justify-between">
                           <AiFillEdit
-                            className="cursor-pointer	 font-semibold outline-none  duration-300 transition-all w-fit px-2 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                            className="  font-semibold outline-none disabled:cursor-not-allowed 
+                            duration-300 transition-all w-fit px-5 py-[0.30rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
                             color="white"
-                            size={25}
+                            size={20}
                             onClick={() => {
                               setIsOpen(true);
                               setFeatureId(el.id);
@@ -509,15 +381,16 @@ const HeroSection = ({ product }: { product: any }) => {
                               api="feature"
                             >
                               <AiFillDelete
-                                className="cursor-pointer font-semibold outline-none	duration-300 transition-all w-fit px-3 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                                className="  font-semibold outline-none disabled:cursor-not-allowed 
+                            duration-300 transition-all w-fit px-5 py-[0.30rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
                                 color="white"
-                                size={25}
+                                size={20}
                               />
                             </AlertDialogComponent>
                           ) : (
                             ""
                           )}
-                        </>
+                        </div>
                       ) : (
                         ""
                       )}
@@ -527,9 +400,9 @@ const HeroSection = ({ product }: { product: any }) => {
                     <div className="flex items-center justify-center">
                       <AiFillPlusCircle
                         className=" cursor-pointer   font-semibold outline-none 
-	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+	duration-300 transition-all w-fit px-5 py-[0.20rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
                         color="white"
-                        size={25}
+                        size={20}
                         onClick={() => {
                           setIsOpenAdd(true);
                           setTypeAction("features");
@@ -546,14 +419,15 @@ const HeroSection = ({ product }: { product: any }) => {
               {product.filesIncluded.length ? (
                 <ul>
                   {product.filesIncluded.map((el: any) => (
-                    <div key={el.id} className="flex items-center">
+                    <div key={el.id} className="flex flex-col">
                       <li>{el.li}</li>
                       {user.data ? (
-                        <>
+                        <div className="flex justify-between">
                           <AiFillEdit
-                            className="cursor-pointer	 font-semibold  outline-none  duration-300 transition-all w-fit px-2 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                            className=" cursor-pointer   font-semibold outline-none 
+                        duration-300 transition-all w-fit px-5 py-[0.20rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
                             color="white"
-                            size={25}
+                            size={20}
                             onClick={() => {
                               setIsOpen(true);
                               setFeatureId(null);
@@ -569,15 +443,15 @@ const HeroSection = ({ product }: { product: any }) => {
                               api="files-included"
                             >
                               <AiFillDelete
-                                className="cursor-pointer font-semibold outline-none	duration-300 transition-all w-fit px-3 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                                className="cursor-pointer font-semibold outline-none	duration-300 transition-all w-fit px-3 py-[0.20rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
                                 color="white"
-                                size={25}
+                                size={20}
                               />
                             </AlertDialogComponent>
                           ) : (
                             ""
                           )}
-                        </>
+                        </div>
                       ) : (
                         ""
                       )}
@@ -587,9 +461,9 @@ const HeroSection = ({ product }: { product: any }) => {
                     <div className="flex items-center justify-center">
                       <AiFillPlusCircle
                         className=" cursor-pointer   font-semibold outline-none 
-	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+	duration-300 transition-all w-fit px-5 py-[0.20rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
                         color="white"
-                        size={25}
+                        size={20}
                         onClick={() => {
                           setIsOpenAdd(true);
                           setTypeAction("files Included");
@@ -713,9 +587,9 @@ const HeroSection = ({ product }: { product: any }) => {
                           {user.data ? (
                             <AiFillEdit
                               className=" cursor-pointer mt-5  font-semibold outline-none 
-	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+	duration-300 transition-all w-fit px-5 py-[0.20rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
                               color="white"
-                              size={25}
+                              size={20}
                               onClick={() => {
                                 setIsOpen(true);
                                 setFeatureId(null);
@@ -735,9 +609,9 @@ const HeroSection = ({ product }: { product: any }) => {
                             >
                               <AiFillDelete
                                 className=" cursor-pointer mt-5  font-semibold outline-none 
-	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+	duration-300 transition-all w-fit px-5 py-[0.20rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
                                 color="white"
-                                size={25}
+                                size={20}
                               />
                             </AlertDialogComponent>
                           ) : (
@@ -751,10 +625,10 @@ const HeroSection = ({ product }: { product: any }) => {
                       <iframe src={el.src + "?autoplay=1"} allow={"autoplay"} />
                       {user.data ? (
                         <AiFillEdit
-                          className="left-5 cursor-pointer m-auto mt-5	 font-semibold outline-none  left-5
-	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                          className="cursor-pointer m-auto mt-5	 font-semibold outline-none  
+	duration-300 transition-all w-fit px-5 py-[0.20rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
                           color="white"
-                          size={25}
+                          size={20}
                           onClick={() => {
                             setIsOpen(true);
                             setFeatureId(null);
@@ -774,9 +648,9 @@ const HeroSection = ({ product }: { product: any }) => {
                         >
                           <AiFillDelete
                             className=" cursor-pointer mt-5  font-semibold outline-none 
-	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+	duration-300 transition-all w-fit px-5 py-[0.20rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
                             color="white"
-                            size={25}
+                            size={20}
                           />
                         </AlertDialogComponent>
                       ) : (
@@ -797,9 +671,9 @@ const HeroSection = ({ product }: { product: any }) => {
             <label>add youtube video</label>
             <AiFillPlusCircle
               className=" cursor-pointer mb-5  font-semibold outline-none 
-	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+	duration-300 transition-all w-fit px-5 py-[0.20rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
               color="white"
-              size={25}
+              size={20}
               onClick={() => {
                 setIsOpenAdd(true);
                 setTypeAction("youtube");

@@ -20,7 +20,9 @@ const AlertDialogComponent = (props) => {
         })
 
         if (response.data) {
-          return toast.success(response.data.message)
+          toast.success(response.data.message)
+          window.location.reload()
+          return
         }
       } catch (error) {
         if (error.response) {
@@ -40,7 +42,9 @@ const AlertDialogComponent = (props) => {
           }
         })
         if (response.data) {
-          return toast.success(response.data.message)
+          toast.success(response.data.message)
+          window.location.reload()
+          return
         }
       } catch (error) {
         if (error.response) {
@@ -62,7 +66,9 @@ const AlertDialogComponent = (props) => {
       })
       if (response.data) {
         props.setAdmins(response.data.admins)
-        return toast.success(response.data.message)
+        toast.success(response.data.message)
+        window.location.reload()
+        return
       }
     } catch (error) {
       if (error.response) {
