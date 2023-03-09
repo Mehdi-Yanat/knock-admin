@@ -56,6 +56,26 @@ const AlertDialogComponent = (props) => {
     }
 
 
+    if (props.action === 'artist') {
+      try {
+        const response = await axios.delete(`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/remove-artist?id=${props.id}&page=${props.page}`, {
+          headers: {
+            'Authorization': accessToken
+          }
+        })
+        if (response.data) {
+          toast.success(response.data.message)
+          window.location.reload()
+          return
+        }
+      } catch (error) {
+        if (error.response) {
+          if (!error.response.data.success) {
+            return toast.warn(error.response.data.message)
+          }
+        }
+      }
+    }
 
 
     try {
