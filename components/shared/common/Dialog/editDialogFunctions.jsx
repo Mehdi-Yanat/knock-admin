@@ -2398,10 +2398,731 @@ const Addartist = ({ formValues, setFormValues, setPreviewImage, isOpen, setIsOp
 	);
 };
 
+// Terms of service
+
+const EditTermsOfService = ({ formValues, setFormValues, isOpen, setIsOpen }) => {
+	const accessToken = getGetAccessTokenFromCookie();
+
+
+	const editSection = useMutation({
+		mutationFn: (event) => {
+			event.preventDefault();
+
+			return fetch(
+				`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/edit-terms-of-service`,
+				{
+					method: 'PUT',
+					headers: {
+						'Content-type': 'application/json',
+						'Authorization': accessToken
+					},
+					body: JSON.stringify(formValues)
+				}
+			)
+				.then((response) => response.json())
+				.then((result) => {
+					if ('success' in result && !result.success)
+						throw new Error(result.message);
+
+					return result;
+				});
+		},
+		onSuccess: (result) =>
+			setTimeout(() => toast(result.message, { type: 'success' }), 0),
+		onError: (result) =>
+			setTimeout(() => toast(result.message, { type: 'error' }), 0)
+	});
+
+	return (
+		<Dialog
+			isOpen={isOpen}
+			setIsOpen={setIsOpen}
+			header={{
+				title: 'Edit section'
+			}}
+		>
+			<form
+				className='mx-auto my-4 sm:w-11/12'
+				onSubmit={editSection.mutate}
+			>
+				<fieldset
+					className='mt-2 space-y-4'
+					disabled={editSection.isLoading}
+				>
+
+					{formValues.h3 ? <FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='h3'
+						type='text'
+						placeholder='*h3'
+						autoComplete='h3'
+						minLength={3}
+					/> : ''}
+
+					{formValues.text ? <FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='text'
+						type='text'
+						placeholder='*text'
+						autoComplete='text'
+						minLength={3}
+					/> : ''}
+
+					<div className='flex justify-end mt-4'>
+						<Button
+							type='submit'
+							classesIntent={{ w: 'full' }}
+							className='mt-4'
+							disabled={editSection.isLoading}
+						>
+							Submit
+						</Button>
+					</div>
+				</fieldset>
+				{editSection.isError && (
+					<div className='text-bg-secondary-2'>
+						<p>{editSection.error.message}</p>
+					</div>
+				)}
+			</form>
+		</Dialog>
+	);
+}
+
+// Shipping 
+
+const EditShippingPolicy = ({ formValues, setFormValues, listId, isOpen, setIsOpen }) => {
+	const accessToken = getGetAccessTokenFromCookie();
+
+
+	const editSection = useMutation({
+		mutationFn: (event) => {
+			event.preventDefault();
+
+			return fetch(
+				`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/edit-shipping-policy`,
+				{
+					method: 'PUT',
+					headers: {
+						'Content-type': 'application/json',
+						'Authorization': accessToken
+					},
+					body: JSON.stringify(formValues)
+				}
+			)
+				.then((response) => response.json())
+				.then((result) => {
+					if ('success' in result && !result.success)
+						throw new Error(result.message);
+
+					return result;
+				});
+		},
+		onSuccess: (result) =>
+			setTimeout(() => toast(result.message, { type: 'success' }), 0),
+		onError: (result) =>
+			setTimeout(() => toast(result.message, { type: 'error' }), 0)
+	});
+
+	return (
+		<Dialog
+			isOpen={isOpen}
+			setIsOpen={setIsOpen}
+			header={{
+				title: 'Edit section'
+			}}
+		>
+			<form
+				className='mx-auto my-4 sm:w-11/12'
+				onSubmit={editSection.mutate}
+			>
+				<fieldset
+					className='mt-2 space-y-4'
+					disabled={editSection.isLoading}
+				>
+
+					{listId ? <FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='li'
+						type='text'
+						placeholder='*li'
+						autoComplete='li'
+						minLength={3}
+					/> :
+						<>
+							<FormField
+								values={formValues}
+								setValues={setFormValues}
+								name='h2'
+								type='text'
+								placeholder='*h2'
+								autoComplete='h2'
+								minLength={3}
+							/>
+
+							<FormField
+								values={formValues}
+								setValues={setFormValues}
+								name='p'
+								type='text'
+								placeholder='*p'
+								autoComplete='p'
+								minLength={3}
+							/>
+
+							<FormField
+								values={formValues}
+								setValues={setFormValues}
+								name='h2s'
+								type='text'
+								placeholder='*h2s'
+								autoComplete='h2s'
+								minLength={3}
+							/>
+
+							<FormField
+								values={formValues}
+								setValues={setFormValues}
+								name='p2'
+								type='text'
+								placeholder='*p'
+								autoComplete='p'
+								minLength={3}
+							/>
+						</>}
+
+					<div className='flex justify-end mt-4'>
+						<Button
+							type='submit'
+							classesIntent={{ w: 'full' }}
+							className='mt-4'
+							disabled={editSection.isLoading}
+						>
+							Submit
+						</Button>
+					</div>
+				</fieldset>
+				{editSection.isError && (
+					<div className='text-bg-secondary-2'>
+						<p>{editSection.error.message}</p>
+					</div>
+				)}
+			</form>
+		</Dialog>
+	);
+}
+
+// Shipping 
+
+const EditRefundPolicy = ({ formValues, setFormValues, isOpen, setIsOpen }) => {
+	const accessToken = getGetAccessTokenFromCookie();
+
+
+	const editSection = useMutation({
+		mutationFn: (event) => {
+			event.preventDefault();
+
+			return fetch(
+				`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/edit-refund-policy`,
+				{
+					method: 'PUT',
+					headers: {
+						'Content-type': 'application/json',
+						'Authorization': accessToken
+					},
+					body: JSON.stringify(formValues)
+				}
+			)
+				.then((response) => response.json())
+				.then((result) => {
+					if ('success' in result && !result.success)
+						throw new Error(result.message);
+
+					return result;
+				});
+		},
+		onSuccess: (result) =>
+			setTimeout(() => toast(result.message, { type: 'success' }), 0),
+		onError: (result) =>
+			setTimeout(() => toast(result.message, { type: 'error' }), 0)
+	});
+
+	return (
+		<Dialog
+			isOpen={isOpen}
+			setIsOpen={setIsOpen}
+			header={{
+				title: 'Edit section'
+			}}
+		>
+			<form
+				className='mx-auto my-4 sm:w-11/12'
+				onSubmit={editSection.mutate}
+			>
+				<fieldset
+					className='mt-2 space-y-4'
+					disabled={editSection.isLoading}
+				>
+
+
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='h2'
+						type='text'
+						placeholder='*h2'
+						autoComplete='h2'
+						minLength={3}
+					/>
+
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='p'
+						type='text'
+						placeholder='*p'
+						autoComplete='p'
+						minLength={3}
+					/>
+
+					<div className='flex justify-end mt-4'>
+						<Button
+							type='submit'
+							classesIntent={{ w: 'full' }}
+							className='mt-4'
+							disabled={editSection.isLoading}
+						>
+							Submit
+						</Button>
+					</div>
+				</fieldset>
+				{editSection.isError && (
+					<div className='text-bg-secondary-2'>
+						<p>{editSection.error.message}</p>
+					</div>
+				)}
+			</form>
+		</Dialog>
+	);
+}
+
+// Privacy 
+
+const EditPrivacyPolicy = ({ formValues, setFormValues, isOpen, setIsOpen }) => {
+	const accessToken = getGetAccessTokenFromCookie();
+
+
+	const formInputRender = () => {
+		switch (formValues.sectionId) {
+
+			case 'collecting':
+				return <>
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='h2'
+						type='text'
+						placeholder='*h2'
+						autoComplete='h2'
+						minLength={3}
+					/>
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='p'
+						type='text'
+						placeholder='*p'
+						autoComplete='p'
+						minLength={3}
+					/>
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='u'
+						type='text'
+						placeholder='*text'
+						autoComplete='text'
+						minLength={3}
+					/>
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='u2'
+						type='text'
+						placeholder='*text'
+						autoComplete='text'
+						minLength={3}
+					/>
+				</>
+
+			case 'collecting-li':
+			case 'collecting-li2':
+				return <>
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='strong'
+						type='text'
+						placeholder='*strong'
+						autoComplete='strong'
+						minLength={3}
+					/>
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='text'
+						type='text'
+						placeholder='*text'
+						autoComplete='text'
+						minLength={3}
+					/>
+				</>
+			case 'minors':
+			case 'lawful':
+			case 'retention':
+			case 'do-not-track':
+				return <>
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='h3'
+						type='text'
+						placeholder='*h3'
+						autoComplete='h3'
+						minLength={3}
+					/>
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='p'
+						type='text'
+						placeholder='*p'
+						autoComplete='p'
+						minLength={3}
+					/>
+				</>
+			case 'sharing-ul':
+			case 'behavioural-ul':
+			case 'lawfulBasis-ul':
+				return <>
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='li'
+						type='text'
+						placeholder='*li'
+						autoComplete='li'
+						minLength={3}
+					/>
+					{formValues.sectionId === 'lawfulBasis-ul' ? '' : <FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='a'
+						type='text'
+						placeholder='*a'
+						autoComplete='a'
+						minLength={3}
+					/>}
+				</>
+			case "behavioural":
+				return <>
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='h3'
+						type='text'
+						placeholder='*h3'
+						autoComplete='h3'
+						minLength={3}
+					/>
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='p2'
+						type='text'
+						placeholder='*p'
+						autoComplete='p'
+						minLength={3}
+					/>
+				</>
+			case "behavioural-p":
+			case "automatic-p":
+			case "automatic-ul":
+			case "ccpa-p":
+			case "cookies-p":
+			case "analytics-p":
+			case "contact-p":
+				return <>
+					{formValues.sectionId === 'automatic-p' ||
+						formValues.sectionId === 'ccpa-p' ||
+						formValues.sectionId === 'automatic-ul' ||
+						formValues.sectionId === 'contact-p' ?
+						<FormField
+							values={formValues}
+							setValues={setFormValues}
+							name='text'
+							type='text'
+							placeholder='*text'
+							autoComplete='text'
+							minLength={3}
+						/>
+						:
+						<>
+							<FormField
+								values={formValues}
+								setValues={setFormValues}
+								name='text'
+								type='text'
+								placeholder='*text'
+								autoComplete='text'
+								minLength={3}
+							/>
+							<FormField
+								values={formValues}
+								setValues={setFormValues}
+								name='a'
+								type='text'
+								placeholder='*a'
+								autoComplete='a'
+								minLength={3}
+							/>
+						</>}
+				</>
+			case "behavioural-ul2":
+				return <>
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='em'
+						type='text'
+						placeholder='*text'
+						autoComplete='text'
+						minLength={3}
+					/>
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='li'
+						type='text'
+						placeholder='*text'
+						autoComplete='text'
+						minLength={3}
+					/>
+				</>
+			case 'personal':
+			case 'changes':
+				return <>
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='h2'
+						type='text'
+						placeholder='*text'
+						autoComplete='text'
+						minLength={3}
+					/>
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='p'
+						type='text'
+						placeholder='*text'
+						autoComplete='text'
+						minLength={3}
+					/>
+				</>
+			case 'yourrights-p':
+			case 'contact-p2':
+				return <>
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='text'
+						type='text'
+						placeholder='*text'
+						autoComplete='text'
+						minLength={3}
+					/>
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='em'
+						type='text'
+						placeholder='*em'
+						autoComplete='em'
+						minLength={3}
+					/>
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='a'
+						type='text'
+						placeholder='*a link'
+						autoComplete='a link'
+						minLength={3}
+					/>
+				</>
+			case 'necessary-th':
+			case 'analytics-th':
+				return <>
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='strong'
+						type='text'
+						placeholder='*text'
+						autoComplete='text'
+						minLength={3}
+					/>
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='strong2'
+						type='text'
+						placeholder='*text'
+						autoComplete='text'
+						minLength={3}
+					/>
+				</>
+			case 'necessary-tr':
+			case 'analytics-tr':
+				return <>
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='em'
+						type='text'
+						placeholder='*text'
+						autoComplete='text'
+						minLength={3}
+					/>
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='td'
+						type='text'
+						placeholder='*text'
+						autoComplete='text'
+						minLength={3}
+					/>
+				</>
+			case 'contact-em':
+				return <FormField
+					values={formValues}
+					setValues={setFormValues}
+					name='em'
+					type='text'
+					placeholder='*text'
+					autoComplete='text'
+					minLength={3}
+				/>
+
+			default:
+				break;
+		}
+	}
+
+	const editSection = useMutation({
+		mutationFn: (event) => {
+			event.preventDefault();
+
+			return fetch(
+				`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/edit-privacy-policy`,
+				{
+					method: 'PUT',
+					headers: {
+						'Content-type': 'application/json',
+						'Authorization': accessToken
+					},
+					body: JSON.stringify(formValues)
+				}
+			)
+				.then((response) => response.json())
+				.then((result) => {
+					if ('success' in result && !result.success)
+						throw new Error(result.message);
+
+					return result;
+				});
+		},
+		onSuccess: (result) =>
+			setTimeout(() => toast(result.message, { type: 'success' }), 0),
+		onError: (result) =>
+			setTimeout(() => toast(result.message, { type: 'error' }), 0)
+	});
+
+	return (
+		<Dialog
+			isOpen={isOpen}
+			setIsOpen={setIsOpen}
+			header={{
+				title: 'Edit section'
+			}}
+		>
+			<form
+				className='mx-auto my-4 sm:w-11/12'
+				onSubmit={editSection.mutate}
+			>
+				<fieldset
+					className='mt-2 space-y-4'
+					disabled={editSection.isLoading}
+				>
+
+
+					{formValues.head ? <>
+						<FormField
+							values={formValues}
+							setValues={setFormValues}
+							name='head'
+							type='text'
+							placeholder='*head'
+							autoComplete='head'
+							minLength={3}
+						/>
+						<FormField
+							values={formValues}
+							setValues={setFormValues}
+							name='head2'
+							type='text'
+							placeholder='*head'
+							autoComplete='head'
+							minLength={3}
+						/>
+					</> : ''}
+					{
+						formInputRender()
+					}
+
+					<div className='flex justify-end mt-4'>
+						<Button
+							type='submit'
+							classesIntent={{ w: 'full' }}
+							className='mt-4'
+							disabled={editSection.isLoading}
+						>
+							Submit
+						</Button>
+					</div>
+				</fieldset>
+				{editSection.isError && (
+					<div className='text-bg-secondary-2'>
+						<p>{editSection.error.message}</p>
+					</div>
+				)}
+			</form>
+		</Dialog>
+	);
+}
+
+
+
 export {
 	EditBanner, EditMainSection, EditHomePageSecondSection, EditHomePageThirdSection,
 	EditHomePageForthSection, ChangeSamplesBox, EditKnockPageSecondSection,
 	EditKnockPageThirdSection, EditKnockPageReviewsSection, EditRequirementSection,
 	EditYoutubeSection, EditKnockPageArtistSection, EditFAQSection, EditDTKSection,
-	AddDTKfeatures, Addreviews, Addartist
+	AddDTKfeatures, Addreviews, Addartist, EditTermsOfService, EditShippingPolicy, EditRefundPolicy, EditPrivacyPolicy
 }
