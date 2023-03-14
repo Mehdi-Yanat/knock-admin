@@ -86,7 +86,11 @@ const TermsOfServiceScreen = () => {
             </div>
             {item.p.map((el: any) => (
               <>
-                <br />
+                {el.id === 2 || el.id === 3 || el.id === 4 || el.id === 5 ? (
+                  <br />
+                ) : (
+                  ""
+                )}
                 {el.text}
                 {user.data ? (
                   <AiFillEdit

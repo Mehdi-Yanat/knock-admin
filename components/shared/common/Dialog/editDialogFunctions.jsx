@@ -2450,7 +2450,7 @@ const EditTermsOfService = ({ formValues, setFormValues, isOpen, setIsOpen }) =>
 					disabled={editSection.isLoading}
 				>
 
-					{formValues.h3 ? <FormField
+					{!formValues.textId ? <FormField
 						values={formValues}
 						setValues={setFormValues}
 						name='h3'
@@ -2460,7 +2460,7 @@ const EditTermsOfService = ({ formValues, setFormValues, isOpen, setIsOpen }) =>
 						minLength={3}
 					/> : ''}
 
-					{formValues.text ? <FormField
+					{formValues.textId ? <FormField
 						values={formValues}
 						setValues={setFormValues}
 						name='text'
@@ -2714,6 +2714,10 @@ const EditRefundPolicy = ({ formValues, setFormValues, isOpen, setIsOpen }) => {
 const EditPrivacyPolicy = ({ formValues, setFormValues, isOpen, setIsOpen }) => {
 	const accessToken = getGetAccessTokenFromCookie();
 
+
+	console.log('====================================');
+	console.log(formValues);
+	console.log('====================================');
 
 	const formInputRender = () => {
 		switch (formValues.sectionId) {
@@ -3072,7 +3076,7 @@ const EditPrivacyPolicy = ({ formValues, setFormValues, isOpen, setIsOpen }) => 
 				>
 
 
-					{formValues.head ? <>
+					{formValues.sectionId === "head" ? <>
 						<FormField
 							values={formValues}
 							setValues={setFormValues}

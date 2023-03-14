@@ -44,67 +44,69 @@ const ShippingPolicyScreen = () => {
         formValues={formValues}
         listId={listId}
       />
-      {data ? (
-        <Wrapper
-          head={{
-            title: "",
-          }}
-          header={{
-            h1Children: "",
-          }}
-          sectionProps={{
-            style: {
-              "--ul-li-style": "url(/svgs/gray-circle.svg)",
-            } as CSSProperties,
-          }}
-        >
-          <h2>{data.h2}</h2>
-          <p>{data.p}</p>
+      <Wrapper
+        head={{
+          title: "Shipping Policy",
+        }}
+        header={{
+          h1Children: "Shipping Policy",
+        }}
+        sectionProps={{
+          style: {
+            "--ul-li-style": "url(/svgs/gray-circle.svg)",
+          } as CSSProperties,
+        }}
+      >
+        {data ? (
+          <>
+            <h2>{data.h2}</h2>
+            <p>{data.p}</p>
 
-          <h2>{data.h2s}</h2>
-          <p>{data.p2}</p>
-          {user.data ? (
-            <AiFillEdit
-              className=" cursor-pointer m-auto mt-5 mb-5 font-semibold outline-none  
+            <h2>{data.h2s}</h2>
+            <p>{data.p2}</p>
+            {user.data ? (
+              <AiFillEdit
+                className=" cursor-pointer m-auto mt-5 mb-5 font-semibold outline-none  
 	duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
-              color="white"
-              size={25}
-              onClick={() => {
-                setIsOpen(true);
-                setListId(null);
-              }}
-            />
-          ) : (
-            ""
-          )}
-          <ul>
-            {data.ul.map((el: { id: any; li: string }) => (
-              <div
-                className="grid items-center	"
-                style={{ gridTemplateColumns: "5fr .5fr" }}
-              >
-                <li key={el.id}>{el.li}</li>
-                {user.data ? (
-                  <AiFillEdit
-                    className=" cursor-pointer font-semibold outline-none  
+                color="white"
+                size={25}
+                onClick={() => {
+                  setIsOpen(true);
+                  setListId(null);
+                }}
+              />
+            ) : (
+              ""
+            )}
+            <ul>
+              {data.ul.map((el: { id: any; li: string }) => (
+                <div
+                  className="grid items-center	"
+                  style={{ gridTemplateColumns: "5fr .5fr" }}
+                >
+                  <li key={el.id}>{el.li}</li>
+                  {user.data ? (
+                    <AiFillEdit
+                      className=" cursor-pointer font-semibold outline-none  
 	duration-300 transition-all w-fit px-2 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
-                    color="white"
-                    size={25}
-                    onClick={() => {
-                      setIsOpen(true);
-                      setListId(el.id);
-                    }}
-                  />
-                ) : (
-                  ""
-                )}
-              </div>
-            ))}
-          </ul>
-        </Wrapper>
-      ) : (
-        ""
-      )}
+                      color="white"
+                      size={25}
+                      onClick={() => {
+                        setIsOpen(true);
+                        setListId(el.id);
+                      }}
+                    />
+                  ) : (
+                    ""
+                  )}
+                </div>
+              ))}
+            </ul>
+          </>
+        ) : (
+          ""
+        )}
+      </Wrapper>
     </>
   );
 };
