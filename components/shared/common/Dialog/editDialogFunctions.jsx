@@ -2715,10 +2715,6 @@ const EditPrivacyPolicy = ({ formValues, setFormValues, isOpen, setIsOpen }) => 
 	const accessToken = getGetAccessTokenFromCookie();
 
 
-	console.log('====================================');
-	console.log(formValues);
-	console.log('====================================');
-
 	const formInputRender = () => {
 		switch (formValues.sectionId) {
 

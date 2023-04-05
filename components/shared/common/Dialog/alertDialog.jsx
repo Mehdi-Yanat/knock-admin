@@ -110,7 +110,7 @@ const AlertDialogComponent = (props) => {
         <AlertDialog.Content className={classes.AlertDialogContent}>
           <AlertDialog.Title className={classes.AlertDialogTitle}>Are you absolutely sure?</AlertDialog.Title>
           <AlertDialog.Description className={classes.AlertDialogDescription}>
-            This action cannot be undone. This will permanently delete the account and remove
+            This action cannot be undone. {props.handle || props.action ? '' : 'This will permanently delete the account and'} remove
             data from our servers.
           </AlertDialog.Description>
           <div style={{ display: 'flex', gap: 25, justifyContent: 'flex-end' }}>
@@ -118,7 +118,7 @@ const AlertDialogComponent = (props) => {
               <button className={classes.Button + ' ' + classes.mauve}>Cancel</button>
             </AlertDialog.Cancel>
             <AlertDialog.Action onClick={deleteFunction} asChild>
-              <button className={classes.Button + ' ' + classes.red}>Yes, delete account</button>
+              <button className={classes.Button + ' ' + classes.red}>Yes, delete {props.handle || props.action ? '' : 'account'}</button>
             </AlertDialog.Action>
           </div>
         </AlertDialog.Content>
