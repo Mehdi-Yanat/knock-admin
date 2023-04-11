@@ -30,20 +30,17 @@ const HeroSection = ({ data }: { data: any }) => {
           tradeMark: paragraph.tradeMark,
         };
       });
-    }
-  }, [paragraphId, data]);
-
-  useEffect(() => {
-    if (data)
-      setFormValues((value) => {
+    } else {
+      setFormValues((oldValue) => {
         return {
-          ...value,
+          ...oldValue,
           br: data.br,
           h2: data.h2,
           tradeMark: data.tradeMark,
         };
       });
-  }, []);
+    }
+  }, [paragraphId, data]);
 
   return (
     <section className="bg-primary-1 section-p-v1 leading-[1] sm:leading-[1.7]">
