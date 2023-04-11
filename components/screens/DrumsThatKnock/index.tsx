@@ -8,7 +8,6 @@ import {
   KnockProductShowcaseSection,
 } from "./sections";
 
-
 const DrumsThatKnock = ({
   products,
   knockPlugin,
@@ -22,7 +21,7 @@ const DrumsThatKnock = ({
 
   return (
     <>
-      <HeroSection />
+      <HeroSection data={data ? data.main_section : ""} />
       <DigitalProductsSection products={products} />
       {/* <MerchSection /> */}
       {data ? <ArtistsSection data={data} /> : ""}

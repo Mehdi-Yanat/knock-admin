@@ -64,7 +64,7 @@ const ArtistsSection = ({ data }: { data: any }) => {
         };
       });
     }
-  }, [reviewId]);
+  }, [reviewId, data]);
 
   useEffect(() => {
     if (artistId) {
@@ -78,7 +78,7 @@ const ArtistsSection = ({ data }: { data: any }) => {
         };
       });
     }
-  }, [artistId]);
+  }, [artistId, data]);
 
   const { user } = useGetUserDataFromStore();
 
@@ -88,7 +88,7 @@ const ArtistsSection = ({ data }: { data: any }) => {
   formData.append("review", formValues.review);
   formData.append("reviewBy", formValues.reviewBy);
   formData.append("alt", formValues.alt);
-  
+
   return (
     <>
       <section className="bg-primary-2 section-p-v1 pb-0">
@@ -110,8 +110,8 @@ const ArtistsSection = ({ data }: { data: any }) => {
         <div className="flex flex-col gap-2 lg:px-8 sm:gap-4">
           <header className="text-center flex items-center justify-center">
             <h2 className="text-h4 font-semibold capitalize flex flex-wrap justify-center">
-              SOME ARTISTS WHO HAVE USED DRUMS THAT&nbsp;
-              <KnockTrademark />
+              {data ? <span>{data.artist.h2}&nbsp;</span> : ""}
+              <KnockTrademark tradeMark={data.artist.tradeMark} />
             </h2>
           </header>
           <div className="w-[1200px] max-w-full mx-auto">
@@ -217,7 +217,7 @@ duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-se
             setIsOpen={setIsOpen}
             setreviewId={setreviewId}
             setIsOpenAddReview={setIsOpenAddReview}
-            page='dtk'
+            page="dtk"
           />
         </div>
       </section>

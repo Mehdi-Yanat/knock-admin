@@ -27,13 +27,11 @@ const MarketingPopUp = (props) => {
     buttonColor: props.popup ? props.popup.buttonColor : '',
     buttonLink: props.popup ? props.popup.buttonLink : '',
     mainImageUrl: props.popup ? props.popup.mainImageUrl : '',
-    disable:props.popup ? props.popup.disable : false
+    disable: props.popup ? props.popup.disable : false
   })
 
   let formData = new FormData()
   formData.append('mainImageUrl', formValues.mainImageUrl)
-
-
 
 
   const [openEditMode, setOpenEditMode] = useState(false)
@@ -83,12 +81,43 @@ const MarketingPopUp = (props) => {
           if ('success' in result && !result.success)
             throw new Error(result.message);
 
+          setFormValues(result.popup)
+
           return result;
         });
     },
     onSuccess: (result) => { setTimeout(() => toast(result.message), 0), setOpenEditMode(false) },
     onError: (result) => setTimeout(() => toast(result.message, { type: 'error' }), 0)
   });
+
+  const resetPopUpmutation = useMutation({
+    mutationFn: (event) => {
+      event.preventDefault();
+
+      return fetch(
+        `${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/reset-popup`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-type': 'application/json',
+            'Authorization': accessToken
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((result) => {
+          if ('success' in result && !result.success)
+            throw new Error(result.message);
+
+          setFormValues(result.popup)
+
+          return result;
+        });
+    },
+    onSuccess: (result) => { setTimeout(() => toast(result.message), 0), setOpenEditMode(false) },
+    onError: (result) => setTimeout(() => toast(result.message, { type: 'error' }), 0)
+  });
+
 
 
   return (
@@ -110,12 +139,8 @@ const MarketingPopUp = (props) => {
         </div> : <UploadInput setFormValues={setFormValues} setPreviewImage={setPreviewImage} />}
       </div> :
         <div className=' m-4 flex justify-center'>
-          <CustomNextImage isAnimated={false} alt={formValues.h2} width={300} unoptimized height={300} src={previewImage
-            ? previewImage
-            : formValues.mainImageUrl
-              ? process.env.NEXT_PUBLIC_KNOCK_URL_API +
-              formValues.mainImageUrl
-              : ""} />
+          {formValues.mainImageUrl ? <CustomNextImage isAnimated={false} alt={formValues.h2} width={300} unoptimized height={300} src={process.env.NEXT_PUBLIC_KNOCK_URL_API + formValues.mainImageUrl
+          } /> : ''}
         </div>}
       <div className='m-4  flex flex-col items-center gap-5' >
         <h2 style={{ color: formValues.h2Color }} >{formValues.h2}</h2>
@@ -160,14 +185,14 @@ const MarketingPopUp = (props) => {
               minLength={3}
             />
             <div>
-						<input checked={formValues.disable} type="checkbox" id="diable" name="disable" onChange={(e) => setFormValues(value => {
-							return {
-								...value,
-								disable:e.target.checked
-							}
-						})} value={formValues.disable} />
-						<label for="diable"> Disable popup</label>
-					</div>
+              <input checked={formValues.disable} type="checkbox" id="disable" name="disable" onChange={(e) => setFormValues(value => {
+                return {
+                  ...value,
+                  disable: e.target.checked
+                }
+              })} value={formValues.disable} />
+              <label htmlFor="disable"> Disable popup</label>
+            </div>
             <div className="flex flex-col" >
               <label >Button background color</label>
               <SketchPicker disableAlpha={true} color={formValues.buttonColor} onChangeComplete={(color) => {
@@ -206,9 +231,12 @@ const MarketingPopUp = (props) => {
       </div>
       {user.data ?
         <>
-          {openEditMode ? <div className='m-4  flex justify-center gap-5' >
-            <Button onClick={editPopUpmutation.mutate} >
-              submit
+          {openEditMode ? <div className='flex flex-col   justify-center gap-4' >
+            <Button className='w-full mt-5 ' onClick={resetPopUpmutation.mutate} >
+              Reset
+            </Button>
+            <Button className='w-full' onClick={editPopUpmutation.mutate} >
+              Submit
             </Button>
           </div> : <div className='m-4  flex justify-center gap-5'>
             <Button onClick={() => setOpenEditMode(true)} >

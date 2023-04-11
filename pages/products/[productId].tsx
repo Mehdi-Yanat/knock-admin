@@ -1,58 +1,58 @@
-import type { GetServerSideProps, NextPage } from 'next';
+import type { GetServerSideProps, NextPage } from "next";
 
-import ProductByIdScreen from '@components/screens/ProductById';
-import { IProduct } from 'types';
-import { getOneProductById } from 'server/controllers/products';
+import ProductByIdScreen from "@components/screens/ProductById";
+import { IProduct } from "types";
+import { getOneProductById } from "server/controllers/products";
 
 export interface IProductByIdPageProps {
-	product: IProduct;
+  product: IProduct;
 }
 
 const ProductByIdPage: NextPage<IProductByIdPageProps> = ({ product }) => {
-	return <ProductByIdScreen product={product} />;
+  return <ProductByIdScreen product={product} />;
 };
 
 const pages_redirects_map: Record<string, any> = {
-	'knock-plugin': '/knock',
-	'knock-clipper': '/knock-clipper'
+  "knock-plugin": "/knock",
+  "knock-clipper": "/knock-clipper",
 };
 
 export const getServerSideProps: GetServerSideProps = async ({
-	params,
-	res
+  params,
+  res,
 }) => {
-	const productId = params?.productId;
-	if (typeof productId !== 'string')
-		throw new Error('productId must be a string');
+  const productId = params?.productId;
+  if (typeof productId !== "string")
+    throw new Error("productId must be a string");
 
-	if (typeof pages_redirects_map[productId] === 'string')
-		return {
-			redirect: {
-				destination: pages_redirects_map[productId],
-				permanent: true
-			}
-		};
+  if (typeof pages_redirects_map[productId] === "string")
+    return {
+      redirect: {
+        destination: pages_redirects_map[productId],
+        permanent: true,
+      },
+    };
 
-	// !!!
-	// Handle errors
-	const product = JSON.parse(
-		JSON.stringify(await getOneProductById(productId))
-	);
+  // !!!
+  // Handle errors
+  const product = JSON.parse(
+    JSON.stringify(await getOneProductById(productId))
+  );
 
-	if (!product)
-		return {
-			notFound: true
-		};
+  if (!product)
+    return {
+      notFound: true,
+    };
 
-	res.setHeader(
-		'Cache-Control',
-		'public, s-maxage=10, stale-while-revalidate=59'
-	);
+  res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=10, stale-while-revalidate=59"
+  );
 
-	return {
-		props: {
-			product
-		}
-	};
+  return {
+    props: {
+      product,
+    },
+  };
 };
 export default ProductByIdPage;

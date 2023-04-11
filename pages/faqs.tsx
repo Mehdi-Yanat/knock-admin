@@ -1,9 +1,12 @@
 import CustomNextImage from "@components/shared/common/CustomNextImage";
 import type { NextPage } from "next";
 import { defaultSiteName3 } from "@utils/core/next-seo.config";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { getFaqPageData } from "@utils/core/API";
-import { useGetUserDataFromStore } from "@utils/core/hooks";
+import {
+  getGetAccessTokenFromCookie,
+  useGetUserDataFromStore,
+} from "@utils/core/hooks";
 import { AiFillEdit } from "react-icons/ai";
 import { useEffect, useState } from "react";
 import {
@@ -11,6 +14,9 @@ import {
   EditRequirementSection,
 } from "@components/shared/common/Dialog/editDialogFunctions";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import Button from "@components/shared/core/Button";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const FAQSPages: NextPage = () => {
   const { data } = useQuery(["faq"], () => getFaqPageData(), {
@@ -76,6 +82,29 @@ const FAQSPages: NextPage = () => {
 
   const { user } = useGetUserDataFromStore();
 
+  const accessToken = getGetAccessTokenFromCookie();
+
+  const resetSection = useMutation({
+    mutationFn: (event) => {
+      return fetch(`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/reset-FAQ`, {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: accessToken,
+        },
+      })
+        .then((response) => response.json())
+        .then((result) => {
+          if ("success" in result && !result.success)
+            throw new Error(result.message);
+
+          return result;
+        });
+    },
+    onSuccess: (result) => setTimeout(() => toast(result.message), 0),
+    onError: (result: any) =>
+      setTimeout(() => toast(result.message, { type: "error" }), 0),
+  });
   return (
     <>
       <section className="bg-primary-1 section-p-v1 flex flex-col">
@@ -209,6 +238,12 @@ const FAQSPages: NextPage = () => {
             )}
           </ul>
         </div>
+
+        {user.data ? (
+          <Button onClick={() => resetSection.mutate()}>Reset</Button>
+        ) : (
+          ""
+        )}
       </section>
     </>
   );

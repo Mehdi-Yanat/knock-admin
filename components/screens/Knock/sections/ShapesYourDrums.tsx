@@ -1,65 +1,17 @@
 import CustomNextImage from "@components/shared/common/CustomNextImage";
 import { EditKnockPageThirdSection } from "@components/shared/common/Dialog/editDialogFunctions";
-import { useQuery } from "@tanstack/react-query";
-import { getKnockPageData } from "@utils/core/API";
-import { useGetUserDataFromStore } from "@utils/core/hooks";
+import {
+  useGetUserDataFromStore,
+} from "@utils/core/hooks";
 import { useEffect, useState } from "react";
 import { AiFillEdit } from "react-icons/ai";
 
-const features = [
-  {
-    title: "PUNCH",
-    description:
-      "Transient shaper, amplifies the attack of your drums, making them more snappy and punchy. Add a touch of Punch to bring your drum tracks to life. Great for drum loops or one shots.",
-    image: {
-      src: "/images/knock/I1_266x266 1.png",
-      alt: "",
-    },
-  },
-  {
-    title: "SATURATE",
-    description:
-      "Adds harmonic distortion while compensating perceived loudness volume. Choose from three selectable modes (soft, medium, hard). Perfect for 808s, one shots, or drum loops.",
-    image: {
-      src: "/images/knock/Saturate_266x266 1.png",
-      alt: "",
-    },
-  },
-  {
-    title: "SUB",
-    description:
-      "Detects when a kick drum is present, and generates a layered sub frequency tone, giving your kick a deep low end presence. Select the pitch of your sub tone. Perfect for breakbeats, and tuning your kick drum to the key of your song.",
-    image: {
-      src: "/images/knock/SUB_266x266 1.png",
-      alt: "",
-    },
-  },
-  {
-    title: "AIR",
-    description:
-      "Adds smooth, transparent top end to your drum tracks without even a hint of harshness. There are two user selectable modes (vintage and clean).",
-    image: {
-      src: "/images/knock/AIR_266x266 1.png",
-      alt: "",
-    },
-  },
-  {
-    title: "CLIP",
-    description:
-      'A user adjustable hard & soft clipper. Push your drums hard without clipping to give your drums a warm, aggressive tone reminiscent of pushing vintage analogue gear into "the red". Select a harder clip curve for a more aggressive tone, or a softer clip curve for a more rounded tone.',
-    image: {
-      src: "/images/knock/CLERP_266x266 1.png",
-      alt: "",
-    },
-  },
-];
 
-const ShapesYourDrumsSection = ({data}:{data:any}) => {
+const ShapesYourDrumsSection = ({ data }: { data: any }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [shapesId, setShapesId] = useState("");
 
   const [shapesData, setShapesData] = useState({});
-
 
   const { user } = useGetUserDataFromStore();
 

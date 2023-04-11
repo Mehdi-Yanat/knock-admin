@@ -15,10 +15,7 @@ const HeroSection = ({
 }) => {
   const [previewImage, setPreviewImage] = useState(null);
   const mainSection = useQuery(["main-section"], () => getMainSection(), {
-    onSuccess(data) {
-      return data;
-    },
-    refetchInterval: 3000,
+    refetchOnWindowFocus: true,
   });
 
   const [OnLiveMainSectionChange, setOnLiveMainSectionChange] = useState({

@@ -9,7 +9,6 @@ import {
 const ReviewsSection = ({ data }: { data: any }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenAddReview, setIsOpenAddReview] = useState(false);
-  const [isOpenAddArtist, setIsOpenAddArtist] = useState(false);
   const [reviewId, setreviewId] = useState("");
 
   const [previewImage, setPreviewImage] = useState(null);

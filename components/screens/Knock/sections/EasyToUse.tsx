@@ -1,8 +1,6 @@
 import { EditHomePageSecondSection } from "@components/shared/common/Dialog/editDialogFunctions";
 import ProductShowcase from "@components/shared/core/ProductShowcase";
 import { IKnockPluginPageProps } from "@pages/knock";
-import { useQuery } from "@tanstack/react-query";
-import { getKnockPageData } from "@utils/core/API";
 import { useGetUserDataFromStore } from "@utils/core/hooks";
 import { useState } from "react";
 

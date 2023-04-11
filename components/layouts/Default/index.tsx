@@ -33,12 +33,9 @@ const DefaultLayout = ({
   setBanner: Dispatch<SetStateAction<boolean>>;
 }) => {
   const { user } = useGetUserDataFromStore();
-  
+
   const popup = useQuery(["get-popup"], () => getPopup(), {
-    onSuccess(data) {
-      return data;
-    },
-    refetchInterval: 10000,
+    refetchInterval: 3000,
   });
 
   const accessToken = getGetAccessTokenFromCookie();

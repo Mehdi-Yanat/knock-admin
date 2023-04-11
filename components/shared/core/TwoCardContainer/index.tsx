@@ -6,7 +6,13 @@ import {
   EditRequirementSection,
 } from "@components/shared/common/Dialog/editDialogFunctions";
 import { useGetUserDataFromStore } from "@utils/core/hooks";
-import { Dispatch, HTMLAttributes, SetStateAction, useState } from "react";
+import {
+  Dispatch,
+  Fragment,
+  HTMLAttributes,
+  SetStateAction,
+  useState,
+} from "react";
 import { AiFillEdit } from "react-icons/ai";
 
 const TwoCardContainer = ({
@@ -17,7 +23,7 @@ const TwoCardContainer = ({
   items1ListProps = {},
   items2ListProps = {},
   backgroundImg = {},
-  sectionId
+  sectionId,
 }: {
   items1: any;
   items2: any;
@@ -26,7 +32,7 @@ const TwoCardContainer = ({
   items1ListProps?: HTMLAttributes<HTMLUListElement>;
   items2ListProps?: HTMLAttributes<HTMLUListElement>;
   backgroundImg?: Partial<ICustomNextImageProps> | false;
-  sectionId:string
+  sectionId: string;
 }) => {
   const { user } = useGetUserDataFromStore();
 
@@ -36,7 +42,7 @@ const TwoCardContainer = ({
     sectionId: sectionId,
     requireId: "",
     li: "",
-    macOrPc:''
+    macOrPc: "",
   });
 
   return (
@@ -79,8 +85,8 @@ const TwoCardContainer = ({
           }}
         >
           {items1.map((item: any) => (
-            <>
-              <li key={item.id}>{item.li}</li>
+            <Fragment key={item.id}>
+              <li>{item.li}</li>
               {user.data ? (
                 <AiFillEdit
                   className="left-5 cursor-pointer m-auto mt-5	 font-semibold outline-none  left-5
@@ -93,7 +99,7 @@ const TwoCardContainer = ({
                         ...el,
                         li: item.li,
                         requireId: item.id,
-                        macOrPc:'mac'
+                        macOrPc: "mac",
                       };
                     }),
                       setIsOpen(true);
@@ -102,7 +108,7 @@ const TwoCardContainer = ({
               ) : (
                 ""
               )}
-            </>
+            </Fragment>
           ))}
         </ul>
       </div>
@@ -126,8 +132,8 @@ const TwoCardContainer = ({
           }}
         >
           {items2.map((item: any) => (
-            <>
-              <li key={item.id}>{item.li}</li>
+            <Fragment key={item.id}>
+              <li>{item.li}</li>
               {user.data ? (
                 <AiFillEdit
                   className="left-5 cursor-pointer m-auto mt-5	 font-semibold outline-none  left-5
@@ -140,7 +146,7 @@ const TwoCardContainer = ({
                         ...el,
                         li: item.li,
                         requireId: item.id,
-                        macOrPc:'pc'
+                        macOrPc: "pc",
                       };
                     }),
                       setIsOpen(true);
@@ -149,7 +155,7 @@ const TwoCardContainer = ({
               ) : (
                 ""
               )}
-            </>
+            </Fragment>
           ))}
         </ul>
       </div>

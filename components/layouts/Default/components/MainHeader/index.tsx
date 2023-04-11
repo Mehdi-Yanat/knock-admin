@@ -27,8 +27,13 @@ import { HiShoppingBag } from "react-icons/hi";
 import { AiFillCloseCircle, AiFillEdit } from "react-icons/ai";
 import { commonClasses } from "../..";
 import UserAuthButton from "./components/UserAuthButton";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { EditBanner } from "@components/shared/common/Dialog/editDialogFunctions";
+import { useAddProductsToCheckoutAndCart } from "@utils/core/hooks";
+import { getAllProducts, getOneProductById } from "server/controllers/products";
+import { GetServerSideProps } from "next";
+import axios from "axios";
+import { toast } from "react-toastify";
+
 const linkClasses = ({
   isActive,
   keepCase,
@@ -63,6 +68,7 @@ const MainHeader = (props: any) => {
     background: "",
     bannerUrl: "",
     bannerUrlText: "",
+    isAddToCartButton: "",
     disable: "",
   });
 
@@ -162,6 +168,42 @@ const MainHeader = (props: any) => {
     userCheckoutDetailsAndIdAndKey,
   ]);
 
+  const addProductsToCheckoutAndCart = useAddProductsToCheckoutAndCart();
+  const id = banner.data && banner.data.bannerUrl.split("/")[1];
+  const _Path = banner.data && banner.data.bannerUrl.split("")[0];
+
+  const addToCart = async () => {
+    if (_Path !== "/") {
+      return toast.warn(" '/' is missing add the '/' as path");
+    }
+
+    if (Number(id)) {
+      try {
+        const { data } = await axios.get(`/api/products/product?id=${id}`);
+        addProductsToCheckoutAndCart.mutate({
+          products: [{ ...data.product, quantity: 1 }],
+        });
+      } catch (error) {
+        if (error.response) {
+          return toast.warn("Product not found");
+        }
+      }
+    } else {
+      try {
+        const { data } = await axios.get(
+          `/api/products/product?handle=${id === "knock" ? "knock-plugin" : id}`
+        );
+        addProductsToCheckoutAndCart.mutate({
+          products: [{ ...data.product, quantity: 1 }],
+        });
+      } catch (error) {
+        if (error.response) {
+          return toast.warn(error.response.data.message);
+        }
+      }
+    }
+  };
+
   return (
     <>
       {props.openBanner &&
@@ -181,14 +223,27 @@ const MainHeader = (props: any) => {
             >
               <h4>{onLiveBannerChange.text}</h4>
               {onLiveBannerChange.bannerUrlText ? (
-                <div className="">
-                  <Link
-                    href={onLiveBannerChange.bannerUrl}
+                !onLiveBannerChange.isAddToCartButton ? (
+                  <div>
+                    <Link
+                      href={
+                        Number(id)
+                          ? "/products/" + id
+                          : onLiveBannerChange.bannerUrl
+                      }
+                      className="text-bold border rounded-3xl	 px-5"
+                    >
+                      {onLiveBannerChange.bannerUrlText}
+                    </Link>
+                  </div>
+                ) : (
+                  <button
                     className="text-bold border rounded-3xl	 px-5"
+                    onClick={addToCart}
                   >
                     {onLiveBannerChange.bannerUrlText}
-                  </Link>
-                </div>
+                  </button>
+                )
               ) : (
                 ""
               )}
@@ -218,7 +273,11 @@ const MainHeader = (props: any) => {
       <header
         id="main-header"
         className={`${commonClasses} bg-primary-1 z-10 fixed ${
-          !banner.data ? "top-0" : props.openBanner && user.data ? "top-14" : "top-0"
+          !banner.data
+            ? "top-0"
+            : props.openBanner && user.data
+            ? "top-14"
+            : "top-0"
         } right-0 left-0 w-full flex flex-col`}
       >
         <div className="relative w-full px-4 mx-auto sm:px-8">

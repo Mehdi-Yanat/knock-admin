@@ -1,10 +1,14 @@
 import { EditRefundPolicy } from "@components/shared/common/Dialog/editDialogFunctions";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { getRefundPolicy } from "@utils/core/API";
-import { useGetUserDataFromStore } from "@utils/core/hooks";
+import {
+  getGetAccessTokenFromCookie,
+  useGetUserDataFromStore,
+} from "@utils/core/hooks";
 import { useEffect, useState } from "react";
 import { AiFillEdit } from "react-icons/ai";
 import Wrapper from "./components/Wrapper";
+import { toast } from "react-toastify";
 
 const RefundPolicyScreen = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,6 +27,34 @@ const RefundPolicyScreen = () => {
 
   const { user } = useGetUserDataFromStore();
 
+  const accessToken = getGetAccessTokenFromCookie();
+
+  const resetSection = useMutation({
+    mutationFn: (event) => {
+      return fetch(
+        `${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/reset-refund-policy`,
+        {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json",
+            Authorization: accessToken,
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((result) => {
+          if ("success" in result && !result.success)
+            throw new Error(result.message);
+
+          return result;
+        });
+    },
+    onSuccess: (result) =>
+      setTimeout(() => toast(result.message, { type: "success" }), 0),
+    onError: (result: any) =>
+      setTimeout(() => toast(result.message, { type: "error" }), 0),
+  });
+
   return (
     <>
       <EditRefundPolicy
@@ -33,6 +65,7 @@ const RefundPolicyScreen = () => {
       />
 
       <Wrapper
+        resetHandler={resetSection.mutate}
         header={{
           h1Children: "refund policy",
         }}

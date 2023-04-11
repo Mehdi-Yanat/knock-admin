@@ -20,8 +20,21 @@ const EditBanner = ({ setOnLiveBannerChange, banner, isOpen, setIsOpen }) => {
 		background: banner ? banner.background : '',
 		bannerUrl: banner ? banner.bannerUrl : '',
 		bannerUrlText: banner ? banner.bannerUrlText : '',
+		isAddToCartButton: banner ? banner.isAddToCartButton : false,
 		disable: banner ? banner.disable : false
 	});
+
+	const resetValues = () => {
+		setFormValues({
+			text: 'Check this out Knock Clipper',
+			textColor: 'white',
+			background: '#7548FE',
+			bannerUrl: '/knock-clipper',
+			bannerUrlText: 'here',
+			isAddToCartButton: false,
+			disable: false
+		})
+	}
 
 	useEffect(() => {
 		setOnLiveBannerChange(formValues)
@@ -82,7 +95,6 @@ const EditBanner = ({ setOnLiveBannerChange, banner, isOpen, setIsOpen }) => {
 						autoComplete='text'
 						minLength={3}
 					/>
-
 					<FormField
 						values={formValues}
 						setValues={setFormValues}
@@ -110,6 +122,15 @@ const EditBanner = ({ setOnLiveBannerChange, banner, isOpen, setIsOpen }) => {
 						})} value={formValues.disable} />
 						<label for="diable"> Disable banner</label>
 					</div>
+					<div>
+						<input checked={formValues.isAddToCartButton} type="checkbox" id="isAddToCartButton" name="isAddToCartButton" onChange={(e) => setFormValues(value => {
+							return {
+								...value,
+								isAddToCartButton: e.target.checked
+							}
+						})} value={formValues.isAddToCartButton} />
+						<label for="isAddToCartButton"> Enable add to cart functionality </label>
+					</div>
 					<div className="flex flex-col" >
 						<label >Change background</label>
 						<SketchPicker disableAlpha={true} color={formValues.background} onChangeComplete={(color) => {
@@ -132,17 +153,28 @@ const EditBanner = ({ setOnLiveBannerChange, banner, isOpen, setIsOpen }) => {
 							})
 						}} />
 					</div>
-
-					<div className='flex justify-end mt-4'>
+					<div className='flex justify-end '>
 						<Button
 							type='submit'
 							classesIntent={{ w: 'full' }}
-							className='mt-4'
+							onClick={resetValues}
+							className="mt-4"
+						>
+							Reset
+						</Button>
+					</div>
+
+					<div className='flex justify-end '>
+						<Button
+							type='submit'
+							classesIntent={{ w: 'full' }}
 							disabled={EditBanner.isLoading}
 						>
 							Submit
 						</Button>
 					</div>
+
+
 				</fieldset>
 				{EditBanner.isError && (
 					<div className='text-bg-secondary-2'>
@@ -159,6 +191,7 @@ const EditMainSection = ({ setOnLiveMainSectionChange, OnLiveMainSectionChange, 
 
 	const [uploadImageApi, setUploadImageApi] = useState('')
 	const [editMainSectionApi, setEditMainSectionApi] = useState('')
+	const [resetMainSectionApi, setResetMainSectionApi] = useState('')
 
 	const [formValues, setFormValues] = useState({
 		h2: '',
@@ -213,15 +246,18 @@ const EditMainSection = ({ setOnLiveMainSectionChange, OnLiveMainSectionChange, 
 					case 'home-page':
 						setUploadImageApi('image-main-section')
 						setEditMainSectionApi('edit-main-section')
+						setResetMainSectionApi('main-section')
 						break;
 					case 'knock-page':
 						setUploadImageApi('image-knock-main-section')
 						setEditMainSectionApi('edit-knock-main-section')
+						setResetMainSectionApi('knock-main-section')
 						break;
 
 					case 'knock-clipper-page':
 						setUploadImageApi('image-knock-clipper-main-section')
 						setEditMainSectionApi('edit-knock-clipper-main-section')
+						setResetMainSectionApi('knock-clipper-main-section')
 						break;
 					default:
 						break;
@@ -282,6 +318,34 @@ const EditMainSection = ({ setOnLiveMainSectionChange, OnLiveMainSectionChange, 
 			setTimeout(() => toast(result.message, { type: 'error' }), 0)
 	});
 
+	const resetMainSection = useMutation({
+		mutationFn: (event) => {
+			event.preventDefault();
+
+			return fetch(
+				`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/reset-main?pageId=${resetMainSectionApi}&sectionId=${OnLiveMainSectionChange.sectionId}`,
+				{
+					method: 'GET',
+					headers: {
+						'Content-type': 'application/json',
+						'Authorization': accessToken
+					},
+				}
+			)
+				.then((response) => response.json())
+				.then((result) => {
+					if ('success' in result && !result.success)
+						throw new Error(result.message);
+					window.location.reload()
+					return result;
+				});
+		},
+		onSuccess: (result) =>
+			setTimeout(() => toast(result.message), 0),
+		onError: (result) =>
+			setTimeout(() => toast(result.message, { type: 'error' }), 0)
+	});
+
 	return (
 		<Dialog
 			isOpen={isOpen}
@@ -290,9 +354,8 @@ const EditMainSection = ({ setOnLiveMainSectionChange, OnLiveMainSectionChange, 
 				title: 'Edit the main section'
 			}}
 		>
-			<form
+			<div
 				className='mx-auto my-4 sm:w-11/12'
-				onSubmit={editMainSection.mutate}
 			>
 				<fieldset
 					className='mt-2 space-y-4'
@@ -374,13 +437,24 @@ const EditMainSection = ({ setOnLiveMainSectionChange, OnLiveMainSectionChange, 
 						<UploadInput setPreviewImage={setPreviewImage} setFormValues={setFormValues} />
 					</div>
 
-
 					<div className='flex justify-end mt-4'>
 						<Button
 							type='submit'
 							classesIntent={{ w: 'full' }}
 							className='mt-4'
 							disabled={editMainSection.isLoading}
+							onClick={resetMainSection.mutate}
+						>
+							Reset
+						</Button>
+					</div>
+
+					<div className='flex justify-end'>
+						<Button
+							type='submit'
+							classesIntent={{ w: 'full' }}
+							disabled={editMainSection.isLoading}
+							onClick={editMainSection.mutate}
 						>
 							Submit
 						</Button>
@@ -391,7 +465,7 @@ const EditMainSection = ({ setOnLiveMainSectionChange, OnLiveMainSectionChange, 
 						<p>{editMainSection.error.message}</p>
 					</div>
 				)}
-			</form>
+			</div>
 		</Dialog>
 	);
 };
@@ -400,6 +474,7 @@ const EditMainSection = ({ setOnLiveMainSectionChange, OnLiveMainSectionChange, 
 const EditHomePageSecondSection = ({ OnLiveSecondSectionChange, setPreviewImage, setOnLiveSecondSectionChange, productShowCase, isOpen, setIsOpen }) => {
 
 	const [editSectionAPI, setEditSectionAPI] = useState('')
+	const [resetSectionAPI, setResetSectionAPI] = useState('')
 	const [editSectionUploadImageAPI, setEditSectionUploadImageAPI] = useState('')
 
 	const [formValues, setFormValues] = useState({
@@ -439,22 +514,27 @@ const EditHomePageSecondSection = ({ OnLiveSecondSectionChange, setPreviewImage,
 				case 'secondSection':
 					setEditSectionAPI('edit-homepage')
 					setEditSectionUploadImageAPI('image-homepage')
+					setResetSectionAPI('second-section-homepage')
 					break;
 				case 'forthSection-knock':
 					setEditSectionAPI('edit-knockpage')
 					setEditSectionUploadImageAPI('image-knockpage')
+					setResetSectionAPI('forth-section-knock')
 					break;
 				case 'thirdSection-knockclipper':
 					setEditSectionAPI('edit-knockclipperpage')
 					setEditSectionUploadImageAPI('image-knockclipperpage')
+					setResetSectionAPI('third-section-knockclipper')
 					break;
 				case 'iosSection-knockpage':
 					setEditSectionAPI('edit-knockpage')
 					setEditSectionUploadImageAPI('image-knockpage')
+					setResetSectionAPI('iosSection-section-knock')
 					break;
 				case 'lastSection-dtkpage':
 					setEditSectionAPI('edit-DTK')
 					setEditSectionUploadImageAPI('image-DTK')
+					setResetSectionAPI('last-section-DTK')
 					break;
 
 				default:
@@ -518,6 +598,34 @@ const EditHomePageSecondSection = ({ OnLiveSecondSectionChange, setPreviewImage,
 			setTimeout(() => toast(result.message, { type: 'error' }), 0)
 	});
 
+	const resetMainSection = useMutation({
+		mutationFn: (event) => {
+			event.preventDefault();
+
+			return fetch(
+				`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/reset-home-page?sectionId=${resetSectionAPI}`,
+				{
+					method: 'GET',
+					headers: {
+						'Content-type': 'application/json',
+						'Authorization': accessToken
+					},
+				}
+			)
+				.then((response) => response.json())
+				.then((result) => {
+					if ('success' in result && !result.success)
+						throw new Error(result.message);
+					window.location.reload()
+					return result;
+				});
+		},
+		onSuccess: (result) =>
+			setTimeout(() => toast(result.message), 0),
+		onError: (result) =>
+			setTimeout(() => toast(result.message, { type: 'error' }), 0)
+	});
+
 	return (
 		<Dialog
 			isOpen={isOpen}
@@ -526,9 +634,8 @@ const EditHomePageSecondSection = ({ OnLiveSecondSectionChange, setPreviewImage,
 				title: 'Edit showcase section'
 			}}
 		>
-			<form
+			<div
 				className='mx-auto my-4 sm:w-11/12'
-				onSubmit={editSection.mutate}
 			>
 				<fieldset
 					className='mt-2 space-y-4'
@@ -585,13 +692,21 @@ const EditHomePageSecondSection = ({ OnLiveSecondSectionChange, setPreviewImage,
 						<UploadInput setPreviewImage={setPreviewImage} setFormValues={setFormValues} />
 					</div>
 
-
 					<div className='flex justify-end mt-4'>
 						<Button
 							type='submit'
 							classesIntent={{ w: 'full' }}
 							className='mt-4'
-							disabled={editSection.isLoading}
+							onClick={resetMainSection.mutate}
+						>
+							Reset
+						</Button>
+					</div>
+					<div className='flex justify-end mt-4'>
+						<Button
+							type='submit'
+							classesIntent={{ w: 'full' }}
+							onClick={editSection.mutate}
 						>
 							Submit
 						</Button>
@@ -602,7 +717,7 @@ const EditHomePageSecondSection = ({ OnLiveSecondSectionChange, setPreviewImage,
 						<p>{editSection.error.message}</p>
 					</div>
 				)}
-			</form>
+			</div>
 		</Dialog>
 	);
 };
@@ -663,6 +778,33 @@ const EditHomePageThirdSection = ({ OnLiveAboutSectionChange, setOnLiveAboutSect
 			setTimeout(() => toast(result.message, { type: 'error' }), 0)
 	});
 
+	const resetMainSection = useMutation({
+		mutationFn: (event) => {
+			event.preventDefault();
+
+			return fetch(
+				`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/reset-home-page?sectionId=third-section-homepage`,
+				{
+					method: 'GET',
+					headers: {
+						'Content-type': 'application/json',
+						'Authorization': accessToken
+					},
+				}
+			)
+				.then((response) => response.json())
+				.then((result) => {
+					if ('success' in result && !result.success)
+						throw new Error(result.message);
+					return result;
+				});
+		},
+		onSuccess: (result) =>
+			setTimeout(() => toast(result.message), 0),
+		onError: (result) =>
+			setTimeout(() => toast(result.message, { type: 'error' }), 0)
+	});
+
 	return (
 		<Dialog
 			isOpen={isOpen}
@@ -671,7 +813,7 @@ const EditHomePageThirdSection = ({ OnLiveAboutSectionChange, setOnLiveAboutSect
 				title: 'Edit about section'
 			}}
 		>
-			<form
+			<div
 				className='mx-auto my-4 sm:w-11/12'
 				onSubmit={editSection.mutate}
 			>
@@ -706,13 +848,21 @@ const EditHomePageThirdSection = ({ OnLiveAboutSectionChange, setOnLiveAboutSect
 						autoComplete='p'
 						minLength={3}
 					/>
-
 					<div className='flex justify-end mt-4'>
 						<Button
-							type='submit'
 							classesIntent={{ w: 'full' }}
 							className='mt-4'
 							disabled={editSection.isLoading}
+							onClick={resetMainSection.mutate}
+						>
+							Reset
+						</Button>
+					</div>
+					<div className='flex justify-end mt-4'>
+						<Button
+							classesIntent={{ w: 'full' }}
+							disabled={editSection.isLoading}
+							onClick={editSection.mutate}
 						>
 							Submit
 						</Button>
@@ -723,7 +873,7 @@ const EditHomePageThirdSection = ({ OnLiveAboutSectionChange, setOnLiveAboutSect
 						<p>{editSection.error.message}</p>
 					</div>
 				)}
-			</form>
+			</div>
 		</Dialog>
 	);
 };
@@ -816,6 +966,33 @@ const EditHomePageForthSection = ({ OnLivelatestSamplesChange, setOnLivelatestSa
 			setTimeout(() => toast(result.message, { type: 'error' }), 0)
 	});
 
+	const resetSection = useMutation({
+		mutationFn: (event) => {
+			event.preventDefault();
+
+			return fetch(
+				`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/reset-home-page?sectionId=forth-section-homepage`,
+				{
+					method: 'GET',
+					headers: {
+						'Content-type': 'application/json',
+						'Authorization': accessToken
+					},
+				}
+			)
+				.then((response) => response.json())
+				.then((result) => {
+					if ('success' in result && !result.success)
+						throw new Error(result.message);
+					return result;
+				});
+		},
+		onSuccess: (result) =>
+			setTimeout(() => toast(result.message), 0),
+		onError: (result) =>
+			setTimeout(() => toast(result.message, { type: 'error' }), 0)
+	});
+
 	return (
 		<Dialog
 			isOpen={isOpen}
@@ -824,7 +1001,7 @@ const EditHomePageForthSection = ({ OnLivelatestSamplesChange, setOnLivelatestSa
 				title: 'Edit latest samples section'
 			}}
 		>
-			<form
+			<div
 				className='mx-auto my-4 sm:w-11/12'
 				onSubmit={editSection.mutate}
 			>
@@ -899,10 +1076,17 @@ const EditHomePageForthSection = ({ OnLivelatestSamplesChange, setOnLivelatestSa
 					/>
 					<div className='flex justify-end mt-4'>
 						<Button
-							type='submit'
 							classesIntent={{ w: 'full' }}
 							className='mt-4'
-							disabled={editSection.isLoading}
+							onClick={resetSection.mutate}
+						>
+							Reset
+						</Button>
+					</div>
+					<div className='flex justify-end mt-4'>
+						<Button
+							classesIntent={{ w: 'full' }}
+							onClick={editSection.mutate}
 						>
 							Submit
 						</Button>
@@ -913,7 +1097,7 @@ const EditHomePageForthSection = ({ OnLivelatestSamplesChange, setOnLivelatestSa
 						<p>{editSection.error.message}</p>
 					</div>
 				)}
-			</form>
+			</div>
 		</Dialog>
 	);
 };
@@ -982,6 +1166,7 @@ const ChangeSamplesBox = ({ isOpen, setIsOpen, products, formValues, setFormValu
 const EditKnockPageSecondSection = ({ formValues, setFormValues, isOpen, setIsOpen }) => {
 
 	const [API_URL, setAPI_URL] = useState('')
+	const [API_URL_RESET, setAPI_URL_RESET] = useState('')
 
 	const accessToken = getGetAccessTokenFromCookie();
 
@@ -991,10 +1176,12 @@ const EditKnockPageSecondSection = ({ formValues, setFormValues, isOpen, setIsOp
 			switch (formValues.sectionId) {
 				case 'secondSection-knock-clipper':
 					setAPI_URL('edit-knockclipperpage')
+					setAPI_URL_RESET('knockclipperpage')
 					break;
 
 				default:
 					setAPI_URL('edit-knockpage')
+					setAPI_URL_RESET('knockpage')
 					break;
 			}
 		}
@@ -1030,6 +1217,33 @@ const EditKnockPageSecondSection = ({ formValues, setFormValues, isOpen, setIsOp
 			setTimeout(() => toast(result.message, { type: 'error' }), 0)
 	});
 
+	const resetSection = useMutation({
+		mutationFn: (event) => {
+			event.preventDefault();
+
+			return fetch(
+				`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/reset-${API_URL_RESET}?sectionId=secondSection`,
+				{
+					method: 'GET',
+					headers: {
+						'Content-type': 'application/json',
+						'Authorization': accessToken
+					},
+				}
+			)
+				.then((response) => response.json())
+				.then((result) => {
+					if ('success' in result && !result.success)
+						throw new Error(result.message);
+					return result;
+				});
+		},
+		onSuccess: (result) =>
+			setTimeout(() => toast(result.message), 0),
+		onError: (result) =>
+			setTimeout(() => toast(result.message, { type: 'error' }), 0)
+	});
+
 	return (
 		<Dialog
 			isOpen={isOpen}
@@ -1038,9 +1252,8 @@ const EditKnockPageSecondSection = ({ formValues, setFormValues, isOpen, setIsOp
 				title: 'Edit section'
 			}}
 		>
-			<form
+			<div
 				className='mx-auto my-4 sm:w-11/12'
-				onSubmit={editSection.mutate}
 			>
 				<fieldset
 					className='mt-2 space-y-4'
@@ -1055,13 +1268,22 @@ const EditKnockPageSecondSection = ({ formValues, setFormValues, isOpen, setIsOp
 						autoComplete='p'
 						minLength={3}
 					/>
-
 					<div className='flex justify-end mt-4'>
 						<Button
 							type='submit'
 							classesIntent={{ w: 'full' }}
-							className='mt-4'
+							disabled={resetSection.isLoading}
+							onClick={resetSection.mutate}
+						>
+							Reset
+						</Button>
+					</div>
+					<div className='flex justify-end mt-4'>
+						<Button
+							type='submit'
+							classesIntent={{ w: 'full' }}
 							disabled={editSection.isLoading}
+							onClick={editSection.mutate}
 						>
 							Submit
 						</Button>
@@ -1072,7 +1294,7 @@ const EditKnockPageSecondSection = ({ formValues, setFormValues, isOpen, setIsOp
 						<p>{editSection.error.message}</p>
 					</div>
 				)}
-			</form>
+			</div>
 		</Dialog>
 	);
 };
@@ -1111,6 +1333,36 @@ const EditKnockPageThirdSection = ({ formValues, setFormValues, shapesId, isOpen
 			setTimeout(() => toast(result.message, { type: 'error' }), 0)
 	});
 
+	const resetSection = useMutation({
+		mutationFn: (event) => {
+			event.preventDefault();
+
+			return fetch(
+				`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/reset-knockpage?sectionId=thirdSection&shapesId=${shapesId}`,
+				{
+					method: 'GET',
+					headers: {
+						'Content-type': 'application/json',
+						'Authorization': accessToken
+					},
+				}
+			)
+				.then((response) => response.json())
+				.then((result) => {
+					if ('success' in result && !result.success)
+						throw new Error(result.message);
+
+
+					return result;
+				});
+		},
+		onSuccess: (result) =>
+			setTimeout(() => toast(result.message), 0),
+		onError: (result) =>
+			setTimeout(() => toast(result.message, { type: 'error' }), 0)
+	});
+
+
 	return (
 		<Dialog
 			isOpen={isOpen}
@@ -1119,9 +1371,8 @@ const EditKnockPageThirdSection = ({ formValues, setFormValues, shapesId, isOpen
 				title: 'Edit section'
 			}}
 		>
-			<form
+			<div
 				className='mx-auto my-4 sm:w-11/12'
-				onSubmit={editSection.mutate}
 			>
 				<fieldset
 					className='mt-2 space-y-4'
@@ -1160,13 +1411,19 @@ const EditKnockPageThirdSection = ({ formValues, setFormValues, shapesId, isOpen
 							autoComplete='h2'
 							minLength={3}
 						/>}
-
 					<div className='flex justify-end mt-4'>
 						<Button
-							type='submit'
 							classesIntent={{ w: 'full' }}
 							className='mt-4'
-							disabled={editSection.isLoading}
+							onClick={resetSection.mutate}
+						>
+							Reset
+						</Button>
+					</div>
+					<div className='flex justify-end mt-4'>
+						<Button
+							classesIntent={{ w: 'full' }}
+							onClick={editSection.mutate}
 						>
 							Submit
 						</Button>
@@ -1177,7 +1434,7 @@ const EditKnockPageThirdSection = ({ formValues, setFormValues, shapesId, isOpen
 						<p>{editSection.error.message}</p>
 					</div>
 				)}
-			</form>
+			</div>
 		</Dialog>
 	);
 };
@@ -1263,6 +1520,33 @@ const EditKnockPageReviewsSection = ({ formValues, setFormValues, reviewId, setP
 			setTimeout(() => toast(result.message, { type: 'error' }), 0)
 	});
 
+	const resetSection = useMutation({
+		mutationFn: (event) => {
+			event.preventDefault();
+
+			return fetch(
+				`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/reset-review?pageId=${formValues.sectionId}&reviewId=${formValues.id}`,
+				{
+					method: 'GET',
+					headers: {
+						'Content-type': 'application/json',
+						'Authorization': accessToken
+					},
+				}
+			)
+				.then((response) => response.json())
+				.then((result) => {
+					if ('success' in result && !result.success)
+						throw new Error(result.message);
+					return result;
+				});
+		},
+		onSuccess: (result) =>
+			setTimeout(() => toast(result.message), 0),
+		onError: (result) =>
+			setTimeout(() => toast(result.message, { type: 'error' }), 0)
+	});
+
 	return (
 		<Dialog
 			isOpen={isOpen}
@@ -1271,9 +1555,8 @@ const EditKnockPageReviewsSection = ({ formValues, setFormValues, reviewId, setP
 				title: 'Edit section'
 			}}
 		>
-			<form
+			<div
 				className='mx-auto my-4 sm:w-11/12'
-				onSubmit={editSection.mutate}
 			>
 				<fieldset
 					className='mt-2 space-y-4'
@@ -1315,13 +1598,21 @@ const EditKnockPageReviewsSection = ({ formValues, setFormValues, reviewId, setP
 						<label >Upload new image</label>
 						<UploadInput setPreviewImage={setPreviewImage} setFormValues={setFormValues} />
 					</div>
-
 					<div className='flex justify-end mt-4'>
 						<Button
 							type='submit'
 							classesIntent={{ w: 'full' }}
 							className='mt-4'
-							disabled={editSection.isLoading}
+							onClick={resetSection.mutate}
+						>
+							Reset
+						</Button>
+					</div>
+					<div className='flex justify-end mt-4'>
+						<Button
+							type='submit'
+							classesIntent={{ w: 'full' }}
+							onClick={editSection.mutate}
 						>
 							Submit
 						</Button>
@@ -1332,7 +1623,7 @@ const EditKnockPageReviewsSection = ({ formValues, setFormValues, reviewId, setP
 						<p>{editSection.error.message}</p>
 					</div>
 				)}
-			</form>
+			</div>
 		</Dialog>
 	);
 };
@@ -1340,6 +1631,7 @@ const EditKnockPageReviewsSection = ({ formValues, setFormValues, reviewId, setP
 const EditRequirementSection = ({ formValues, setFormValues, isOpen, setIsOpen }) => {
 
 	const [API_URL, setAPI_URL] = useState('')
+	const [API_URL_RESET, setAPI_URL_RESET] = useState('')
 	const [requirementId, setRequirementId] = useState('')
 
 	const accessToken = getGetAccessTokenFromCookie();
@@ -1349,9 +1641,11 @@ const EditRequirementSection = ({ formValues, setFormValues, isOpen, setIsOpen }
 			switch (formValues.sectionId) {
 				case 'sevenSection-knock':
 					setAPI_URL('edit-knockpage')
+					setAPI_URL_RESET('reset-knockpage')
 					break;
 				case 'forthSection-knockclipper':
 					setAPI_URL('edit-knockclipperpage')
+					setAPI_URL_RESET('reset-knockclipperpage')
 					break;
 
 				default:
@@ -1394,6 +1688,35 @@ const EditRequirementSection = ({ formValues, setFormValues, isOpen, setIsOpen }
 			setTimeout(() => toast(result.message, { type: 'error' }), 0)
 	});
 
+
+	const resetSection = useMutation({
+		mutationFn: (event) => {
+			event.preventDefault();
+
+			return fetch(
+				`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/${API_URL_RESET}?requirdId=${requirementId}&sectionId=requirement-section&type=${formValues.macOrPc}`,
+				{
+					method: 'GET',
+					headers: {
+						'Content-type': 'application/json',
+						'Authorization': accessToken
+					},
+				}
+			)
+				.then((response) => response.json())
+				.then((result) => {
+					if ('success' in result && !result.success)
+						throw new Error(result.message);
+
+					return result;
+				});
+		},
+		onSuccess: (result) =>
+			setTimeout(() => toast(result.message), 0),
+		onError: (result) =>
+			setTimeout(() => toast(result.message, { type: 'error' }), 0)
+	});
+
 	return (
 		<Dialog
 			isOpen={isOpen}
@@ -1402,9 +1725,8 @@ const EditRequirementSection = ({ formValues, setFormValues, isOpen, setIsOpen }
 				title: 'Edit section'
 			}}
 		>
-			<form
+			<div
 				className='mx-auto my-4 sm:w-11/12'
-				onSubmit={editSection.mutate}
 			>
 				<fieldset
 					className='mt-2 space-y-4'
@@ -1442,13 +1764,19 @@ const EditRequirementSection = ({ formValues, setFormValues, isOpen, setIsOpen }
 							autoComplete='li'
 							minLength={3}
 						/>}
-
 					<div className='flex justify-end mt-4'>
 						<Button
-							type='submit'
 							classesIntent={{ w: 'full' }}
 							className='mt-4'
-							disabled={editSection.isLoading}
+							onClick={resetSection.mutate}
+						>
+							Reset
+						</Button>
+					</div>
+					<div className='flex justify-end '>
+						<Button
+							classesIntent={{ w: 'full' }}
+							onClick={editSection.mutate}
 						>
 							Submit
 						</Button>
@@ -1459,7 +1787,7 @@ const EditRequirementSection = ({ formValues, setFormValues, isOpen, setIsOpen }
 						<p>{editSection.error.message}</p>
 					</div>
 				)}
-			</form>
+			</div>
 		</Dialog>
 	);
 };
@@ -1467,6 +1795,7 @@ const EditRequirementSection = ({ formValues, setFormValues, isOpen, setIsOpen }
 const EditYoutubeSection = ({ formValues, setFormValues, isOpen, setIsOpen }) => {
 
 	const [API_URL, setAPI_URL] = useState('')
+	const [API_URL_RESET, setAPI_URL_RESET] = useState('')
 	const accessToken = getGetAccessTokenFromCookie();
 
 
@@ -1475,9 +1804,11 @@ const EditYoutubeSection = ({ formValues, setFormValues, isOpen, setIsOpen }) =>
 			switch (formValues.sectionId) {
 				case 'eightSection-knock':
 					setAPI_URL('edit-knockpage')
+					setAPI_URL_RESET('reset-knockpage')
 					break;
 				case 'fifthSection-knockclipper':
 					setAPI_URL('edit-knockclipperpage')
+					setAPI_URL_RESET('reset-knockclipperpage')
 					break;
 
 
@@ -1518,6 +1849,34 @@ const EditYoutubeSection = ({ formValues, setFormValues, isOpen, setIsOpen }) =>
 			setTimeout(() => toast(result.message, { type: 'error' }), 0)
 	});
 
+	const resetSection = useMutation({
+		mutationFn: (event) => {
+			event.preventDefault();
+
+			return fetch(
+				`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/${API_URL_RESET}?sectionId=youtube-section`,
+				{
+					method: 'GET',
+					headers: {
+						'Content-type': 'application/json',
+						'Authorization': accessToken
+					},
+				}
+			)
+				.then((response) => response.json())
+				.then((result) => {
+					if ('success' in result && !result.success)
+						throw new Error(result.message);
+
+					return result;
+				});
+		},
+		onSuccess: (result) =>
+			setTimeout(() => toast(result.message), 0),
+		onError: (result) =>
+			setTimeout(() => toast(result.message, { type: 'error' }), 0)
+	});
+
 	return (
 		<Dialog
 			isOpen={isOpen}
@@ -1526,9 +1885,8 @@ const EditYoutubeSection = ({ formValues, setFormValues, isOpen, setIsOpen }) =>
 				title: 'Edit section'
 			}}
 		>
-			<form
+			<div
 				className='mx-auto my-4 sm:w-11/12'
-				onSubmit={editSection.mutate}
 			>
 				<fieldset
 					className='mt-2 space-y-4'
@@ -1554,8 +1912,6 @@ const EditYoutubeSection = ({ formValues, setFormValues, isOpen, setIsOpen }) =>
 						autoComplete='youtube url'
 						minLength={3}
 						labelTextVariants='change'
-
-
 					/>
 
 					<FormField
@@ -1595,13 +1951,21 @@ const EditYoutubeSection = ({ formValues, setFormValues, isOpen, setIsOpen }) =>
 						autoComplete='button'
 						minLength={3}
 					/>
-
 					<div className='flex justify-end mt-4'>
 						<Button
 							type='submit'
 							classesIntent={{ w: 'full' }}
 							className='mt-4'
-							disabled={editSection.isLoading}
+							onClick={resetSection.mutate}
+						>
+							Reset
+						</Button>
+					</div>
+					<div className='flex justify-end'>
+						<Button
+							type='submit'
+							classesIntent={{ w: 'full' }}
+							onClick={editSection.mutate}
 						>
 							Submit
 						</Button>
@@ -1612,7 +1976,7 @@ const EditYoutubeSection = ({ formValues, setFormValues, isOpen, setIsOpen }) =>
 						<p>{editSection.error.message}</p>
 					</div>
 				)}
-			</form>
+			</div>
 		</Dialog>
 	);
 };
@@ -1654,8 +2018,7 @@ const EditKnockPageArtistSection = ({ formValues, setFormValues, artistId, setPr
 			event.preventDefault();
 
 			if (typeof (formValues.imageUrl) === 'object') {
-				fetch(
-					`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/upload/${API_URL_IMAGE}`,
+				fetch(`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/upload/${API_URL_IMAGE}`,
 					{
 						method: 'POST',
 						headers: {
@@ -1698,6 +2061,33 @@ const EditKnockPageArtistSection = ({ formValues, setFormValues, artistId, setPr
 			setTimeout(() => toast(result.message, { type: 'error' }), 0)
 	});
 
+	const resetSection = useMutation({
+		mutationFn: (event) => {
+			event.preventDefault();
+			return fetch(
+				`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/reset-DTK?artistId=${artistId}&sectionId=${formValues.sectionId}`,
+				{
+					method: 'GET',
+					headers: {
+						'Content-type': 'application/json',
+						'Authorization': accessToken
+					},
+				}
+			)
+				.then((response) => response.json())
+				.then((result) => {
+					if ('success' in result && !result.success)
+						throw new Error(result.message);
+
+					return result;
+				});
+		},
+		onSuccess: (result) =>
+			setTimeout(() => toast(result.message), 0),
+		onError: (result) =>
+			setTimeout(() => toast(result.message, { type: 'error' }), 0)
+	});
+
 	return (
 		<Dialog
 			isOpen={isOpen}
@@ -1706,9 +2096,8 @@ const EditKnockPageArtistSection = ({ formValues, setFormValues, artistId, setPr
 				title: 'Edit section'
 			}}
 		>
-			<form
+			<div
 				className='mx-auto my-4 sm:w-11/12'
-				onSubmit={editSection.mutate}
 			>
 				<fieldset
 					className='mt-2 space-y-4'
@@ -1737,7 +2126,16 @@ const EditKnockPageArtistSection = ({ formValues, setFormValues, artistId, setPr
 							type='submit'
 							classesIntent={{ w: 'full' }}
 							className='mt-4'
-							disabled={editSection.isLoading}
+							onClick={resetSection.mutate}
+						>
+							Reset
+						</Button>
+					</div>
+					<div className='flex justify-end mt-4'>
+						<Button
+							type='submit'
+							classesIntent={{ w: 'full' }}
+							onClick={editSection.mutate}
 						>
 							Submit
 						</Button>
@@ -1748,7 +2146,7 @@ const EditKnockPageArtistSection = ({ formValues, setFormValues, artistId, setPr
 						<p>{editSection.error.message}</p>
 					</div>
 				)}
-			</form>
+			</div>
 		</Dialog>
 	);
 };
@@ -1795,17 +2193,13 @@ const EditFAQSection = ({ formValues, setFormValues, listId, isOpen, setIsOpen }
 				title: 'Edit section'
 			}}
 		>
-			<form
+			<div
 				className='mx-auto my-4 sm:w-11/12'
-				onSubmit={editSection.mutate}
 			>
 				<fieldset
 					className='mt-2 space-y-4'
 					disabled={editSection.isLoading}
 				>
-
-
-
 					{
 						listId ? <FormField
 							values={formValues}
@@ -1854,7 +2248,7 @@ const EditFAQSection = ({ formValues, setFormValues, listId, isOpen, setIsOpen }
 							type='submit'
 							classesIntent={{ w: 'full' }}
 							className='mt-4'
-							disabled={editSection.isLoading}
+							onClick={editSection.mutate}
 						>
 							Submit
 						</Button>
@@ -1865,7 +2259,7 @@ const EditFAQSection = ({ formValues, setFormValues, listId, isOpen, setIsOpen }
 						<p>{editSection.error.message}</p>
 					</div>
 				)}
-			</form>
+			</div>
 		</Dialog>
 	);
 };
@@ -2397,6 +2791,169 @@ const Addartist = ({ formValues, setFormValues, setPreviewImage, isOpen, setIsOp
 		</Dialog>
 	);
 };
+
+const EditDTKmainSection = ({ isOpen, setIsOpen, setFormValues, formValues, paragraphId }) => {
+	const accessToken = getGetAccessTokenFromCookie();
+
+
+
+	const editSection = useMutation({
+		mutationFn: (event) => {
+			event.preventDefault();
+
+			return fetch(
+				`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/edit-DTK?paragraphId=${paragraphId}`,
+				{
+					method: 'PUT',
+					headers: {
+						'Content-type': 'application/json',
+						'Authorization': accessToken
+					},
+					body: JSON.stringify(formValues)
+				}
+			)
+				.then((response) => response.json())
+				.then((result) => {
+					if ('success' in result && !result.success)
+						throw new Error(result.message);
+
+					return result;
+				});
+		},
+		onSuccess: (result) =>
+			setTimeout(() => {
+				toast(result.message)
+			}, 0),
+		onError: (result) =>
+			setTimeout(() => toast(result.message, { type: 'error' }), 0)
+	});
+
+	const resetSection = useMutation({
+		mutationFn: (event) => {
+			event.preventDefault();
+
+			return fetch(
+				`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/reset-DTK?paragraphId=${paragraphId}`,
+				{
+					method: 'GET',
+					headers: {
+						'Content-type': 'application/json',
+						'Authorization': accessToken
+					},
+				}
+			)
+				.then((response) => response.json())
+				.then((result) => {
+					if ('success' in result && !result.success)
+						throw new Error(result.message);
+
+					return result;
+				});
+		},
+		onSuccess: (result) =>
+			setTimeout(() => {
+				toast(result.message)
+			}, 0),
+		onError: (result) =>
+			setTimeout(() => toast(result.message, { type: 'error' }), 0)
+	});
+
+	return (
+		<Dialog
+			isOpen={isOpen}
+			setIsOpen={setIsOpen}
+			header={{
+				title: 'Edit section'
+			}}
+		>
+			<div
+				className='mx-auto my-4 sm:w-11/12'
+			>
+				<fieldset
+					className='mt-2 space-y-4'
+					disabled={editSection.isLoading}
+				>
+
+					{paragraphId ?
+						<>
+							<FormField
+								values={formValues}
+								setValues={setFormValues}
+								name='p'
+								type='text'
+								placeholder='*p'
+								autoComplete='p'
+								minLength={3}
+							/>
+							{paragraphId === 3 ? <FormField
+								values={formValues}
+								setValues={setFormValues}
+								name='tradeMark'
+								type='text'
+								placeholder='*trade mark'
+								autoComplete='trade mark'
+								minLength={3}
+							/> : ''}
+						</> : <>
+							<FormField
+								values={formValues}
+								setValues={setFormValues}
+								name='br'
+								type='text'
+								placeholder='*br'
+								autoComplete='br'
+								minLength={3}
+							/>
+
+							<FormField
+								values={formValues}
+								setValues={setFormValues}
+								name='h2'
+								type='text'
+								placeholder='*h2'
+								autoComplete='h2'
+								minLength={3}
+							/>
+							<FormField
+								values={formValues}
+								setValues={setFormValues}
+								name='tradeMark'
+								type='text'
+								placeholder='*trade mark'
+								autoComplete='trade mark'
+								minLength={3}
+							/>
+						</>
+					}
+					<div className='flex justify-end mt-4'>
+						<Button
+							type='submit'
+							classesIntent={{ w: 'full' }}
+							className='mt-4'
+							onClick={resetSection.mutate}
+						>
+							Reset
+						</Button>
+					</div>
+					<div className='flex justify-end mt-4'>
+						<Button
+							type='submit'
+							classesIntent={{ w: 'full' }}
+							onClick={editSection.mutate}
+						>
+							Submit
+						</Button>
+					</div>
+				</fieldset>
+				{editSection.isError && (
+					<div className='text-bg-secondary-2'>
+						<p>{editSection.error.message}</p>
+					</div>
+				)}
+			</div>
+		</Dialog>
+	);
+}
 
 // Terms of service
 
@@ -3124,5 +3681,6 @@ export {
 	EditHomePageForthSection, ChangeSamplesBox, EditKnockPageSecondSection,
 	EditKnockPageThirdSection, EditKnockPageReviewsSection, EditRequirementSection,
 	EditYoutubeSection, EditKnockPageArtistSection, EditFAQSection, EditDTKSection,
-	AddDTKfeatures, Addreviews, Addartist, EditTermsOfService, EditShippingPolicy, EditRefundPolicy, EditPrivacyPolicy
+	AddDTKfeatures, Addreviews, Addartist, EditTermsOfService, EditShippingPolicy, EditRefundPolicy, EditPrivacyPolicy,
+	EditDTKmainSection
 }
