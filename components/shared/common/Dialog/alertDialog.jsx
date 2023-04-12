@@ -77,6 +77,45 @@ const AlertDialogComponent = (props) => {
       }
     }
 
+    if (props.action === "faq") {
+      try {
+        const response = await axios.delete(`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/remove-FAQ?id=${props.id}`, {
+          headers: {
+            'Authorization': accessToken
+          }
+        })
+        if (response.data) {
+          toast.success(response.data.message)
+          return
+        }
+      } catch (error) {
+        if (error.response) {
+          if (!error.response.data.success) {
+            return toast.warn(error.response.data.message)
+          }
+        }
+      }
+    }
+
+    if (props.action === 'faq-list') {
+      try {
+        const response = await axios.delete(`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/remove-FAQ-list?faqId=${props.faqId}&id=${props.id}`, {
+          headers: {
+            'Authorization': accessToken
+          }
+        })
+        if (response.data) {
+          toast.success(response.data.message)
+          return
+        }
+      } catch (error) {
+        if (error.response) {
+          if (!error.response.data.success) {
+            return toast.warn(error.response.data.message)
+          }
+        }
+      }
+    }
 
     try {
       const response = await axios.delete(`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/admin/${props.adminId}`, {

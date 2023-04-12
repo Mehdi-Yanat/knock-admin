@@ -2,6 +2,7 @@ import CustomNextImage from "@components/shared/common/CustomNextImage";
 import { EditDTKmainSection } from "@components/shared/common/Dialog/editDialogFunctions";
 import Button from "@components/shared/core/Button";
 import KnockTrademark from "@components/shared/core/KnockTrademark";
+import { useGetUserDataFromStore } from "@utils/core/hooks";
 import { Fragment, useEffect, useState } from "react";
 import { AiFillEdit } from "react-icons/ai";
 
@@ -42,6 +43,8 @@ const HeroSection = ({ data }: { data: any }) => {
     }
   }, [paragraphId, data]);
 
+  const { user } = useGetUserDataFromStore();
+
   return (
     <section className="bg-primary-1 section-p-v1 leading-[1] sm:leading-[1.7]">
       <EditDTKmainSection
@@ -69,14 +72,18 @@ const HeroSection = ({ data }: { data: any }) => {
               <KnockTrademark tradeMark={data ? data.tradeMark : ""} />
             </div>
           </h1>
-          <Button
-            onClick={() => {
-              setIsOpen(true);
-              setParagraphId(null);
-            }}
-          >
-            <AiFillEdit />
-          </Button>
+          {user.data ? (
+            <Button
+              onClick={() => {
+                setIsOpen(true);
+                setParagraphId(null);
+              }}
+            >
+              <AiFillEdit />
+            </Button>
+          ) : (
+            ""
+          )}
           {data
             ? data.p.map((el: any) =>
                 el.tradeMark ? (
@@ -85,28 +92,36 @@ const HeroSection = ({ data }: { data: any }) => {
                       {el.text} &nbsp;
                       <KnockTrademark tradeMark={el.tradeMark} />.
                     </p>
-                    <Button
-                      onClick={() => {
-                        setIsOpen(true);
-                        setParagraphId(el.id);
-                      }}
-                    >
-                      <AiFillEdit />
-                    </Button>
+                    {user.data ? (
+                      <Button
+                        onClick={() => {
+                          setIsOpen(true);
+                          setParagraphId(el.id);
+                        }}
+                      >
+                        <AiFillEdit />
+                      </Button>
+                    ) : (
+                      ""
+                    )}
                   </Fragment>
                 ) : (
                   <Fragment key={el.id}>
                     <p className="text-[1rem] sm:text-2xl max-w-[600px]">
                       {el.text}
                     </p>
-                    <Button
-                      onClick={() => {
-                        setIsOpen(true);
-                        setParagraphId(el.id);
-                      }}
-                    >
-                      <AiFillEdit />
-                    </Button>
+                    {user.data ? (
+                      <Button
+                        onClick={() => {
+                          setIsOpen(true);
+                          setParagraphId(el.id);
+                        }}
+                      >
+                        <AiFillEdit />
+                      </Button>
+                    ) : (
+                      ""
+                    )}
                   </Fragment>
                 )
               )

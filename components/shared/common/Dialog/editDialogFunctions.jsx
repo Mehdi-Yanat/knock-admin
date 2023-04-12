@@ -10,6 +10,7 @@ import UploadInput from '../uploadInput/UploadInput'
 import Image from "next/image";
 import classes from "../../../../styles/editDialogFunctions.module.scss"
 import axios from "axios";
+import { AiFillMinusCircle, AiFillPlusCircle } from "react-icons/ai";
 
 const EditBanner = ({ setOnLiveBannerChange, banner, isOpen, setIsOpen }) => {
 
@@ -2267,6 +2268,288 @@ const EditFAQSection = ({ formValues, setFormValues, listId, isOpen, setIsOpen }
 	);
 };
 
+const AddFAQ = ({ formValues, setFormValues, isOpen, setIsOpen }) => {
+
+	const accessToken = getGetAccessTokenFromCookie();
+
+
+	const editSection = useMutation({
+		mutationFn: (event) => {
+			event.preventDefault();
+
+			return fetch(
+				`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/add-FAQ`,
+				{
+					method: 'POST',
+					headers: {
+						'Content-type': 'application/json',
+						'Authorization': accessToken
+					},
+					body: JSON.stringify(formValues)
+				}
+			)
+				.then((response) => response.json())
+				.then((result) => {
+					if ('success' in result && !result.success)
+						throw new Error(result.message);
+					setFormValues({
+						answer_type: "",
+						faq_list: [],
+						h2: "",
+						h3: null,
+						p: "",
+					})
+					return result;
+				});
+		},
+		onSuccess: (result) =>
+			setTimeout(() => toast(result.message), 0),
+		onError: (result) =>
+			setTimeout(() => toast(result.message, { type: 'error' }), 0)
+	});
+
+	return (
+		<Dialog
+			isOpen={isOpen}
+			setIsOpen={setIsOpen}
+			header={{
+				title: 'Add section'
+			}}
+		>
+			<div
+				className='mx-auto my-4 sm:w-11/12'
+			>
+				<fieldset
+					className='mt-2 space-y-4'
+					disabled={editSection.isLoading}
+				>
+
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='h2'
+						type='text'
+						placeholder='*h2'
+						autoComplete='h2'
+						minLength={3}
+					/>
+
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='p'
+						type='text'
+						placeholder='*p'
+						autoComplete='p'
+						minLength={3}
+					/>
+
+					<div className="flex items-center " >
+						<label>Direct Answer</label>
+						<input
+							name='answer_type'
+							type='radio'
+							placeholder='*answer type'
+							autoComplete='answer type'
+							minLength={3}
+							labelText="answer"
+							className="ml-5"
+							onChange={(event) => setFormValues(oldValue => {
+								return {
+									...oldValue,
+									answer_type: 'answer'
+								}
+							})}
+						/>
+					</div>
+					<div className="flex items-center " >
+						<label>Opening And Lists</label>
+						<input
+							name='answer_type'
+							type='radio'
+							placeholder='*answer type'
+							autoComplete='answer type'
+							minLength={3}
+							labelText="answer"
+							className="ml-5"
+							onChange={(event) => setFormValues(oldValue => {
+								return {
+									...oldValue,
+									answer_type: 'opening_and_lists'
+								}
+							})}
+						/>
+					</div>
+					{
+						formValues.answer_type === "opening_and_lists" ?
+							<>
+								<FormField
+									values={formValues}
+									setValues={setFormValues}
+									name='h3'
+									type='text'
+									placeholder='*h3'
+									autoComplete='h3'
+									minLength={3}
+								/>
+
+								{formValues.faq_list.map((value, index) => (
+									<>
+										<FormField key={index} value={value} placeholder="faq list" onChange={(event) => {
+											const newInputs = [...formValues.faq_list];
+											newInputs[index] = event.target.value;
+											setFormValues(value => {
+												return {
+													...value,
+													faq_list: newInputs
+												}
+											});
+										}} />
+									</>
+								))}
+								<div
+									className="flex items-center justify-center p-2 gap-5"
+								>
+									<AiFillPlusCircle
+										onClick={() => {
+											setFormValues((value) => {
+												return {
+													...value,
+													faq_list: [...formValues.faq_list, ""],
+												};
+											});
+										}}
+										className=" cursor-pointer   font-semibold outline-none 
+									duration-300 transition-all w-fit px-5 py-[0.10rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+									/>
+									<AiFillMinusCircle
+										onClick={() => {
+											const newInputs = [...formValues.faq_list];
+											newInputs.splice(formValues.faq_list.length - 1, 1);
+											setFormValues((value) => {
+												return {
+													...value,
+													faq_list: newInputs,
+												};
+											});
+										}}
+										className="cursor-pointer   font-semibold outline-none 
+									duration-300 transition-all w-fit px-5 py-[0.10rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+									/>
+
+								</div>
+							</> : ''
+					}
+
+
+					<div className='flex justify-end mt-4'>
+						<Button
+							type='submit'
+							classesIntent={{ w: 'full' }}
+							className='mt-4'
+							onClick={editSection.mutate}
+						>
+							Submit
+						</Button>
+					</div>
+				</fieldset>
+				{editSection.isError && (
+					<div className='text-bg-secondary-2'>
+						<p>{editSection.error.message}</p>
+					</div>
+				)}
+			</div>
+		</Dialog>
+	);
+};
+
+const AddFAQList = ({ formValues, setFormValues, isOpen, setIsOpen }) => {
+
+	const accessToken = getGetAccessTokenFromCookie();
+
+	const editSection = useMutation({
+		mutationFn: (event) => {
+			event.preventDefault();
+
+			return fetch(
+				`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/add-FAQ-list`,
+				{
+					method: 'POST',
+					headers: {
+						'Content-type': 'application/json',
+						'Authorization': accessToken
+					},
+					body: JSON.stringify(formValues)
+				}
+			)
+				.then((response) => response.json())
+				.then((result) => {
+					if ('success' in result && !result.success)
+						throw new Error(result.message);
+					setFormValues({
+						answer_type: "",
+						faq_list: [],
+						h2: "",
+						h3: null,
+						p: "",
+					})
+					return result;
+				});
+		},
+		onSuccess: (result) =>
+			setTimeout(() => toast(result.message), 0),
+		onError: (result) =>
+			setTimeout(() => toast(result.message, { type: 'error' }), 0)
+	});
+
+	return (
+		<Dialog
+			isOpen={isOpen}
+			setIsOpen={setIsOpen}
+			header={{
+				title: 'Add subtext list'
+			}}
+		>
+			<div
+				className='mx-auto my-4 sm:w-11/12'
+			>
+				<fieldset
+					className='mt-2 space-y-4'
+					disabled={editSection.isLoading}
+				>
+
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='li'
+						type='text'
+						placeholder='*li'
+						autoComplete='li'
+						minLength={3}
+					/>
+
+
+					<div className='flex justify-end mt-4'>
+						<Button
+							type='submit'
+							classesIntent={{ w: 'full' }}
+							className='mt-4'
+							onClick={editSection.mutate}
+						>
+							Submit
+						</Button>
+					</div>
+				</fieldset>
+				{editSection.isError && (
+					<div className='text-bg-secondary-2'>
+						<p>{editSection.error.message}</p>
+					</div>
+				)}
+			</div>
+		</Dialog>
+	);
+};
+
 // DTK product 
 
 const EditDTKSection = ({ formValues, setFormValues, featureId, youtubeId, filesIncludeId, descriptionId, isOpen, setIsOpen }) => {
@@ -3175,7 +3458,7 @@ const EditShippingPolicy = ({ formValues, setFormValues, listId, isOpen, setIsOp
 	);
 }
 
-// Shipping 
+// Refund Policy 
 
 const EditRefundPolicy = ({ formValues, setFormValues, isOpen, setIsOpen }) => {
 	const accessToken = getGetAccessTokenFromCookie();
@@ -3685,5 +3968,5 @@ export {
 	EditKnockPageThirdSection, EditKnockPageReviewsSection, EditRequirementSection,
 	EditYoutubeSection, EditKnockPageArtistSection, EditFAQSection, EditDTKSection,
 	AddDTKfeatures, Addreviews, Addartist, EditTermsOfService, EditShippingPolicy, EditRefundPolicy, EditPrivacyPolicy,
-	EditDTKmainSection
+	EditDTKmainSection, AddFAQ , AddFAQList
 }

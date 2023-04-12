@@ -7,9 +7,16 @@ import {
   getGetAccessTokenFromCookie,
   useGetUserDataFromStore,
 } from "@utils/core/hooks";
-import { AiFillEdit } from "react-icons/ai";
+import {
+  AiFillDelete,
+  AiFillEdit,
+  AiFillMinusCircle,
+  AiFillPlusCircle,
+} from "react-icons/ai";
 import { useEffect, useState } from "react";
 import {
+  AddFAQ,
+  AddFAQList,
   EditFAQSection,
   EditRequirementSection,
 } from "@components/shared/common/Dialog/editDialogFunctions";
@@ -17,6 +24,7 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import Button from "@components/shared/core/Button";
 import axios from "axios";
 import { toast } from "react-toastify";
+import AlertDialogComponent from "@components/shared/common/Dialog/alertDialog";
 
 const FAQSPages: NextPage = () => {
   const { data } = useQuery(["faq"], () => getFaqPageData(), {
@@ -27,6 +35,8 @@ const FAQSPages: NextPage = () => {
   });
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpenNewFaq, setIsOpenNewFaq] = useState(false);
+  const [isOpenNewFaqList, setIsOpenNewFaqList] = useState(false);
   const [faqId, setFaqId] = useState("");
   const [listId, setListId] = useState("");
 
@@ -105,9 +115,35 @@ const FAQSPages: NextPage = () => {
     onError: (result: any) =>
       setTimeout(() => toast(result.message, { type: "error" }), 0),
   });
+
+  const [newFaq, setNewFaq] = useState({
+    answer_type: "",
+    faq_list: [],
+    h2: "",
+    h3: null,
+    p: "",
+  });
+
+  const [newFaqList, setNewFaqList] = useState({
+    li: "",
+    id: "",
+  });
+
   return (
     <>
       <section className="bg-primary-1 section-p-v1 flex flex-col">
+        <AddFAQ
+          setFormValues={setNewFaq}
+          formValues={newFaq}
+          isOpen={isOpenNewFaq}
+          setIsOpen={setIsOpenNewFaq}
+        />
+        <AddFAQList
+          setFormValues={setNewFaqList}
+          formValues={newFaqList}
+          isOpen={isOpenNewFaqList}
+          setIsOpen={setIsOpenNewFaqList}
+        />
         <EditFAQSection
           formValues={formValues}
           setFormValues={setFormValues}
@@ -174,6 +210,17 @@ const FAQSPages: NextPage = () => {
 													rtl:right-0 rtl:left-auto rtl:translate-x-[150%]"
                         />
                         {item.h2}
+                        {[1, 2, 3, 4, 5, 6].includes(item.id) ? (
+                          ""
+                        ) : (
+                          <AlertDialogComponent action="faq" id={item.id}>
+                            <AiFillDelete
+                              size={22}
+                              className="absolute right-0 top-0 font-semibold outline-none  
+	duration-300 transition-all w-fit px-1 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize "
+                            />
+                          </AlertDialogComponent>
+                        )}
                       </h3>
                       {item.answer_type === "opening_and_lists" ? (
                         <>
@@ -193,22 +240,59 @@ const FAQSPages: NextPage = () => {
                                       {subListElem.li}
                                     </li>
                                     {user.data ? (
-                                      <AiFillEdit
-                                        className="left-5 cursor-pointer m-auto 	 font-semibold outline-none  
+                                      <div className="flex gap-1">
+                                        <AiFillEdit
+                                          className="left-5 cursor-pointer m-auto 	 font-semibold outline-none  
 	duration-300 transition-all w-fit px-1 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
-                                        color="white"
-                                        size={25}
-                                        onClick={() => {
-                                          setIsOpen(true);
-                                          setFaqId(item.id);
-                                          setListId(subListElem.id);
-                                        }}
-                                      />
+                                          color="white"
+                                          size={25}
+                                          onClick={() => {
+                                            setIsOpen(true);
+                                            setFaqId(item.id);
+                                            setListId(subListElem.id);
+                                          }}
+                                        />
+                                        {item.id === 3 &&
+                                        [1, 2, 3].includes(subListElem.id) ? (
+                                          " "
+                                        ) : (
+                                          <AlertDialogComponent
+                                            action="faq-list"
+                                            faqId={item.id}
+                                            id={subListElem.id}
+                                          >
+                                            <AiFillDelete
+                                              size={22}
+                                              className="left-5 cursor-pointer m-auto 	 font-semibold outline-none  
+                                            duration-300 transition-all w-fit px-1 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                                            />
+                                          </AlertDialogComponent>
+                                        )}
+                                      </div>
                                     ) : (
                                       ""
                                     )}
                                   </div>
                                 ))}
+                                {user.data ? (
+                                  <AiFillPlusCircle
+                                    className="cursor-pointer m-auto  font-semibold outline-none  mt-5
+	duration-300 transition-all w-fit px-2 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                                    color="white"
+                                    size={25}
+                                    onClick={() => {
+                                      setIsOpenNewFaqList(true);
+                                      setNewFaqList((value) => {
+                                        return {
+                                          ...value,
+                                          id: item.id,
+                                        };
+                                      });
+                                    }}
+                                  />
+                                ) : (
+                                  ""
+                                )}
                               </ul>
                             </div>
                           </div>
@@ -238,6 +322,25 @@ const FAQSPages: NextPage = () => {
             )}
           </ul>
         </div>
+
+        {user.data ? (
+          <Button
+            onClick={() => {
+              setIsOpenNewFaq(true);
+              setNewFaq((value: any) => {
+                return {
+                  ...value,
+                  faq_list: [...newFaq.faq_list, ""],
+                };
+              });
+            }}
+            className="mb-5"
+          >
+            <AiFillPlusCircle />
+          </Button>
+        ) : (
+          ""
+        )}
 
         {user.data ? (
           <Button onClick={() => resetSection.mutate()}>Reset</Button>
