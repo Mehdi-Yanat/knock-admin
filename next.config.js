@@ -85,11 +85,11 @@ const nextConfig = (phase, { defaultConfig }) => {
           headers: securityHeaders,
         },
         {
-          source: "/products/[...param]",
+          source: "/products/:path",
           headers: securityHeaders,
         },
         {
-          source: "/boutique/[...param]",
+          source: "/boutique/:path",
           headers: securityHeaders,
         },
       ];
