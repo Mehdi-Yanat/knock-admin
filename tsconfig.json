@@ -1,42 +1,49 @@
 {
-	"compilerOptions": {
-		"target": "es5",
-		"lib": ["dom", "dom.iterable", "esnext"],
-		"allowJs": true,
-		"skipLibCheck": true,
-		"strict": true,
-		"forceConsistentCasingInFileNames": true,
-		"useUnknownInCatchVariables": false,
-		"noEmit": true,
-		"esModuleInterop": true,
-		"module": "esnext",
-		"moduleResolution": "node",
-		"resolveJsonModule": true,
-		"isolatedModules": true,
-		"jsx": "preserve",
-		"incremental": true,
-		"plugins": [
-			{
-				"name": "next"
-			}
-		],
-		"baseUrl": ".",
-		"paths": {
-			"@components/*": ["./components/*"],
-			"@context/*": ["./context/*"],
-			"@pages/*": ["./pages/*"],
-			"@styles/*": ["./styles/*"],
-			"@types/*": ["./types/*"],
-			"@utils/*": ["./utils/*"]
-		}
-	},
-	"include": [
-		"next-env.d.ts",
-		"./index.d.ts",
-		"**/*.ts",
-		"**/*.tsx",
-		".next/types/**/*.ts",
-		"pages/account/activate/[...slug].jsx"
-, "lib/getApiUrl.js", "components/screens/CustomerProfile/index.tsx", "components/shared/common/Dialog/alertDialog.jsx", "components/shared/common/Dialog/editDialogFunctions.jsx", "components/screens/Home/sections/Hero/index.tsx", "utils/core/shopify.ts", "components/shared/common/SmaplesBoxSelect/SelectBox.jsx"	],
-	"exclude": ["node_modules"]
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "useUnknownInCatchVariables": false,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": ["./components/*"],
+      "@context/*": ["./context/*"],
+      "@pages/*": ["./pages/*"],
+      "@styles/*": ["./styles/*"],
+      "@types/*": ["./types/*"],
+      "@utils/*": ["./utils/*"]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "./index.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "pages/account/activate/[...slug].jsx",
+    "lib/getApiUrl.js",
+    "components/screens/CustomerProfile/index.tsx",
+    "components/shared/common/Dialog/alertDialog.jsx",
+    "components/shared/common/Dialog/editDialogFunctions.jsx",
+    "components/screens/Home/sections/Hero/index.tsx",
+    "utils/core/shopify.ts",
+    "components/shared/common/SmaplesBoxSelect/SelectBox.jsx"
+  ],
+  "exclude": ["node_modules"]
 }
