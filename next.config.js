@@ -9,6 +9,10 @@ const securityHeaders = [
     key: "Content-Security-Policy",
     value: "frame-ancestors 'self'",
   },
+  {
+    key: "X-XSS-Protection",
+    value: "1; mode=block",
+  },
 ];
 
 const nextConfig = (phase, { defaultConfig }) => {
