@@ -49,39 +49,7 @@ const nextConfig = (phase, { defaultConfig }) => {
     headers: async () => {
       return [
         {
-          source: "/",
-          headers: securityHeaders,
-        },
-        {
-          source: "/knock",
-          headers: securityHeaders,
-        },
-        {
-          source: "/knock-clipper",
-          headers: securityHeaders,
-        },
-        {
-          source: "/drums-that-knock",
-          headers: securityHeaders,
-        },
-        {
-          source: "/faqs",
-          headers: securityHeaders,
-        },
-        {
-          source: "/policies/terms-of-service",
-          headers: securityHeaders,
-        },
-        {
-          source: "/policies/privacy-policy",
-          headers: securityHeaders,
-        },
-        {
-          source: "/policies/refund-policy",
-          headers: securityHeaders,
-        },
-        {
-          source: "/policies/shipping-policy",
+          source: "/*",
           headers: securityHeaders,
         },
       ];
