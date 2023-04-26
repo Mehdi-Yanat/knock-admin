@@ -156,16 +156,20 @@ const LatestSamplesSection = ({
 				</div> */}
             <div className="md:flex-grow md:w-1/2 flex flex-col sm:flex-row justify-center items-center gap-8">
               {filteredProducts.length ? (
-                <div className="sm:flex-1  " key={filteredProducts[0].id}>
-                  <ProductBasicCard
-                    link={{
-                      children: filteredProducts[0].title,
-                      href: `/products/${getIdFromGid(filteredProducts[0].id)}`,
-                    }}
-                    productData={filteredProducts[0]}
-                  />
+                <div key={filteredProducts[0].id}>
+                  <div className="md:h-[390px]">
+                    <ProductBasicCard
+                      link={{
+                        children: filteredProducts[0].title,
+                        href: `/products/${getIdFromGid(
+                          filteredProducts[0].id
+                        )}`,
+                      }}
+                      productData={filteredProducts[0]}
+                    />
+                  </div>
                   {user.data ? (
-                    <div className="flex item-center w-full justify-center	mt-5">
+                    <div className="flex item-center w-full justify-center mt-5">
                       <Button
                         onClick={() => {
                           setChangeSmaplesBox(true),
@@ -188,16 +192,20 @@ const LatestSamplesSection = ({
                 ""
               )}
               {filteredProducts.length ? (
-                <div className="sm:flex-1  " key={filteredProducts[1].id}>
-                  <ProductBasicCard
-                    link={{
-                      children: filteredProducts[1].title,
-                      href: `/products/${getIdFromGid(filteredProducts[1].id)}`,
-                    }}
-                    productData={filteredProducts[1]}
-                  />
+                <div key={filteredProducts[1].id}>
+                  <div className=" md:h-[390px]" >
+                    <ProductBasicCard
+                      link={{
+                        children: filteredProducts[1].title,
+                        href: `/products/${getIdFromGid(
+                          filteredProducts[1].id
+                        )}`,
+                      }}
+                      productData={filteredProducts[1]}
+                    />
+                  </div>
                   {user.data ? (
-                    <div className="flex item-center w-full justify-center	mt-5">
+                    <div className="flex item-center w-full justify-center mt-5">
                       <Button
                         onClick={() => {
                           setChangeSmaplesBox(true),

@@ -90,7 +90,7 @@ const HeroSection = ({ data }: { data: any }) => {
                   <Fragment key={el.id}>
                     <p className="text-[1rem] sm:text-2xl flex flex-wrap items-center justify-center text-center">
                       {el.text} &nbsp;
-                      <KnockTrademark tradeMark={el.tradeMark} />.
+                      <KnockTrademark tradeMark={el.tradeMark} />
                     </p>
                     {user.data ? (
                       <Button

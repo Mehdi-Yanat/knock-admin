@@ -17,6 +17,7 @@ const SystemRequirementsSection = ({
   backgroundImg = {},
   data,
   sectionId,
+  page,
 }: {
   items1: any;
   items2: any;
@@ -27,6 +28,7 @@ const SystemRequirementsSection = ({
   backgroundImg?: Partial<ICustomNextImageProps> | false;
   sectionId: string;
   data: any;
+  page?: string;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -42,7 +44,7 @@ const SystemRequirementsSection = ({
           h2: data.h2,
           p: data.p,
           sectionId: sectionId,
-          isHeader:true
+          isHeader: true,
         };
       });
     }
@@ -63,9 +65,7 @@ const SystemRequirementsSection = ({
           <h2 className="text-h4 text-primary-1 uppercase font-semibold">
             {formValues.h2}
           </h2>
-          <p className="text-h5">
-            {formValues.p}
-          </p>
+          <p className="text-h5">{formValues.p}</p>
           {user.data ? (
             <AiFillEdit
               className="left-5 cursor-pointer m-auto mt-5	 font-semibold outline-none  left-5
@@ -90,6 +90,7 @@ const SystemRequirementsSection = ({
           items2ListProps={items2ListProps}
           backgroundImg={backgroundImg}
           sectionId={sectionId}
+          page={page}
         />
       </div>
     </section>

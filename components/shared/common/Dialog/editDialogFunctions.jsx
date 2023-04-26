@@ -3960,6 +3960,93 @@ const EditPrivacyPolicy = ({ formValues, setFormValues, isOpen, setIsOpen }) => 
 	);
 }
 
+// Add Requirement Section
+
+const AddRequirementSectionBullet = ({ formValues, setFormValues, isOpen, setIsOpen }) => {
+	const accessToken = getGetAccessTokenFromCookie();
+
+
+	const addBulletPoint = useMutation({
+		mutationFn: (event) => {
+			event.preventDefault();
+			return fetch(
+				`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/add-system-requirements-bullet-${formValues.page}`,
+				{
+					method: 'POST',
+					headers: {
+						'Content-type': 'application/json',
+						'Authorization': accessToken
+					},
+					body: JSON.stringify(formValues)
+				}
+			)
+				.then((response) => response.json())
+				.then((result) => {
+					if ('success' in result && !result.success)
+						throw new Error(result.message);
+
+					return result;
+				});
+		},
+		onSuccess: (result) =>
+			setTimeout(() => {
+				toast(result.message)
+			}, 0),
+		onError: (result) =>
+			setTimeout(() => toast(result.message, { type: 'error' }), 0)
+	});
+
+	return (
+		<Dialog
+			isOpen={isOpen}
+			setIsOpen={setIsOpen}
+			header={{
+				title: 'add bullet point'
+			}}
+		>
+			<form
+				className='mx-auto my-4 sm:w-11/12'
+				onSubmit={addBulletPoint.mutate}
+			>
+				<fieldset
+					className='mt-2 space-y-4'
+					disabled={addBulletPoint.isLoading}
+				>
+
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='li'
+						type='text'
+						placeholder='*li'
+						autoComplete='li'
+						minLength={3}
+					/>
+
+
+
+					<div className='flex justify-end mt-4'>
+						<Button
+							type='submit'
+							classesIntent={{ w: 'full' }}
+							className='mt-4'
+							disabled={addBulletPoint.isLoading}
+						>
+							Submit
+						</Button>
+					</div>
+				</fieldset>
+				{addBulletPoint.isError && (
+					<div className='text-bg-secondary-2'>
+						<p>{addBulletPoint.error.message}</p>
+					</div>
+				)}
+			</form>
+		</Dialog>
+	);
+}
+
+
 
 
 export {
@@ -3968,5 +4055,5 @@ export {
 	EditKnockPageThirdSection, EditKnockPageReviewsSection, EditRequirementSection,
 	EditYoutubeSection, EditKnockPageArtistSection, EditFAQSection, EditDTKSection,
 	AddDTKfeatures, Addreviews, Addartist, EditTermsOfService, EditShippingPolicy, EditRefundPolicy, EditPrivacyPolicy,
-	EditDTKmainSection, AddFAQ , AddFAQList
+	EditDTKmainSection, AddFAQ, AddFAQList, AddRequirementSectionBullet
 }

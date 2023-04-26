@@ -39,8 +39,7 @@ const KnockScreen = ({ knockClipperPlugin }: IKnockClipperPageProps) => {
     : [];
 
   const DynamicComponentWithNoSSR = dynamic(
-    () =>
-      import("./sections/Hero").then((mod) => mod.default),
+    () => import("./sections/Hero").then((mod) => mod.default),
     { ssr: false }
   );
 
@@ -63,6 +62,7 @@ const KnockScreen = ({ knockClipperPlugin }: IKnockClipperPageProps) => {
             backgroundImg={false}
             sectionId={"forthSection-knockclipper"}
             data={data ? data.forthSection : ""}
+            page="knock-clipper"
           />
 
           <VideosSection

@@ -57,6 +57,7 @@ const KnockScreen = ({ knockPlugin }: IKnockPluginPageProps) => {
             items2HeaderText="PC"
             backgroundImg={false}
             sectionId={"sevenSection-knock"}
+            page={'knock'}
           />
           <section aria-hidden className="section-pb-v1 bg-primary-1"></section>
           <VideosSection
