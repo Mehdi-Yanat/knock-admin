@@ -4047,6 +4047,196 @@ const AddRequirementSectionBullet = ({ formValues, setFormValues, isOpen, setIsO
 }
 
 
+// upselling 
+
+const EditandAddUpSelling = ({ formValues, setFormValues, products, isOpen, setIsOpen }) => {
+	const accessToken = getGetAccessTokenFromCookie();
+
+	const editSection = useMutation({
+		mutationFn: (event) => {
+			event.preventDefault();
+
+			return fetch(
+				`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/${formValues.isEditing ? 'edit-upselling-product' : 'add-upselling-product'}`,
+				{
+					method: formValues.isEditing ? 'PUT' : 'POST',
+					headers: {
+						'Content-type': 'application/json',
+						'Authorization': accessToken
+					},
+					body: JSON.stringify(formValues)
+				}
+			)
+				.then((response) => response.json())
+				.then((result) => {
+					if ('success' in result && !result.success)
+						throw new Error(result.message);
+
+					return result;
+				});
+		},
+		onSuccess: (result) =>
+			setTimeout(() => toast(result.message, { type: 'success' }), 0),
+		onError: (result) =>
+			setTimeout(() => toast(result.message, { type: 'error' }), 0)
+	});
+
+	return (
+		<Dialog
+			isOpen={isOpen}
+			setIsOpen={setIsOpen}
+			header={{
+				title: formValues.isEditing ? 'Edit upsell product' : "Add upsell product"
+			}}
+		>
+
+			<form
+				className='mx-auto my-4 sm:w-11/12'
+				onSubmit={editSection.mutate}
+			>
+				<fieldset
+					className='mt-2 space-y-4'
+					disabled={editSection.isLoading}
+				>
+
+					{formValues.isEditing ? '' : <select value={formValues.handle} onChange={(event) => setFormValues(values => {
+						return {
+							...values,
+							handle: event.target.value
+						}
+					})} className="w-full p-3" >
+						{products.map((value, index) => (
+							<option key={index} value={value.handle}>
+								{value.title}
+							</option>
+						))}
+					</select>}
+
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='discount_code'
+						type='text'
+						placeholder='*discount_code'
+						autoComplete='discount_code'
+						minLength={3}
+					/>
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='discount_percentage'
+						type='number'
+						placeholder='*discount_percentage'
+						autoComplete='discount_percentage'
+						minLength={3}
+					/>
+
+
+
+					<div className='flex justify-end mt-4'>
+						<Button
+							type='submit'
+							classesIntent={{ w: 'full' }}
+							className='mt-4'
+							disabled={editSection.isLoading}
+						>
+							Submit
+						</Button>
+					</div>
+				</fieldset>
+			</form>
+		</Dialog>
+	);
+}
+
+const EditUpSellingSettings = ({ formValues, setFormValues, isOpen, setIsOpen }) => {
+	const accessToken = getGetAccessTokenFromCookie();
+
+	const editSection = useMutation({
+		mutationFn: (event) => {
+			event.preventDefault();
+
+			return fetch(
+				`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/edit-upselling-product-settings`,
+				{
+					method: 'PUT',
+					headers: {
+						'Content-type': 'application/json',
+						'Authorization': accessToken
+					},
+					body: JSON.stringify(formValues)
+				}
+			)
+				.then((response) => response.json())
+				.then((result) => {
+					if ('success' in result && !result.success)
+						throw new Error(result.message);
+
+					return result;
+				});
+		},
+		onSuccess: (result) =>
+			setTimeout(() => toast(result.message, { type: 'success' }), 0),
+		onError: (result) =>
+			setTimeout(() => toast(result.message, { type: 'error' }), 0)
+	});
+
+	return (
+		<Dialog
+			isOpen={isOpen}
+			setIsOpen={setIsOpen}
+			header={{
+				title: "Edit popup settings"
+			}}
+		>
+
+			<form
+				className='mx-auto my-4 sm:w-11/12'
+				onSubmit={editSection.mutate}
+			>
+				<fieldset
+					className='mt-2 space-y-4'
+					disabled={editSection.isLoading}
+				>
+
+
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='buttonText'
+						type='text'
+						placeholder='*buttonText'
+						autoComplete='buttonText'
+						minLength={3}
+					/>
+					<div>
+						<input checked={formValues.disable} type="checkbox" id="diable" name="disable" onChange={(e) => setFormValues(value => {
+							return {
+								...value,
+								disable: e.target.checked
+							}
+						})} value={formValues.disable} />
+						<label for="diable"> Disable popup</label>
+					</div>
+
+
+
+					<div className='flex justify-end mt-4'>
+						<Button
+							type='submit'
+							classesIntent={{ w: 'full' }}
+							className='mt-4'
+							disabled={editSection.isLoading}
+						>
+							Submit
+						</Button>
+					</div>
+				</fieldset>
+			</form>
+		</Dialog>
+	);
+}
+
 
 
 export {
@@ -4055,5 +4245,5 @@ export {
 	EditKnockPageThirdSection, EditKnockPageReviewsSection, EditRequirementSection,
 	EditYoutubeSection, EditKnockPageArtistSection, EditFAQSection, EditDTKSection,
 	AddDTKfeatures, Addreviews, Addartist, EditTermsOfService, EditShippingPolicy, EditRefundPolicy, EditPrivacyPolicy,
-	EditDTKmainSection, AddFAQ, AddFAQList, AddRequirementSectionBullet
+	EditDTKmainSection, AddFAQ, AddFAQList, AddRequirementSectionBullet, EditandAddUpSelling, EditUpSellingSettings
 }

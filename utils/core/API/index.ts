@@ -200,6 +200,20 @@ export const getPopup = async () => {
   return response.data.popup;
 };
 
+
+export const getUpSellingPopup = async () => {
+  const response = await axios.get(
+    `${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/get-upselling-popup`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  return response.data;
+};
+
 export const getMainSection = async () => {
   const response = await axios.get(
     `${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/get-main-section`,

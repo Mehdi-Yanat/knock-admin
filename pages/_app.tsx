@@ -26,6 +26,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [openPopUp, setOpenPop] = useState(false);
+  const [openUpSellingPopUp, setOpenUpSellingPop] = useState(false);
   const [openBanner, setBanner] = useState(true);
 
 
@@ -47,7 +48,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <QueryClientProvider client={queryClient}>
       <Hydrate state={pageProps.dehydratedState}>
         <SharedCustomerStateProvider>
-          <DefaultLayout setBanner={setBanner} openBanner={openBanner} openPopUp={openPopUp} setOpenPop={setOpenPop} >
+          <DefaultLayout setBanner={setBanner} openBanner={openBanner} setOpenUpSellingPop={setOpenUpSellingPop} openUpSellingPopUp={openUpSellingPopUp} openPopUp={openPopUp} setOpenPop={setOpenPop} >
             <DynamicTopProgressBar />
             <DefaultSeo {...SEODefaults} />
             <Component openPopUp={openPopUp} {...pageProps} />

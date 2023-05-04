@@ -54,6 +54,7 @@ const DigitalProductsSection = ({
 		return [...foundItems.filter(Boolean), ...itemsNotFound];
 	}, [products]);
 */
+
   return (
     <section className="bg-primary-1 section-p-v1 relative">
       <div className="pointer-events-none select-none grid grid-rows-4 justify-items-center items-center absolute top-0 right-0 bottom-0 left-0 w-full h-full">

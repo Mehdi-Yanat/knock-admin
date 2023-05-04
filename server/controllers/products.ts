@@ -13,6 +13,8 @@ import { print } from "graphql";
 export const getOneProductById = async (id: string) => {
   const client = getShopifyClient();
 
+  if (!id) return;
+
   const product: any = await client.product.fetch(
     `gid://shopify/Product/${id}`
   );
