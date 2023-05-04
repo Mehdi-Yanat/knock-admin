@@ -490,7 +490,7 @@ const CartContainer = ({
         aria-hidden={!isCartVisible}
         className={cx(
           `fixed translate-y-main-nav-h ${
-            !banner?.disable && openBanner ? "top-14" : "top-0"
+            openBanner ? "top-14" : "top-0"
           } right-0 w-full h-full bg-primary-3 bg-opacity-60 transition-all`,
           isCartVisible
             ? "duration-300"
