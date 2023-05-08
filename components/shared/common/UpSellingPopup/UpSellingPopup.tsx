@@ -9,6 +9,7 @@ import {
   AiFillDelete,
   AiFillEdit,
   AiFillPlusCircle,
+  AiFillSetting,
 } from "react-icons/ai";
 import {
   EditUpSellingSettings,
@@ -65,28 +66,22 @@ const UpSellingPopup = (props: any) => {
 
   useEffect(() => {
     if (props.upselling && props.upselling.length) {
-      const productsHandle = props.upselling.map(
-        (el: { handle: string }) => el.handle
-      );
-
-      const filterUpSellingsProduct: any = props.products?.filter((el: any) =>
-        productsHandle.includes(el.handle)
-      );
-
-      let newArry = [];
-
-      for (let i = 0; i < filterUpSellingsProduct.length; i++) {
-        const combinedObject = {
-          ...props.upselling[i],
-          ...filterUpSellingsProduct[i],
+      const filterUpSellingsProduct = props.upselling.map((upsell: any) => {
+        const filter = props.products.find(
+          (el: any) => el.handle === upsell.handle
+        );
+        delete upsell.id;
+        return {
+          ...filter,
+          ...upsell,
         };
+      });
 
-        newArry.push(combinedObject);
-      }
-
-      setInterestedProduct(newArry);
+      setInterestedProduct(filterUpSellingsProduct);
+    } else {
+      setInterestedProduct([]);
     }
-  }, [props.upselling && props.upselling.length]);
+  }, [props.upselling, props.upselling?.length]);
 
   return (
     <Dialog
@@ -253,7 +248,7 @@ const UpSellingPopup = (props: any) => {
               });
           }}
         />
-        <AiFillEdit
+        <AiFillSetting
           className="cursor-pointer  font-semibold outline-none  	duration-300 transition-all w-fit px-6 rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
           color="white"
           onClick={() => {

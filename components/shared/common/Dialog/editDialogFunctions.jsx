@@ -4105,11 +4105,11 @@ const EditandAddUpSelling = ({ formValues, setFormValues, products, isOpen, setI
 							handle: event.target.value
 						}
 					})} className="w-full p-3" >
-						{products.map((value, index) => (
-							<option key={index} value={value.handle}>
+						{products.map((value, index) => {
+							return value.title.endsWith('(PIB)') ? null : (<option key={index} value={value.handle}>
 								{value.title}
-							</option>
-						))}
+							</option>)
+						})}
 					</select>}
 
 					<FormField
