@@ -4100,9 +4100,12 @@ const EditandAddUpSelling = ({ formValues, setFormValues, products, isOpen, setI
 				>
 
 					{formValues.isEditing ? '' : <select value={formValues.handle} onChange={(event) => setFormValues(values => {
+						const selectedProduct = products.find((product) => product.handle === event.target.value);
 						return {
 							...values,
-							handle: event.target.value
+							handle: event.target.value,
+							comparePriceAt: selectedProduct.variants[0].compareAtPrice?.amount,
+							price: selectedProduct.variants[0].price.amount
 						}
 					})} className="w-full p-3" >
 						{products.map((value, index) => {
@@ -4112,26 +4115,37 @@ const EditandAddUpSelling = ({ formValues, setFormValues, products, isOpen, setI
 						})}
 					</select>}
 
-					<FormField
+					{formValues.hasDiscount ? <> <FormField
 						values={formValues}
 						setValues={setFormValues}
 						name='discount_code'
 						type='text'
-						placeholder='*discount_code'
-						autoComplete='discount_code'
+						placeholder='*discount code'
+						autoComplete='discount code'
 						minLength={3}
 					/>
-					<FormField
-						values={formValues}
-						setValues={setFormValues}
-						name='discount_percentage'
-						type='number'
-						placeholder='*discount_percentage'
-						autoComplete='discount_percentage'
-						minLength={3}
-					/>
+						<FormField
+							values={formValues}
+							setValues={setFormValues}
+							name='discount_percentage'
+							type='number'
+							placeholder='*discount percentage'
+							autoComplete='discount percentage'
+							minLength={3}
+						/>
+					</>
+						: ''}
 
 
+					<div>
+						<input checked={formValues.hasDiscount} type="checkbox" id="diable" name="disable" onChange={(e) => setFormValues(value => {
+							return {
+								...value,
+								hasDiscount: e.target.checked
+							}
+						})} value={formValues.disable} />
+						<label for="diable"> {formValues.hasDiscount ? 'Remove' : 'Add'} discount code</label>
+					</div>
 
 					<div className='flex justify-end mt-4'>
 						<Button

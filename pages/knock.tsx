@@ -8,7 +8,7 @@ export interface IKnockPluginPageProps {
 	knockPlugin: IProduct; // ShopifyBuy.Product;
 }
 
-const KnockPluginPage: NextPage<IKnockPluginPageProps> = (props) => {
+const KnockPluginPage: NextPage<IKnockPluginPageProps> = (props) => {	
 	return <KnockScreen {...props} />;
 };
 
