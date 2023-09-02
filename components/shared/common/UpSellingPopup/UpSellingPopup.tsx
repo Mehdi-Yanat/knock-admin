@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Dialog from "../Dialog";
 import Link from "next/link";
 import { useSharedCustomerState } from "@context/Customer";
@@ -10,12 +10,14 @@ import {
   AiFillEdit,
   AiFillPlusCircle,
   AiFillSetting,
+  AiOutlineDrag,
 } from "react-icons/ai";
 import {
   EditUpSellingSettings,
   EditandAddUpSelling,
 } from "../Dialog/editDialogFunctions";
 import AlertDialogComponent from "../Dialog/alertDialog";
+import { getGetAccessTokenFromCookie } from "@utils/core/hooks";
 
 const UpSellingPopup = (props: any) => {
   const [
@@ -73,7 +75,6 @@ const UpSellingPopup = (props: any) => {
         const filter = props.products.find(
           (el: any) => el.handle === upsell.handle
         );
-        delete upsell.id;
         return {
           ...filter,
           ...upsell,
@@ -89,6 +90,54 @@ const UpSellingPopup = (props: any) => {
   const knockPlugin = props.products.find(
     (el: { handle: string }) => el.handle === "knock-plugin"
   );
+
+  const accessToken = getGetAccessTokenFromCookie();
+
+  const dragItem = useRef<any>();
+  const dragOverItem = useRef<any>();
+
+  //const handle drag sorting
+  const handleSort = () => {
+    //duplicate items
+    let _interestedProduct = [...interestedProduct];
+
+    //remove and save the dragged item content
+    const draggedItemContent = _interestedProduct.splice(
+      dragItem.current,
+      1
+    )[0];
+
+    //switch the position
+    _interestedProduct.splice(dragOverItem.current, 0, draggedItemContent);
+
+    //reset the position ref
+    dragItem.current = null;
+    dragOverItem.current = null;
+
+    console.log(_interestedProduct);
+
+    const reorderedItems = _interestedProduct.map((item, index) => ({
+      id: item.id,
+      position: index + 1, // Assign the new order positions
+    }));
+
+    fetch(
+      `${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/edit-upselling-product/order`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: accessToken,
+        },
+        body: JSON.stringify({ reorderedItems }),
+      }
+    ).then((res) => {
+      console.log(res);
+    });
+
+    //update the actual array
+    setInterestedProduct(_interestedProduct);
+  };
 
   return (
     <Dialog
@@ -115,7 +164,14 @@ const UpSellingPopup = (props: any) => {
       {!interestedProduct?.length
         ? "Add upselling product"
         : interestedProduct.map((product: any, index: any) => (
-            <>
+            <div
+              onDragEnter={(e) => (dragOverItem.current = index)}
+              onDragEnd={handleSort}
+              onDragStart={(e) => (dragItem.current = index)}
+              onDragOver={(e) => e.preventDefault()}
+              draggable
+              key={product.id}
+            >
               {!product.title.endsWith("(PIB)") ? (
                 <article
                   key={product.id}
@@ -269,6 +325,12 @@ const UpSellingPopup = (props: any) => {
                             size={20}
                           />
                         </AlertDialogComponent>
+
+                        <AiOutlineDrag
+                          className="hidden md:block cursor-pointer font-semibold outline-none  	duration-300 transition-all w-fit px-6 rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+                          color="white"
+                          size={20}
+                        />
                       </div>
                     </div>
                   </div>
@@ -276,7 +338,7 @@ const UpSellingPopup = (props: any) => {
               ) : (
                 ""
               )}
-            </>
+            </div>
           ))}
       <div className="flex items-center justify-center gap-2 mt-4">
         <AiFillPlusCircle
