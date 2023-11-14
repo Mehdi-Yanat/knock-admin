@@ -1,12 +1,9 @@
-import type { IProductByIdPageProps } from "@pages/products/[productId]";
 
 import Button from "@components/shared/core/Button";
 
-import CustomNextImage from "@components/shared/common/CustomNextImage";
 
 import classes from "@styles/productsPages.module.scss";
 import ProductDetails from "@components/screens/ProductById/sections/ProductDetails";
-import Link from "next/link";
 import { FaPlay } from "react-icons/fa";
 import { Fragment, useEffect, useState } from "react";
 import {

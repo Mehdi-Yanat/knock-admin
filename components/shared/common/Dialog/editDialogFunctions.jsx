@@ -4515,24 +4515,17 @@ const AddProduct = ({ isOpen, setIsOpen, setOpenImage }) => {
 								<div key={index}>
 									<FormField
 										values={video}
-										onChange={(e) => handleYoutubeChange(index, 'src', e.target.value)}
+										onChange={(e) => handleYoutubeChange(index, 'src', `https://www.youtube.com/embed/${e.target.value}`)}
 										name={`src-${index}`}
 										type='text'
-										placeholder={`*YouTube Video Source ${index + 1}`}
+										placeholder={`*YouTube Video Source <insert-youtube-video-id-here> ${index + 1}`}
 									/>
 									<FormField
 										values={video}
-										onChange={(e) => handleYoutubeChange(index, 'srcImage', e.target.value)}
+										onChange={(e) => handleYoutubeChange(index, 'srcImage', `https://img.youtube.com/vi/${e.target.value}/maxresdefault.jpg`)}
 										name={`srcImage-${index}`}
 										type='text'
-										placeholder={`*YouTube Video Image Source ${index + 1}`}
-									/>
-									<FormField
-										values={video}
-										onChange={(e) => handleYoutubeChange(index, 'title', e.target.value)}
-										name={`title-${index}`}
-										type='text'
-										placeholder={`*YouTube Video Title ${index + 1}`}
+										placeholder={`*YouTube Video Image Source <insert-youtube-video-id-here> ${index + 1}`}
 									/>
 								</div>
 							))}

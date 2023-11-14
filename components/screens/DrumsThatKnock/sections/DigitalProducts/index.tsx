@@ -144,7 +144,7 @@ const DigitalProductsSection = ({
           }}
         >
           {products.map((item) => (
-            <div className="flex flex-col gap-5">
+            <div key={item.id} className="flex flex-col gap-5">
               <ProductCardWithDetails
                 key={item.id}
                 link={{
