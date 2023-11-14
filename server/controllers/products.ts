@@ -24,7 +24,7 @@ export const getOneProductById = async (id: string) => {
   );
 
   let newFieldsApi = response.data.DTKproduct;
-  delete newFieldsApi.id;
+  delete newFieldsApi?.id;
 
   const newProductObject = {
     ...product,

@@ -354,7 +354,7 @@ const HeroSection = ({ product }: { product: any }) => {
           <div className={classes.productPageFeatures}>
             <div className={classes.overLayFeaturesSection}></div>
             <div>
-              {product.features.length ? (
+              {product.features?.length ? (
                 <ul>
                   {product.features.map((el: any) => (
                     <div key={el.id} className="flex flex-col">
@@ -416,7 +416,7 @@ const HeroSection = ({ product }: { product: any }) => {
               ) : (
                 ""
               )}
-              {product.filesIncluded.length ? (
+              {product.filesIncluded?.length ? (
                 <ul>
                   {product.filesIncluded.map((el: any) => (
                     <div key={el.id} className="flex flex-col">
@@ -457,7 +457,7 @@ const HeroSection = ({ product }: { product: any }) => {
                       )}
                     </div>
                   ))}
-                  {product.filesIncluded.length && user.data ? (
+                  {product.filesIncluded?.length && user.data ? (
                     <div className="flex items-center justify-center">
                       <AiFillPlusCircle
                         className=" cursor-pointer   font-semibold outline-none 
@@ -559,7 +559,7 @@ const HeroSection = ({ product }: { product: any }) => {
         <ProductDetails product={product} />
 
         {renderFeature()}
-        {product.youtubeVideo.length ? (
+        {product.youtubeVideo?.length ? (
           <div className={classes.productPageYoutubeSections}>
             {product.youtubeVideo[0].title ? (
               <h4>{product.youtubeVideo[0].title}</h4>
@@ -622,7 +622,7 @@ const HeroSection = ({ product }: { product: any }) => {
                     </>
                   ) : (
                     <>
-                      <iframe src={el.src + "?autoplay=1"}  allow={"autoplay"} />
+                      <iframe src={el.src + "?autoplay=1"} allow={"autoplay"} />
                       <div className="flex flex-row justify-center gap-5 items-center mt-4 lg:flex  ">
                         {user.data ? (
                           <AiFillEdit
@@ -668,7 +668,7 @@ const HeroSection = ({ product }: { product: any }) => {
           ""
         )}
 
-        {user.data ? (
+        {user.data && product.youtubeVideo?.length ? (
           <>
             <label>add youtube video</label>
             <AiFillPlusCircle

@@ -138,9 +138,30 @@ const AlertDialogComponent = (props) => {
     }
 
     if (props.action === "upselling") {
-      
+
       try {
         const response = await axios.delete(`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/delete-upselling-product?handle=${props.handleProduct}`, {
+          headers: {
+            'Authorization': accessToken
+          }
+        })
+        if (response.data) {
+          toast.success(response.data.message)
+          return
+        }
+      } catch (error) {
+        if (error.response) {
+          if (!error.response.data.success) {
+            return toast.warn(error.response.data.message)
+          }
+        }
+      }
+    }
+
+    if (props.action === "dtk-product") {
+
+      try {
+        const response = await axios.delete(`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/remove-dtk-product?handle=${props.handleProduct}`, {
           headers: {
             'Authorization': accessToken
           }

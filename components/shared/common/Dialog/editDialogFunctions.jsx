@@ -4251,6 +4251,326 @@ const EditUpSellingSettings = ({ formValues, setFormValues, isOpen, setIsOpen })
 	);
 }
 
+const AddProduct = ({ isOpen, setIsOpen, setOpenImage }) => {
+
+	const [formValues, setFormValues] = useState({
+		handle: '',
+		description: {
+			h3: '',
+			text: ''
+		},
+		features: [],
+		filesIncluded: [],
+		youtubeVideo: []
+	});
+
+
+	const handleAddField = (field) => {
+		setFormValues((prevFormValues) => ({
+			...prevFormValues,
+			[field]: [...prevFormValues[field], { li: '' }]
+		}));
+	};
+
+	const handleAddFieldYoutube = (field) => {
+		setFormValues((prevFormValues) => ({
+			...prevFormValues,
+			[field]: [...prevFormValues[field], { src: '', srcImage: '', title: '' }]
+		}));
+	};
+
+	const handleRemoveField = (field, index) => {
+		setFormValues((prevFormValues) => {
+			const newFormValues = { ...prevFormValues };
+			newFormValues[field].splice(index, 1);
+			return newFormValues;
+		});
+	};
+
+	const handleRemoveYoutubeField = (field, index) => {
+		setFormValues((prevFormValues) => {
+			const newFormValues = { ...prevFormValues };
+			// Create a copy of the array to avoid mutating the original state
+			const newArray = [...newFormValues[field]];
+
+			// Remove the element at the specified index
+			newArray.splice(index, 1);
+
+			// Update the state with the new array
+			newFormValues[field] = newArray;
+			return newFormValues;
+		});
+	};
+
+	const handleChange = (field, index, key, value) => {
+		setFormValues((prevFormValues) => {
+			const newFormValues = { ...prevFormValues };
+			newFormValues[field][index][key] = value;
+			return newFormValues;
+		});
+	};
+
+	const handleYoutubeChange = (index, key, value) => {
+		setFormValues((prevFormValues) => {
+			const newFormValues = { ...prevFormValues };
+			newFormValues.youtubeVideo = newFormValues.youtubeVideo || [];
+			newFormValues.youtubeVideo[index] = newFormValues.youtubeVideo[index] || {};
+			newFormValues.youtubeVideo[index][key] = value;
+			return newFormValues;
+		});
+	};
+
+	const accessToken = getGetAccessTokenFromCookie();
+
+	const addProduct = useMutation({
+		mutationFn: (event) => {
+			return fetch(
+				`${process.env.NEXT_PUBLIC_KNOCK_URL_API}/ui/add-dtk-product`,
+				{
+					method: 'POST',
+					headers: {
+						'Content-type': 'application/json',
+						'Authorization': accessToken
+					},
+					body: JSON.stringify(formValues)
+				}
+			)
+				.then((response) => response.json())
+				.then((result) => {
+					if ('success' in result && !result.success)
+						throw new Error(result.message);
+
+					return result;
+				});
+		},
+		onSuccess: (result) =>
+			setTimeout(() => toast(result.message, { type: 'success' }), 0),
+		onError: (result) =>
+			setTimeout(() => toast(result.message, { type: 'error' }), 0)
+	});
+
+	const [formSettings, setFormSettings] = useState({
+		isDescriptionOn: false,
+		isFeaturesOn: false,
+		isFilesIncludedOn: false,
+		isYoutubeVideoOn: false
+	})
+
+	return (
+		<Dialog
+			isOpen={isOpen}
+			setIsOpen={setIsOpen}
+			header={{
+				title: "Add Product"
+			}}
+		>
+			<div className='mx-auto my-4 sm:w-11/12'>
+				<fieldset
+					className='mt-2 space-y-4'
+					disabled={addProduct.isLoading}
+				>
+					<FormField
+						values={formValues}
+						setValues={setFormValues}
+						name='handle'
+						type='text'
+						placeholder='*handle'
+						autoComplete='handle'
+						minLength={3}
+					/>
+					<Image className="cursor-pointer" onClick={() => { setIsOpen(false), setOpenImage(value => !value) }} height={238} width={1901} src={"/images/handle-example.png"} />
+					<div>
+						<input checked={formSettings.isDescriptionOn} type="checkbox" id="isDescriptionOn" name="isDescriptionOn" onChange={(e) => setFormSettings(value => {
+							return {
+								...value,
+								isDescriptionOn: e.target.checked
+							}
+						})} value={formSettings.isDescriptionOn} />
+						<label for="isDescriptionOn"> Enable description</label>
+					</div>
+					{formSettings.isDescriptionOn ? <div className="flex flex-col gap-3" >
+						<FormField
+							values={formValues.description.h3}
+							onChange={(e) => {
+								setFormValues((prevFormValues) => ({
+									...prevFormValues, description: {
+										text: prevFormValues.description.text,
+										h3: e.target.value
+									}
+								}))
+							}}
+							name='h3'
+							type='text'
+							placeholder='*h3'
+						/>
+						<FormField
+							values={formValues.description.text}
+							onChange={(e) => {
+								setFormValues((prevFormValues) => ({
+									...prevFormValues, description: {
+										h3: prevFormValues.description.h3,
+										text: e.target.value
+									}
+								}))
+							}}
+							name='text'
+							type='text'
+							placeholder='*text'
+						/>
+					</div> : ''}
+					<div>
+						<input checked={formSettings.isFeaturesOn} type="checkbox" id="isFeaturesOn" name="isFeaturesOn" onChange={(e) => setFormSettings(value => {
+							return {
+								...value,
+								isFeaturesOn: e.target.checked
+							}
+						})} value={formSettings.isFeaturesOn} />
+						<label for="isFeaturesOn"> Enable features </label>
+					</div>
+					{formSettings.isFeaturesOn ? (
+						<div className="flex flex-col gap-3">
+							{formValues.features.map((feature, index) => (
+								<FormField
+									key={index}
+									values={feature}
+									onChange={(e) => handleChange('features', index, 'li', e.target.value)}
+									name={`feature-${index}`}
+									type='text'
+									placeholder={`*feature ${index + 1}`}
+								/>
+							))}
+							<div className="flex m-auto gap-2 ">
+								<button onClick={() => handleAddField('features')}>
+									<AiFillPlusCircle
+										className="left-5 cursor-pointer mb-5	m-auto font-semibold outline-none  
+              duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+										color="white"
+										size={25}
+									/>
+								</button>
+								<button onClick={() => handleRemoveField('features')}>
+									<AiFillMinusCircle
+										className="left-5 cursor-pointer mb-5	m-auto font-semibold outline-none  
+              duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+										color="white"
+										size={25}
+									/>
+								</button>
+							</div>
+						</div>
+					) : ''}
+					<div>
+						<input checked={formSettings.isFilesIncludedOn} type="checkbox" id="isFilesIncludedOn" name="isFilesIncludedOn" onChange={(e) => setFormSettings(value => {
+							return {
+								...value,
+								isFilesIncludedOn: e.target.checked
+							}
+						})} value={formSettings.isFilesIncludedOn} />
+						<label for="isFilesIncludedOn"> Enable files</label>
+					</div>
+					{formSettings.isFilesIncludedOn ? (
+						<div className="flex flex-col gap-3">
+							{formValues.filesIncluded.map((file, index) => (
+								<FormField
+									key={index}
+									values={file}
+									onChange={(e) => handleChange('filesIncluded', index, 'li', e.target.value)}
+									name={`file-${index}`}
+									type='text'
+									placeholder={`*file ${index + 1}`}
+								/>
+							))}
+							<div className="flex m-auto gap-2" >
+								<button onClick={() => handleAddField('filesIncluded')}>
+									<AiFillPlusCircle
+										className="left-5 cursor-pointer mb-5	m-auto font-semibold outline-none  
+              duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+										color="white"
+										size={25}
+									/>
+								</button>
+								<button onClick={() => handleRemoveField('filesIncluded')}>
+									<AiFillMinusCircle
+										className="left-5 cursor-pointer mb-5	m-auto font-semibold outline-none  
+              duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+										color="white"
+										size={25}
+									/>
+								</button>
+							</div>
+						</div>
+					) : ''}
+					<div>
+						<input checked={formSettings.isYoutubeVideoOn} type="checkbox" id="isYoutubeVideoOn" name="isYoutubeVideoOn" onChange={(e) => setFormSettings(value => {
+							return {
+								...value,
+								isYoutubeVideoOn: e.target.checked
+							}
+						})} value={formSettings.isYoutubeVideoOn} />
+						<label for="isYoutubeVideoOn"> Enable Youtube Video</label>
+					</div>
+					{formSettings.isYoutubeVideoOn ? (
+						<div className="flex flex-col gap-3">
+							{formValues.youtubeVideo.map((video, index) => (
+								<div key={index}>
+									<FormField
+										values={video}
+										onChange={(e) => handleYoutubeChange(index, 'src', e.target.value)}
+										name={`src-${index}`}
+										type='text'
+										placeholder={`*YouTube Video Source ${index + 1}`}
+									/>
+									<FormField
+										values={video}
+										onChange={(e) => handleYoutubeChange(index, 'srcImage', e.target.value)}
+										name={`srcImage-${index}`}
+										type='text'
+										placeholder={`*YouTube Video Image Source ${index + 1}`}
+									/>
+									<FormField
+										values={video}
+										onChange={(e) => handleYoutubeChange(index, 'title', e.target.value)}
+										name={`title-${index}`}
+										type='text'
+										placeholder={`*YouTube Video Title ${index + 1}`}
+									/>
+								</div>
+							))}
+							<div className="flex m-auto gap-3">
+								<button onClick={() => handleAddFieldYoutube('youtubeVideo')}>
+									<AiFillPlusCircle
+										className="left-5 cursor-pointer mb-5	m-auto font-semibold outline-none  
+              duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+										color="white"
+										size={25}
+									/>
+								</button>
+								<button onClick={() => handleRemoveYoutubeField('youtubeVideo')}>
+									<AiFillMinusCircle
+										className="left-5 cursor-pointer mb-5 m-auto font-semibold outline-none duration-300 transition-all w-fit px-8 py-[0.25rem] rounded-3xl text-white bg-secondary-1 hover:bg-purple-800 focus:ring focus:ring-bg-secondary-1 capitalize"
+										color="white"
+										size={25}
+									/>
+								</button>
+							</div>
+						</div>
+					) : ''}
+					<div className='flex justify-end mt-4'>
+						<Button
+							type='submit'
+							classesIntent={{ w: 'full' }}
+							className='mt-4'
+							disabled={addProduct.isLoading}
+							onClick={addProduct.mutate}
+						>
+							Submit
+						</Button>
+					</div>
+				</fieldset>
+			</div>
+		</Dialog>
+	);
+}
 
 
 export {
@@ -4259,5 +4579,5 @@ export {
 	EditKnockPageThirdSection, EditKnockPageReviewsSection, EditRequirementSection,
 	EditYoutubeSection, EditKnockPageArtistSection, EditFAQSection, EditDTKSection,
 	AddDTKfeatures, Addreviews, Addartist, EditTermsOfService, EditShippingPolicy, EditRefundPolicy, EditPrivacyPolicy,
-	EditDTKmainSection, AddFAQ, AddFAQList, AddRequirementSectionBullet, EditandAddUpSelling, EditUpSellingSettings
+	EditDTKmainSection, AddFAQ, AddFAQList, AddRequirementSectionBullet, EditandAddUpSelling, EditUpSellingSettings, AddProduct
 }

@@ -121,16 +121,17 @@
     & > ul:nth-child(1) {
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
       padding: 1em 3em;
       border-radius: 25px;
       background-color: #1a1b1d;
+      justify-content: space-between;
       width: 100%;
       z-index: 1;
     }
     & > ul:nth-child(2) {
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
       flex-wrap: wrap;
       padding: 1em 3em;
       border-radius: 25px;
@@ -289,6 +290,10 @@
   }
 }
 
+.productPageDetailsUl {
+  height: 100% !important;
+}
+
 .ProductCardDetailsPriceSales {
   display: flex;
   align-items: center;
@@ -338,12 +343,6 @@
 
 // media --- 1024px ---
 @media (min-width: 1024px) {
-  .ul {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.6em;
-  }
-
   .ProductCardDetailsPriceSales {
     position: relative;
     justify-content: flex-start;
@@ -360,16 +359,19 @@
 
   .productPageFeatures {
     & > div:nth-child(2) {
-      grid-template-columns: 1fr 1fr;
+      display: flex;
+      align-items: normal;
+      justify-content: center;
       li {
         font-size: 1.06rem;
       }
       ul {
-        flex: 1;
-        height: 100% !important;
+        max-width: 600px;
         display: flex;
         justify-content: space-between;
         flex-direction: column;
+        flex-wrap: wrap;
+        max-height: 650px;
       }
     }
   }
@@ -446,18 +448,10 @@
 
 // media --- 1200px ---
 @media (min-width: 1200px) {
-  .productPageFeaturesBigBox {
-    & > div:nth-child(2) {
-      width: 90% !important;
-    }
-  }
   .productPageFeatures {
     & > div:nth-child(2) {
       width: 90%;
       gap: 3em;
-      & > ul:nth-child(2) {
-        flex-wrap: wrap;
-      }
     }
   }
   .ProductCardDetails {

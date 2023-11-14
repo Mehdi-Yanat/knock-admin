@@ -1,11 +1,16 @@
 // interface Props {}
 
 import CustomNextImage from "@components/shared/common/CustomNextImage";
+import AlertDialogComponent from "@components/shared/common/Dialog/alertDialog";
+import { AddProduct } from "@components/shared/common/Dialog/editDialogFunctions";
+import Button from "@components/shared/core/Button";
 import { ProductCardWithDetails } from "@components/shared/core/Card/product/default";
 import { IDrumsThatKnockPageProps } from "@pages/drums-that-knock";
+import { useGetUserDataFromStore } from "@utils/core/hooks";
 
 import { getIdFromGid } from "@utils/core/shopify";
-import { useMemo } from "react";
+import Image from "next/image";
+import { useMemo, useState } from "react";
 
 import { IProduct } from "types";
 
@@ -40,6 +45,7 @@ const DigitalProductsSection = ({
 }: {
   products: IDrumsThatKnockPageProps["products"];
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
   /*
 	const rearrangedProducts = useMemo(() => {
 		const itemsNotFound: typeof products = [];
@@ -54,72 +60,126 @@ const DigitalProductsSection = ({
 		return [...foundItems.filter(Boolean), ...itemsNotFound];
 	}, [products]);
 */
+  const { user } = useGetUserDataFromStore();
+  const [isOpenImage, setOpenImage] = useState(false);
 
   return (
-    <section className="bg-primary-1 section-p-v1 relative">
-      <div className="pointer-events-none select-none grid grid-rows-4 justify-items-center items-center absolute top-0 right-0 bottom-0 left-0 w-full h-full">
-        <CustomNextImage
-          className="w-full h-full object-contain scale-x-[2.5] scale-y-[2] translate-y-[20%]"
-          src="/images/Rectangle 47.png"
-          alt=""
-          width={800}
-          height={800}
-          placeholder="blur"
-          blurDataURL="/svg/bbblurry.svg"
-        />
-        <CustomNextImage
-          className="w-full h-full object-contain scale-x-[2.8] scale-y-[2.4] translate-x-[5%] rtl:-translate-x-[5%]"
-          src="/images/Rectangle 46.png"
-          alt=""
-          width={800}
-          height={800}
-          placeholder="blur"
-          blurDataURL="/svg/bbblurry.svg"
-        />
-        <CustomNextImage
-          className="w-full h-full object-contain scale-x-[2.8] scale-y-[2.4] translate-x-[15%] rtl:-translate-x-[15%]"
-          src="/images/Rectangle 48.png"
-          alt=""
-          width={800}
-          height={800}
-          placeholder="blur"
-          blurDataURL="/svg/bbblurry.svg"
-        />
-        <CustomNextImage
-          className="w-full h-full object-contain -translate-y-[10%] scale-x-[1.1] scale-y-[1.1] translate-x-[5%] rtl:-translate-x-[5%]"
-          src="/images/Rectangle 45.png"
-          alt=""
-          width={800}
-          height={800}
-          placeholder="blur"
-          blurDataURL="/svg/bbblurry.svg"
-        />
-      </div>
-      <div
-        className="relative justify-items-center"
-        style={{
-          zIndex: 2,
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(16rem, 1fr))",
-          gap: "4rem 3rem",
-        }}
-      >
-        {products.map((item) => (
-          <ProductCardWithDetails
-            key={item.id}
-            link={{
-              children: item.title,
-              href: `/products/${getIdFromGid(item.id)}`,
+    <>
+      {isOpenImage ? (
+        <div
+          onClick={() => {
+            setOpenImage((value) => !value);
+          }}
+          className="fixed cursor-pointer flex items-center justify-center w-full h-full top-0 left-0 right-0  z-[1000] bg-primary-1"
+        >
+          <Image
+            onClick={() => {
+              setOpenImage((value) => !value);
             }}
-            {...item}
-            toAddToCart
-            productData={item}
-            cardVariants={{ intent: "none", w: "full" }}
-            imageVariants={{ onHover: "to-dimmer" }}
+            height={238}
+            width={1901}
+            alt="image handle"
+            src={"/images/handle-example.png"}
+            className=" z-[1000]"
           />
-        ))}
-      </div>
-    </section>
+        </div>
+      ) : (
+        ""
+      )}
+      <section className="bg-primary-1 section-p-v1 relative">
+        {user.data ? (
+          <AddProduct
+            setIsOpen={setIsOpen}
+            isOpen={isOpen}
+            setOpenImage={setOpenImage}
+          />
+        ) : (
+          ""
+        )}
+        <div className="pointer-events-none select-none grid grid-rows-4 justify-items-center items-center absolute top-0 right-0 bottom-0 left-0 w-full h-full">
+          <CustomNextImage
+            className="w-full h-full object-contain scale-x-[2.5] scale-y-[2] translate-y-[20%]"
+            src="/images/Rectangle 47.png"
+            alt=""
+            width={800}
+            height={800}
+            placeholder="blur"
+            blurDataURL="/svg/bbblurry.svg"
+          />
+          <CustomNextImage
+            className="w-full h-full object-contain scale-x-[2.8] scale-y-[2.4] translate-x-[5%] rtl:-translate-x-[5%]"
+            src="/images/Rectangle 46.png"
+            alt=""
+            width={800}
+            height={800}
+            placeholder="blur"
+            blurDataURL="/svg/bbblurry.svg"
+          />
+          <CustomNextImage
+            className="w-full h-full object-contain scale-x-[2.8] scale-y-[2.4] translate-x-[15%] rtl:-translate-x-[15%]"
+            src="/images/Rectangle 48.png"
+            alt=""
+            width={800}
+            height={800}
+            placeholder="blur"
+            blurDataURL="/svg/bbblurry.svg"
+          />
+          <CustomNextImage
+            className="w-full h-full object-contain -translate-y-[10%] scale-x-[1.1] scale-y-[1.1] translate-x-[5%] rtl:-translate-x-[5%]"
+            src="/images/Rectangle 45.png"
+            alt=""
+            width={800}
+            height={800}
+            placeholder="blur"
+            blurDataURL="/svg/bbblurry.svg"
+          />
+        </div>
+        <div
+          className="relative justify-items-center"
+          style={{
+            zIndex: 2,
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(16rem, 1fr))",
+            gap: "4rem 3rem",
+          }}
+        >
+          {products.map((item) => (
+            <div className="flex flex-col gap-5">
+              <ProductCardWithDetails
+                key={item.id}
+                link={{
+                  children: item.title,
+                  href: `/products/${getIdFromGid(item.id)}`,
+                }}
+                {...item}
+                toAddToCart
+                productData={item}
+                cardVariants={{ intent: "none", w: "full" }}
+                imageVariants={{ onHover: "to-dimmer" }}
+              />
+              {user.data ? (
+                <AlertDialogComponent
+                  handleProduct={item.handle}
+                  page="dtk"
+                  action={"dtk-product"}
+                >
+                  <Button className="m-auto ">Remove product details</Button>
+                </AlertDialogComponent>
+              ) : (
+                ""
+              )}
+            </div>
+          ))}
+        </div>
+        {user.data ? (
+          <div className="flex mt-[50px] items-center justify-center w-full">
+            <Button onClick={() => setIsOpen(true)}>Add product</Button>
+          </div>
+        ) : (
+          ""
+        )}
+      </section>
+    </>
   );
 };
 
